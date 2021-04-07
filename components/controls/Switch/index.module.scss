@@ -1,0 +1,91 @@
+$size: 24px;
+
+.bg {
+  background-color: var(--color-primaryFaded);
+  border-radius: $size;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: $size;
+  top: 0;
+  transition: right 0.15s;
+}
+
+.container {
+  background-color: var(--color-field);
+  border-radius: $size;
+  border: 1px solid var(--color-fieldFocused);
+  cursor: pointer;
+  display: block;
+  height: $size / 2;
+  position: relative;
+  width: $size * 1.5;
+
+  &:hover,
+  &:focus-within {
+    .thumb {
+      background-color: var(--color-primaryFaded);
+    }
+
+    .hidden {
+      &:checked {
+        & ~ .thumb {
+          background-color: var(--color-primaryHovered);
+        }
+      }
+    }
+  }
+}
+
+.disabled {
+  background-color: var(--color-disabled);
+  cursor: not-allowed;
+
+  &, &:hover {
+    .bg {
+      background-color: var(--color-disabled);
+    }
+
+    .thumb {
+      background-color: var(--color-disabled);
+      border-color: var(--color-onDisabled);
+    }
+  }
+
+}
+
+.hidden {
+  height: 0;
+  opacity: 0;
+  position: absolute;
+  width: 0;
+
+  &:checked {
+    & ~ .bg {
+      right: 0;
+    }
+
+    & ~ .thumb {
+      background-color: var(--color-primary);
+      border-color: var(--color-primary);
+      left: ($size * 0.75) - 3px;
+    }
+  }
+}
+
+.thumb {
+  background-color: var(--color-background);
+  border-radius: $size;
+  border: 1px solid var(--color-primaryFaded);
+  box-sizing: border-box;
+  height: $size - 2px;
+  left: -1px;
+  position: absolute;
+  top: -$size / 4 + 1px;
+  transition: all 0.15s;
+  width: $size - 2px;
+}
+
+.wrapper {
+  height: $size;
+}

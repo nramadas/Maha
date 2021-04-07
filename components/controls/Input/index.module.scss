@@ -1,0 +1,132 @@
+.container {
+  display: block;
+  fill: var(--color-primary);
+  position: relative;
+  width: 100%;
+}
+
+.error {
+  color: var(--color-error);
+}
+
+.icon {
+  height: 20px;
+  margin-top: -10px;
+  pointer-events: none;
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transition: fill 0.15s ease;
+  width: 20px;
+}
+
+.input {
+  appearance: none;
+  background-color: var(--color-field);
+  border: 1px solid var(--color-fieldBorder);
+  border-radius: 2px;
+  box-sizing: border-box;
+  caret-color: var(--color-primary);
+  color: var(--color-onBackground);
+  font-size: 1rem;
+  font-weight: 400;
+  height: 100%;
+  letter-spacing: 0.00937rem;
+  outline: none;
+  padding: 18px 8px 6px;
+  text-decoration: inherit;
+  text-transform: inherit;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  width: 100%;
+
+  &:hover {
+    & + .label {
+      color: var(--color-primaryFocused);
+    }
+
+    & ~ .icon {
+      fill: var(--color-primaryFocused);
+    }
+  }
+
+  &:focus {
+    & + .label {
+      color: var(--color-primary);
+      transform: scale(0.7);
+      margin-top: 0;
+      top: 8px;
+    }
+
+    & ~ .icon {
+      fill: var(--color-primary);
+    }
+  }
+
+  &:not(:placeholder-shown) {
+    & + .label {
+      color: var(--color-primary);
+      transform: scale(0.7);
+      margin-top: 0;
+      top: 8px;
+    }
+
+    & ~ .icon {
+      fill: var(--color-primary);
+    }
+  }
+
+  &:disabled,
+  &[disabled] {
+    color: var(--color-disabled);
+    cursor: not-allowed;
+
+    & + .label {
+      color: var(--color-disabled);
+    }
+
+    & ~ .icon {
+      fill: var(--color-disabled);
+    }
+  }
+}
+
+.label {
+  color: var(--color-onBackground);
+  font-size: 0.625rem;
+  font-weight: 400;
+  left: 9px;
+  letter-spacing: 1.5px;
+  line-height: 1;
+  margin-top: -0.3125rem;
+  position: absolute;
+  text-transform: uppercase;
+  top: 50%;
+  transform-origin: 0 0;
+  transition: all 0.15s ease;
+}
+
+.withError {
+  .input {
+    background-color: var(--color-fieldError);
+    border-color: var(--color-error);
+
+    &,
+    &:focus,
+    &:hover,
+    &:not(:placeholder-shown) {
+      & + .label {
+        color: var(--color-error);
+      }
+
+      & ~ .icon {
+        fill: var(--color-error);
+      }
+    }
+  }
+}
+
+.withIcon {
+  .input {
+    padding-right: 48px;
+  }
+}

@@ -1,0 +1,202 @@
+.deleteCircle {
+  align-items: center;
+  background-color: var(--color-primaryFaded);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: row;
+  height: 16px;
+  justify-content: center;
+  margin-right: 8px;
+  transition: background-color 0.1s;
+  width: 16px;
+}
+
+.delete {
+  fill: var(--color-onBackground);
+  height: 10px;
+}
+
+.container {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-bottom: -8px;
+  margin-left: -8px;
+}
+
+.choiceContainer {
+  cursor: pointer;
+  margin-left: 8px;
+  margin-top: 8px;
+  position: relative;
+
+  &:hover,
+  &:focus-within {
+    .choice {
+      background-color: var(--color-primaryFocused);
+    }
+  }
+}
+
+.choice {
+  align-items: center;
+  background-color: var(--color-primary);
+  border-radius: 24px;
+  border: 1px solid var(--color-fieldFocused);
+  display: flex;
+  flex-direction: row;
+  height: 24px;
+  justify-content: center;
+  padding: 0 16px 0 4px;
+  transition: background-color 0.1s;
+}
+
+.error {
+  color: var(--color-error);
+}
+
+.focusedResult {
+  background-color: var(--color-primaryFocused);
+}
+
+.hidden {
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  width: 0;
+
+  &:focus ~ .choice {
+    background-color: var(-color-primaryFocused);
+  }
+}
+
+.inputContainer {
+  align-items: center;
+  background-color: var(--color-field);
+  border-radius: 2px;
+  border: 1px solid var(--color-fieldBorder);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  position: relative;
+  min-height: 34px;
+}
+
+.inputContainerFocused {
+  border-bottom-color: transparent;
+  border-radius: 2px 2px 0 0;
+}
+
+.inputContainerNotEmpty {
+  padding: 12px 0 4px 0px;
+
+  .input + .label {
+    color: var(--color-primary);
+    margin-top: 0;
+    transform: scale(0.7);
+    top: 8px;
+  }
+
+  .input {
+    margin-top: -4px;
+  }
+}
+
+.input {
+  appearance: none;
+  background-color: var(--color-field);
+  border: none;
+  caret-color: var(--color-primary);
+  color: var(--color-onBackground);
+  flex-grow: 1;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.00937rem;
+  outline: none;
+  padding: 18px 8px 6px;
+  text-decoration: inherit;
+  text-transform: inherit;
+
+  &:hover {
+    & + .label {
+      color: var(--color-primaryFocused);
+    }
+  }
+
+  &:focus {
+    font-size: 1rem;
+
+    & + .label {
+      color: var(--color-primary);
+      margin-top: 0;
+      transform: scale(0.7);
+      top: 8px;
+    }
+  }
+
+  &:disabled,
+  &[disabled] {
+    color: var(--color-disabled);
+    cursor: not-allowed;
+
+    & + .label {
+      color: var(--color-disabled);
+    }
+  }
+}
+
+.label {
+  color: var(--color-onBackground);
+  font-size: 0.625rem;
+  font-weight: 400;
+  left: 9px;
+  letter-spacing: 1.5px;
+  line-height: 1;
+  margin-top: -0.3125rem;
+  position: absolute;
+  text-transform: uppercase;
+  top: 50%;
+  transform-origin: 0 0;
+  transition: all 0.15s ease;
+}
+
+.results {
+  background-color: var(--color-field);
+  border: 1px solid var(--color-fieldFocused);
+  border-top: none;
+  border-radius: 0 0 2px 2px;
+  box-sizing: border-box;
+  color: var(--color-onBackground);
+  display: grid;
+  padding-top: 4px;
+}
+
+.result {
+  cursor: pointer;
+  padding: 6px 8px;
+}
+
+.withError {
+  background-color: var(--color-fieldError);
+
+  &.inputContainer {
+    border-color: var(--color-error);
+  }
+
+  .input {
+    background-color: var(--color-fieldError);
+  }
+
+  .input + .label {
+    color: var(--color-error);
+    margin-top: 0;
+    transform: scale(0.7);
+    top: 8px;
+  }
+
+  .label {
+    color: var(--color-error);
+  }
+}

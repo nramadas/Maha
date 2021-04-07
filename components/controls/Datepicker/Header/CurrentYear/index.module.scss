@@ -1,0 +1,16 @@
+.year {
+  cursor: pointer;
+  flex-grow: 1;
+  height: 32px;
+  line-height: 30px;
+  text-align: center;
+  transition: background-color .1s;
+
+  &:hover {
+    background-color: var(--color-primaryFaded);
+  }
+}
+
+.yearExpanded {
+  background-color: var(--color-primaryFaded);
+}

@@ -1,0 +1,66 @@
+$size: 40px;
+
+.cell {
+  height: $size;
+  text-align: center;
+  width: $size;
+}
+
+.cellDisabled {
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.cellHovered {
+  .cellInner {
+    background-color: var(--color-primaryFocused);
+  }
+}
+
+.cellInRange {
+  background-color: var(--color-primaryFaded);
+}
+
+.cellInRangeEnd {
+  border-top-right-radius: $size;
+  border-bottom-right-radius: $size;
+}
+
+.cellInRangeStart {
+  border-top-left-radius: $size;
+  border-bottom-left-radius: $size;
+}
+
+.cellInner {
+  align-items: center;
+  border-radius: $size;
+  display: flex;
+  flex-direction: column;
+  height: $size;
+  justify-content: center;
+  width: $size;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  justify-items: center;
+}
+
+.date {
+  cursor: pointer;
+}
+
+.header {
+  align-items: center;
+  color: var(--color-primary);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: $size - 2px;
+}
+
+.selected {
+  background-color: var(--color-primary);
+  color: var(--color-onBackground);
+}

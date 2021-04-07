@@ -1,0 +1,12 @@
+export { Body1 } from './Body1';
+export { Body2 } from './Body2';
+export { Caption } from './Caption';
+export { H1 } from './H1';
+export { H2 } from './H2';
+export { H3 } from './H3';
+export { H4 } from './H4';
+export { H5 } from './H5';
+export { H6 } from './H6';
+export { Overline } from './Overline';
+export { Subtitle1 } from './Subtitle1';
+export { Subtitle2 } from './Subtitle2';

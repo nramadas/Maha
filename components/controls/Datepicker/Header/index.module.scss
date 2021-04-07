@@ -1,0 +1,19 @@
+.bottom {
+  background-color: var(--color-primaryFaded);
+  box-sizing: border-box;
+  height: 0;
+  overflow-y: scroll;
+  transition: height 0.1s;
+}
+
+.bottomGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.top {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

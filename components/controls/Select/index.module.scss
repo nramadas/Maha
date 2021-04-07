@@ -1,0 +1,95 @@
+.icon {
+  fill: var(--color-primary);
+  margin-left: 8px;
+  width: 32px;
+}
+
+.option {
+  align-items: center;
+  background-color: var(--color-background);
+  border: none;
+  border-top: 1px solid var(--color-fieldFocused);
+  box-sizing: border-box;
+  color: var(--color-onBackground);
+  cursor: pointer;
+  display: flex;
+  fill: var(--color-onBackground);
+  flex-direction: row;
+  height: 40px;
+  outline: none;
+  padding: 0 8px;
+  text-align: left;
+
+  &:hover {
+    background-color: var(--color-field);
+  }
+}
+
+.optionsList {
+  background-color: var(--color-background);
+  border: 1px solid var(--color-primaryFocused);
+  border-top: none;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.value {
+  background-color: var(--color-background);
+  border-radius: 2px;
+  border: 1px solid var(--color-background);
+  box-sizing: border-box;
+  color: var(--color-onBackground);
+  cursor: pointer;
+  display: block;
+  fill: var(--color-onBackground);
+  height: 40px;
+  outline: none;
+  overflow: hidden;
+  padding: 0;
+  text-align: left;
+  text-decoration: none;
+  transition: all 0.15s;
+
+  &:focus {
+    border-color: var(--color-primaryFocused);
+  }
+
+  &:hover,
+  &:hover &:focus {
+    background-color: var(--color-field);
+    border-color: var(--color-primaryHovered);
+  }
+
+  &:active {
+    background-color: var(--color-field);
+    border-color: var(--color-primaryPressed);
+  }
+
+  &[data-tooltipopen="true"] {
+    border-color: var(--color-primaryFocused);
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+
+  &:disabled,
+  &[disabled] {
+    border-color: var(--color-background);
+    color: var(--color-onDisabled);
+    cursor: not-allowed;
+  }
+}
+
+.placeholder {
+  color: var(--color-primary);
+}
+
+.size {
+  align-items: center;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  height: 40px;
+  justify-content: space-between;
+  padding: 0 8px;
+}

@@ -1,0 +1,21 @@
+.calendar {
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.calendarContainer {
+  position: relative;
+  height: 280px;
+  width: 100%;
+}
+
+.container {
+  background-color: var(--color-field);
+  display: grid;
+  grid-gap: 8px;
+  grid-template-columns: 1fr;
+  grid-template-rows: min-content 1fr;
+  overflow: hidden;
+  width: 280px;
+}

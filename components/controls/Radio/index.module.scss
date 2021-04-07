@@ -1,0 +1,109 @@
+.circle {
+  background-color: transparent;
+  border-radius: 10px;
+  border: 2px solid var(--color-primary);
+  box-sizing: border-box;
+  height: 20px;
+  left: 10px;
+  margin-top: -10px;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  transition: all 0.2s ease;
+  width: 20px;
+}
+
+.container {
+  align-items: center;
+  display: inline-flex;
+  flex-direction: row;
+  height: 40px;
+  min-width: 40px;
+  overflow: hidden;
+  position: relative;
+
+  &:hover {
+    .hover {
+      background-color: var(--color-fieldHovered);
+    }
+  }
+}
+
+.dot {
+  background-color: var(--color-primary);
+  border-radius: 10px;
+  height: 0;
+  left: 20px;
+  margin-top: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  transition: all 0.2s ease;
+  width: 0;
+}
+
+.hover {
+  background-color: transparent;
+  bottom: 0;
+  border-radius: 20px;
+  cursor: pointer;
+  left: 0;
+  position: absolute;
+  top: 0;
+  transition: all 0.2s ease;
+  width: 40px;
+}
+
+.input {
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+
+  &:checked ~ .circle {
+    border-color: var(--color-primary);
+  }
+
+  &:checked ~ .dot {
+    height: 10px;
+    left: 15px;
+    margin-top: -5px;
+    width: 10px;
+  }
+
+  &:disabled,
+  &[disabled] {
+    cursor: not-allowed;
+
+    & ~ .circle,
+    &:checked ~ .circle {
+      border-color: var(--color-disabled);
+    }
+
+    &:checked ~ .dot {
+      background-color: var(--color-disabled);
+    }
+
+    & ~ .hover {
+      opacity: 0;
+      cursor: not-allowed;
+    }
+
+    & ~ .label {
+      color: var(--color-onDisabled);
+      cursor: not-allowed;
+    }
+  }
+
+  &:focus ~ .hover {
+    background-color: var(--color-fieldHovered);
+  }
+}
+
+.label {
+  cursor: pointer;
+  line-height: 40px;
+  margin-bottom: 3px;
+  padding-left: 36px;
+  position: relative;
+}

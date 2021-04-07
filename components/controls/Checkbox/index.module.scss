@@ -1,0 +1,107 @@
+.box {
+  background-color: transparent;
+  border-radius: 2px;
+  border: 2px solid var(--color-primary);
+  box-sizing: border-box;
+  height: 18px;
+  left: 11px;
+  margin-top: -9px;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  transition: all 0.2s ease;
+  width: 18px;
+}
+
+.check {
+  fill: var(--color-onPrimary);
+  height: 14px;
+  opacity: 0;
+  stroke-width: 2px;
+  stroke: var(--color-onPrimary);
+  transition: all 0.2s ease;
+  width: 14px;
+}
+
+.container {
+  align-items: center;
+  display: inline-flex;
+  flex-direction: row;
+  height: 40px;
+  min-width: 40px;
+  overflow: hidden;
+  position: relative;
+
+  &:hover {
+    .hover {
+      background-color: var(--color-fieldHovered);
+    }
+  }
+}
+
+.hover {
+  background-color: transparent;
+  border-radius: 20px;
+  bottom: 0;
+  cursor: pointer;
+  left: 0;
+  position: absolute;
+  top: 0;
+  transition: all 0.2s ease;
+  width: 40px;
+}
+
+.input {
+  opacity: 0;
+  height: 0;
+  width: 0;
+
+  &:checked ~ .box {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+
+    .check {
+      display: block;
+      opacity: 1;
+    }
+  }
+
+  &:disabled,
+  &[disabled] {
+    cursor: not-allowed;
+
+    & ~ .box,
+    &:checked ~ .box {
+      border-color: var(--color-disabled);
+      background-color: var(--color-disabled);
+      cursor: not-allowed;
+
+      .check {
+        fill: var(--color-onDisabled);
+        stroke: var(--color-onDisabled);
+      }
+    }
+
+    & ~ .hover {
+      cursor: not-allowed;
+      opacity: 0;
+    }
+
+    & ~ .label {
+      color: var(--color-onDisabled);
+      cursor: not-allowed;
+    }
+  }
+
+  &:focus ~ .hover {
+    background-color: var(--color-fieldHovered);
+  }
+}
+
+.label {
+  cursor: pointer;
+  line-height: 40px;
+  margin-bottom: 3px;
+  padding-left: 36px;
+  position: relative;
+}

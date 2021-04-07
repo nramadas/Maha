@@ -1,0 +1,69 @@
+.container {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-bottom: -8px;
+  margin-left: -8px;
+}
+
+.label {
+  margin-bottom: 8px;
+  margin-left: 8px;
+  position: relative;
+
+  &:hover {
+    .choice {
+      background-color: var(--color-primaryFaded);
+    }
+
+    .hidden {
+      &:checked ~.choice {
+        background-color: var(--color-primaryFocused);
+      }
+    }
+  }
+}
+
+.choice {
+  align-items: center;
+  background-color: var(--color-field);
+  border-radius: 24px;
+  border: 1px solid var(--color-fieldFocused);
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  height: 24px;
+  justify-content: center;
+  padding: 0 16px;
+  transition: background-color 0.1s;
+}
+
+.disabled {
+  .choice {
+    &, &:hover {
+      background-color: var(--color-disabled);
+      color: var(--color-onDisabled);
+      cursor: not-allowed;
+    }
+  }
+}
+
+.hidden {
+  opacity: 0;
+  position: absolute;
+
+  &:focus ~ .choice {
+    background-color: var(--color-primaryFaded);
+  }
+
+  &:checked ~ .choice {
+    background-color: var(--color-primary);
+  }
+
+  &:checked {
+    &:focus ~ .choice {
+      background-color: var(--color-primaryFocused);
+    }
+  }
+}

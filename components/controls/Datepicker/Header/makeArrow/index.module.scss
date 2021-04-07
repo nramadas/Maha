@@ -1,0 +1,16 @@
+.arrow {
+  cursor: pointer;
+  fill: var(--color-onBackground);
+  height: 32px;
+  padding: 4px 10px;
+  transition: background-color .1s, opacity .1s;
+
+  &:hover {
+    background-color: var(--color-primaryFaded);
+  };
+}
+
+.arrowDisabled {
+  opacity: 0.1;
+  pointer-events: none;
+}

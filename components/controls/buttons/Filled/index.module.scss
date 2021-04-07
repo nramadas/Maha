@@ -1,0 +1,42 @@
+.button {
+  background-color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  border-radius: 2px;
+  box-sizing: border-box;
+  color: var(--color-onPrimary);
+  fill: var(--color-onPrimary);
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 1.25px;
+  line-height: 1;
+  outline: none;
+  padding: 6px 12px 6px;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.15s, border-color 0.15s, background-color 0.15s;
+
+  &:focus {
+    background-color: var(--color-primaryFocused);
+    border-color: var(--color-primaryFocused);
+  }
+
+  &:hover,
+  &:hover &:focus {
+    background-color: var(--color-primaryHovered);
+    border-color: var(--color-primaryHovered);
+  }
+
+  &:active {
+    background-color: var(--color-primaryPressed);
+    border-color: var(--color-primaryPressed);
+  }
+
+  &:disabled,
+  &[disabled] {
+    background-color: var(--color-disabled);
+    border-color: var(--color-disabled);
+    color: var(--color-onDisabled);
+    cursor: not-allowed;
+  }
+}

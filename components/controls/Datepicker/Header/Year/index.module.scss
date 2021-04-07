@@ -1,0 +1,16 @@
+.year {
+  cursor: pointer;
+  height: 32px;
+  line-height: 29px;
+  text-align: center;
+
+  &:hover {
+    background-color: var(--color-primary);
+  }
+}
+
+.yearDisabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  pointer-events: none;
+}
