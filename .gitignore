@@ -32,3 +32,18 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# expo
+native/node_modules
+native/.expo/*
+native/npm-debug.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+native/web-build/
+
+# macOS
+.DS_Store
