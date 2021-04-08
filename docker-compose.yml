@@ -1,0 +1,13 @@
+version: '3.1'
+services:
+  redis:
+    container_name: redis
+    image: 'redis'
+    ports: ['6379:6379']
+  db:
+    container_name: db
+    env_file:
+      - ./.env.local
+    image: 'postgres'
+    ports: ['5432:5432']
+    restart: always
