@@ -44,7 +44,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(
       >
         <input
           {...rest}
-          className={cx(styles.input, rest.className)}
+          className={styles.input}
           placeholder="&nbsp;"
           ref={ref}
           type="text"

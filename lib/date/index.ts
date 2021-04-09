@@ -6,6 +6,29 @@ export interface Parts {
   year: number;
 }
 
+export function before(dateA: Date, dateB: Date) {
+  const aParts = toParts(dateA);
+  const bParts = toParts(dateB);
+
+  if (aParts.year > bParts.year) {
+    return false;
+  }
+
+  if (aParts.year === bParts.year) {
+    if (aParts.month > bParts.month) {
+      return false;
+    }
+
+    if (aParts.month === bParts.month) {
+      if (aParts.day >= bParts.day) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
+
 /**
  * Returns a new `Date`. The month and year will match the input date's, but
  * the day will be the first..

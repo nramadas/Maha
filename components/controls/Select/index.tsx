@@ -1,5 +1,4 @@
 import cx from 'classnames';
-import isEqual from 'lodash/isEqual';
 import React, { useState } from 'react';
 
 import { ChevronDown } from '@/components/icons/ChevronDown';
@@ -7,6 +6,7 @@ import { Body1 } from '@/components/typography';
 import { useTooltip } from '@/hooks/useTooltip';
 
 import styles from './index.module.scss';
+import { sortOptions } from './sortOptions';
 
 interface Option {
   text: string;
@@ -59,13 +59,7 @@ export function Select<O extends Option>(props: Props<O>) {
     type: 'click',
   });
 
-  const sortedOptions = props.options
-    .filter(option => !isEqual(option, selected))
-    .sort((a, b) => {
-      return a.text
-        .toLocaleLowerCase()
-        .localeCompare(b.text.toLocaleLowerCase());
-    });
+  const sortedOptions = sortOptions(props.options, selected);
 
   return (
     <div>

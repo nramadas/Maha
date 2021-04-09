@@ -7,28 +7,11 @@ import { useDateFormatter } from '@/hooks/useDateFormatter';
 import { useDateSelection } from '@/hooks/useDateSelection';
 import { useTooltip } from '@/hooks/useTooltip';
 
+import { value } from './_common';
 import { anim } from './animationHelpers';
 import { Calendar } from './Calendar';
 import { Header } from './Header';
 import styles from './index.module.scss';
-
-/**
- * Typeguard for selected dates
- */
-function notNull(date: Date | null): date is Date {
-  return !!date;
-}
-
-/**
- * Helps convert selected dates to human readable dates
- */
-function value(
-  start: Date | null,
-  end: Date | null,
-  formatter: (date: Date) => string,
-) {
-  return [start, end].filter(notNull).map(formatter).join(' - ');
-}
 
 interface Props<R extends boolean>
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onSelect'> {

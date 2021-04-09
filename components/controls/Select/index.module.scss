@@ -1,6 +1,7 @@
 .icon {
   fill: var(--color-primary);
   margin-left: 8px;
+  transition: transform 0.15s;
   width: 32px;
 }
 
@@ -19,6 +20,7 @@
   outline: none;
   padding: 0 8px;
   text-align: left;
+  transition: background-color 0.15s;
 
   &:hover {
     background-color: var(--color-field);
@@ -49,7 +51,12 @@
   padding: 0;
   text-align: left;
   text-decoration: none;
-  transition: all 0.15s;
+  transition:
+    border-color 0.15s,
+    background-color 0.15s,
+    border-bottom-left-radius 0.15s,
+    border-bottom-right-radius 0.15s,
+    color 0.15s;
 
   &:focus {
     border-color: var(--color-primaryFocused);
@@ -70,6 +77,10 @@
     border-color: var(--color-primaryFocused);
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
+
+    .icon {
+      transform: rotate(180deg);
+    }
   }
 
   &:disabled,

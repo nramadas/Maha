@@ -12,7 +12,7 @@ import { Year } from './Year';
 const LeftArrow = makeArrow(ChevronLeft, { month: -1 });
 const RightArrow = makeArrow(ChevronRight, { month: 1 });
 
-interface Props {
+export interface Props {
   /**
    * The latest year the calendar will allow the user to select. If not
    * provided, it defaults to 50 years after the current year.

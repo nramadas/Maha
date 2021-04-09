@@ -19,11 +19,10 @@ type Return = [
   (date: Date) => void,
 ];
 
-interface State {
+interface RangeState {
   end: Date | null;
   rangePosition: Range;
   start: Date | null;
-  view: Date;
 }
 
 export function reselectingStart(
@@ -38,28 +37,15 @@ export function reselectingStart(
   return start ? date.getTime() < start.getTime() : true;
 }
 
-export function useDateSelection<R extends boolean>(
+export function useRangeSelection<R extends boolean>(
   range?: R,
   onSelect?: Select<R>,
-): Return {
-  const [state, setState] = useState<State>({
-    end: null,
+) {
+  const [state, setState] = useState<RangeState>({
     rangePosition: Range.Start,
+    end: null,
     start: null,
-    view: today(),
   });
-
-  const setView = useCallback(
-    (date: Date) => {
-      setState({
-        end: state.end,
-        start: state.start,
-        rangePosition: state.rangePosition,
-        view: date,
-      });
-    },
-    [state],
-  );
 
   const select = useCallback(
     (date: Date) => {
@@ -94,9 +80,8 @@ export function useDateSelection<R extends boolean>(
 
       setState({
         end,
-        start,
         rangePosition,
-        view: state.view,
+        start,
       });
 
       if (onSelect) {
@@ -110,11 +95,21 @@ export function useDateSelection<R extends boolean>(
     [onSelect, range, state],
   );
 
+  return [state, select] as const;
+}
+
+export function useDateSelection<R extends boolean>(
+  range?: R,
+  onSelect?: Select<R>,
+): Return {
+  const [view, setView] = useState<Date>(today());
+  const [rangeSelection, select] = useRangeSelection(range, onSelect);
+
   return [
-    state.view,
-    state.start,
-    state.end,
-    state.rangePosition,
+    view,
+    rangeSelection.start,
+    rangeSelection.end,
+    rangeSelection.rangePosition,
     setView,
     select,
   ];

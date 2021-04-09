@@ -4,11 +4,14 @@ import React from 'react';
 import styles from './index.module.scss';
 
 interface Props
-  extends Omit<React.HTMLAttributes<HTMLInputElement>, 'onChange'> {
+  extends Omit<
+    React.HTMLAttributes<HTMLInputElement>,
+    'defaultValue' | 'onChange'
+  > {
   /**
    * Starting value for the switch. One of `'on'` or `'off'`.
    */
-  defaultValue?: 'on' | 'off';
+  defaultValue?: boolean;
   /**
    * When set to true, prevents the users for toggling teh Switch
    */
@@ -19,9 +22,9 @@ interface Props
   name: string;
   /**
    * Callback, fired when the value changes. Signature is
-   * `(value: 'on' | 'off') => void`
+   * `(value: boolean) => void`
    */
-  onChange?: (value: 'on' | 'off') => void;
+  onChange?: (value: boolean) => void;
 }
 
 /**
@@ -39,12 +42,12 @@ export function Switch(props: Props) {
       >
         <input
           className={styles.hidden}
-          defaultChecked={defaultValue === 'on' ? true : undefined}
+          defaultChecked={defaultValue}
           disabled={disabled}
           type="checkbox"
           onChange={e => {
             if (onChange) {
-              onChange(e.currentTarget.checked ? 'on' : 'off');
+              onChange(e.currentTarget.checked);
             }
           }}
           {...rest}

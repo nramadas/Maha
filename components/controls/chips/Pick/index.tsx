@@ -23,7 +23,7 @@ interface Props<C> extends React.InputHTMLAttributes<HTMLInputElement> {
   /**
    * Callback that returns when an item is selected
    */
-  onChoose?: (choices: O[]) => void;
+  onChoose?: (choices: C[]) => void;
 }
 
 /**

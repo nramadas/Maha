@@ -4,13 +4,8 @@ import React from 'react';
 import { Caption } from '@/components/typography';
 import { useDateFormatter } from '@/hooks/useDateFormatter';
 
+import { Props } from './_common';
 import styles from './index.module.scss';
-
-interface Props {
-  expanded?: boolean;
-  view: Date;
-  onExpand(): void;
-}
 
 export function CurrentYear(props: Props) {
   const [formatYear] = useDateFormatter({ year: 'numeric' });

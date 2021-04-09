@@ -1,4 +1,6 @@
 import React from 'react';
+
+import '@/styles/fonts.css';
 import '@/styles/normalize.css';
 
 import { DialogProvider } from '@/contexts/Dialog';

@@ -3,13 +3,8 @@ import React from 'react';
 
 import { patch, Parts } from '@/lib/date';
 
+import { Props } from './_common';
 import styles from './index.module.scss';
-
-interface Props {
-  disabled?: boolean;
-  view: Date;
-  onChange(date: Date): void;
-}
 
 export function makeArrow(
   Icon: (props: React.SVGAttributes<SVGElement>) => JSX.Element,

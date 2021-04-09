@@ -35,6 +35,8 @@ yarn-error.log*
 
 # expo
 native/node_modules
+.expo
+.expo/*
 native/.expo/*
 native/npm-debug.*
 *.jks
