@@ -21,6 +21,9 @@ export class User {
   appleId!: string;
 
   @Column()
+  authId!: string;
+
+  @Column()
   email!: string;
 
   @Column({ type: 'jsonb' })

@@ -11,3 +11,22 @@ services:
     image: 'postgres'
     ports: ['5432:5432']
     restart: always
+  authn-migrate:
+    command: './authn migrate'
+    container_name: authn-migrate
+    env_file:
+      - ./.env.local
+    image: 'keratin/authn-server:1.10.4'
+    depends_on:
+      - redis
+      - db
+  authn:
+    container_name: authn
+    env_file:
+      - ./.env.local
+    image: 'keratin/authn-server:1.10.4'
+    ports: ['3001:3000']
+    depends_on:
+      - authn-migrate
+      - redis
+      - db

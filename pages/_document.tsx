@@ -1,11 +1,11 @@
 import 'setimmediate';
-import Document from 'next/document';
+import Document, { DocumentContext } from 'next/document';
 import React from 'react';
 
 import { createCssStyles } from '@/lib/theme/createCssStyles';
 
 export default class MyDocument extends Document {
-  static async getInitialProps(ctx: any) {
+  static async getInitialProps(ctx: DocumentContext) {
     const initialProps = await Document.getInitialProps(ctx);
 
     return {

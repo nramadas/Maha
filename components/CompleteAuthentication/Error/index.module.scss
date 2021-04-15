@@ -1,0 +1,21 @@
+.container {
+  align-items: center;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.explanation {
+  color: var(--color-metadata);
+  margin-top: 12px;
+}
+
+.title {
+  color: var(--color-error);
+  margin-bottom: 24px;
+}

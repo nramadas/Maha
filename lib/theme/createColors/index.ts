@@ -28,6 +28,7 @@ export function createColors() {
     fieldBorder: mix(0.07, Color.G050, Color.G950),
     fieldFocused: mix(0.05, Color.G050, Color.G950),
     fieldHovered: mix(0.05, Color.G050, Color.G950),
+    metadata: mix(0.5, Color.G950, Color.G050),
     onBackground: Color.G050,
     onDisabled: Color.G800,
     onError: Color.G050,
