@@ -9,6 +9,7 @@ interface Request {
   url: string;
   method: 'POST' | 'GET';
   body?: object;
+  cookie?: string;
 }
 
 function url(u: string) {
@@ -17,18 +18,28 @@ function url(u: string) {
 
 export const publicRequest = (req: Request) =>
   fetch(url(req.url), {
-    headers,
+    headers: {
+      ...headers,
+      ...(req.cookie
+        ? {
+            Cookie: req.cookie,
+          }
+        : {}),
+    },
     method: req.method,
     body:
       req.body && req.method !== 'GET' ? JSON.stringify(req.body) : undefined,
-  })
-    .then(r => r.json())
-    .catch(function () {});
+  });
 
 export const privateRequest = (req: Request) =>
   fetch(url(req.url), {
     headers: {
       ...headers,
+      ...(req.cookie
+        ? {
+            Cookie: req.cookie,
+          }
+        : {}),
       Authorization: `Basic ${encode(
         `${process.env.HTTP_AUTH_USERNAME}:${process.env.HTTP_AUTH_PASSWORD}`,
       )}`,
@@ -36,6 +47,4 @@ export const privateRequest = (req: Request) =>
     method: req.method,
     body:
       req.body && req.method !== 'GET' ? JSON.stringify(req.body) : undefined,
-  })
-    .then(r => r.json())
-    .catch(function () {});
+  });

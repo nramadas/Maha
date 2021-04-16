@@ -2,7 +2,7 @@ import Cors from 'micro-cors';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 import { sendEmail } from '@/emails';
-import { privateRequest as authnPrivateRequest } from '@/lib/authn/request';
+import { getEmail } from '@/lib/authn/api';
 
 const cors = Cors({
   allowMethods: ['GET', 'POST', 'OPTIONS'],
@@ -12,18 +12,17 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
     const { account_id, token } = req.body;
 
-    const response = await authnPrivateRequest({
-      url: `/accounts/${account_id}`,
-      method: 'GET',
-    });
+    const response = await getEmail(account_id);
 
-    const email: string = response.result.username;
+    if (response.ok) {
+      const email = response.email;
 
-    sendEmail({
-      to: email,
-      template: 'Authentication',
-      props: { email, token },
-    });
+      sendEmail({
+        to: email,
+        template: 'Authentication',
+        props: { email, token },
+      });
+    }
   }
 
   res.end();

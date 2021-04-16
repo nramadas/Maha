@@ -5,6 +5,7 @@ import React from 'react';
 import '@/styles/fonts.css';
 import '@/styles/normalize.css';
 
+import { JWTRefresh } from '@/components/JWTRefresh';
 import { DialogProvider } from '@/contexts/Dialog';
 import { JWTProvider } from '@/contexts/JWT';
 import { TooltipProvider } from '@/contexts/Tooltip';
@@ -19,15 +20,19 @@ function getBody() {
 }
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  const token = Cookies.get('token');
+  const jwt = Cookies.get('token');
+  const aut = Cookies.get('authn');
 
   return (
     <>
       <JWTProvider
-        initialJwt={token}
+        initialJwt={jwt}
+        initialAut={aut}
         preserveJwt={jwt => Cookies.set('token', jwt)}
+        preserveAut={aut => Cookies.set('authn', aut)}
       >
         <URQLProvider>
+          <JWTRefresh />
           <DialogProvider getContainer={getBody}>
             <TooltipProvider getContainer={getBody}>
               <Component {...pageProps} />

@@ -1,6 +1,5 @@
 import { Field, ObjectType, ID } from 'type-graphql';
 
-import { Role } from '@/graphql/types/Role';
 import { NominalID } from '@/lib/typeHelpers/nominal';
 import { User as BaseUserModel } from '@/models/User';
 
@@ -14,7 +13,4 @@ export class User implements BaseUserModel {
 
   @Field(type => ID, { description: 'User ID' })
   id!: NominalID<'id'>;
-
-  @Field(type => [Role])
-  roles!: Role[];
 }

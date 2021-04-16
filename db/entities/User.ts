@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-@Unique(['email', 'googleId', 'appleId'])
+@Unique(['email', 'googleId', 'appleId', 'authId'])
 export class User {
   @PrimaryGeneratedColumn()
   id!: number;

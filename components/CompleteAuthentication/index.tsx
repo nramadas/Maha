@@ -12,6 +12,7 @@ const completeAuthorization = `
   mutation($email: String!, $token: String!) {
     completeAuthentication(credentials: {email: $email, token: $token}) {
       jwt
+      aut
     }
   }
 `;
@@ -24,7 +25,7 @@ interface Props {
 
 export function CompleteAuthorization(props: Props) {
   const { email, token, onComplete } = props;
-  const { setJwt } = useContext(JWTContext);
+  const { setJwt, setAut } = useContext(JWTContext);
   const [, complete] = useMutation(completeAuthorization);
   const [error, setError] = useState<ErrorType | null>(null);
 
@@ -35,8 +36,9 @@ export function CompleteAuthorization(props: Props) {
           const errorType = result.error.graphQLErrors[0].message as ErrorType;
           setError(errorType);
         } else {
-          const jwt: string = result.data.completeAuthentication.jwt;
+          const { jwt, aut } = result.data.completeAuthentication;
           setJwt(jwt);
+          setAut(aut);
           onComplete();
         }
       });

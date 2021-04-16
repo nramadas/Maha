@@ -7,8 +7,8 @@ import { Container } from 'typedi';
 import { useContainer } from 'typeorm';
 
 import { connectToDb } from '@/db';
-import { Context } from '@/graphql/context';
 import * as resolvers from '@/graphql/resolvers';
+import { contextFromHeaders } from '@/lib/authn/contextFromHeaders';
 
 // eslint-disable-next-line
 useContainer(Container);
@@ -32,9 +32,7 @@ const setup = async () => {
       port: process.env.REDIS_PORT,
     }),
     context: async ({ req }) => {
-      const me = null;
-      const context: Context = { me };
-      return context;
+      return await contextFromHeaders(req.headers);
     },
   });
 

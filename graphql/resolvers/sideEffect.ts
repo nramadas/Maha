@@ -1,5 +1,4 @@
 import { AuthenticationError } from 'apollo-server-micro';
-import { publicRequest as authnPublicRequest } from 'lib/authn/request';
 import { Arg, Mutation, Resolver } from 'type-graphql';
 import { Repository } from 'typeorm';
 import { InjectRepository } from 'typeorm-typedi-extensions';
@@ -7,6 +6,11 @@ import { InjectRepository } from 'typeorm-typedi-extensions';
 import { User as UserEntity } from '@/db/entities/User';
 import { BeginAuthenticationInput } from '@/graphql/types/BeginAuthenticationInput';
 import { SideEffect } from '@/graphql/types/SideEffect';
+import {
+  initiatePasswordlessLogin,
+  userExists,
+  createUser,
+} from '@/lib/authn/api';
 import { ErrorType } from '@/lib/errors/type';
 import { randomString } from '@/lib/random';
 
@@ -23,30 +27,21 @@ export class SideEffectResolver {
   ) {
     const { email } = credentials;
 
-    const existingUser = await authnPublicRequest({
-      url: `/accounts/available?username=${encodeURIComponent(email)}`,
-      method: 'GET',
-    });
+    const existingUser = await userExists(email);
 
-    if (!existingUser.errors) {
-      const createUser = await authnPublicRequest({
-        url: '/accounts',
-        method: 'POST',
-        body: {
-          username: email,
-          password: await randomString(20),
-        },
-      });
+    if (!existingUser.ok) {
+      throw new AuthenticationError(ErrorType.SomethingElse);
+    }
 
-      if (createUser.errors) {
+    if (!existingUser.exists) {
+      const createUserResult = await createUser(email);
+
+      if (!createUserResult.ok) {
         throw new AuthenticationError(ErrorType.SomethingElse);
       }
     }
 
-    await authnPublicRequest({
-      url: `/session/token?username=${encodeURIComponent(email)}`,
-      method: 'GET',
-    });
+    await initiatePasswordlessLogin(email);
 
     return { ok: true };
   }

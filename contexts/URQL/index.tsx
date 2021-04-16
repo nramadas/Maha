@@ -19,5 +19,6 @@ interface Props {
 
 export function URQLProvider(props: Props) {
   const { jwt } = useContext(JWTContext);
-  return <Provider value={setupClient(jwt)}>{props.children}</Provider>;
+  const client = setupClient(jwt);
+  return <Provider value={client}>{props.children}</Provider>;
 }

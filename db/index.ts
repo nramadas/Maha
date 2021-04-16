@@ -1,6 +1,7 @@
 import { getConnectionManager } from 'typeorm';
 
 import config from '@/db/ormconfig';
+import { log } from '@/lib/log/server';
 
 const { cli, migrations, migrationsTableName, ...withoutCli } = config;
 
@@ -19,9 +20,13 @@ export const connectToDb = async () => {
 
   try {
     await manager.get().connect();
-    console.log('Database connection established');
+    log({ subject: 'Database connection established' });
   } catch (e) {
-    console.error('Error: Could not establish connection with database');
+    log({
+      error: true,
+      subject: 'Error: Could not establish connection with database',
+      text: e.toString(),
+    });
     throw e;
   }
 };

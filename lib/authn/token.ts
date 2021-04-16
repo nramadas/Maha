@@ -1,22 +1,14 @@
-import { decode } from '@/lib/base64';
+import { AuthN } from '@keratin/authn-node';
+
 import { AuthnIdToken } from '@/models/AuthnIdToken';
 
-interface Payload {
-  aud: string[];
-  auth_time: number;
-  exp: number;
-  iat: number;
-  iss: number;
-  sub: string;
-}
+const authn = new AuthN({
+  issuer: process.env.AUTHN_URL!,
+  audiences: process.env.APP_DOMAINS!.split(','),
+  username: process.env.HTTP_AUTH_USERNAME!,
+  password: process.env.HTTP_AUTH_PASSWORD!,
+});
 
-export function extractPayload(token: AuthnIdToken) {
-  const [, payloadEncodedStr] = token.split('.');
-
-  try {
-    const payloadStr = decode(payloadEncodedStr);
-    return JSON.parse(payloadStr) as Payload;
-  } catch (e) {
-    return null;
-  }
+export function extractAuthId(token: AuthnIdToken) {
+  return authn.subjectFrom(token);
 }

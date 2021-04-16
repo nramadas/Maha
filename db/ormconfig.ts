@@ -1,6 +1,6 @@
 import { ConnectionOptions } from 'typeorm';
 
-import { User } from './entities/User';
+import * as entities from './entities';
 
 const config: ConnectionOptions = {
   cache: {
@@ -14,7 +14,7 @@ const config: ConnectionOptions = {
     migrationsDir: 'db/migrations',
   },
   database: process.env.POSTGRES_DB,
-  entities: [User],
+  entities: Object.values(entities),
   host: process.env.POSTGRES_HOST,
   migrations: ['db/migrations/*.ts'],
   migrationsTableName: 'typeorm_migrations',
