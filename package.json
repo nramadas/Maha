@@ -6,10 +6,10 @@
     "db": "ts-node --require ./db/env.js --project ./db/typeorm.tsconfig.json ./node_modules/typeorm/cli.js --config db/ormconfig.ts",
     "db.m.new": "yarn db migration:generate -p -n",
     "db.m.run": "yarn db migration:run",
-    "native.start": "IS_EXPO=true && expo start --config ./app.json",
-    "web.dev": "next dev",
-    "web.build": "next build",
-    "web.start": "next start"
+    "native.start": "export IS_EXPO=true && expo start --config ./app.json",
+    "web.dev": "export IS_EXPO=false && next dev",
+    "web.build": "export IS_EXPO=false && next build",
+    "web.start": "export IS_EXPO=false && next start"
   },
   "dependencies": {
     "@expo/vector-icons": "^12.0.4",

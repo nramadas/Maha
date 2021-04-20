@@ -2,6 +2,8 @@
 // Learn more: https://github.com/expo/expo/blob/master/docs/pages/versions/unversioned/guides/using-nextjs.md#shared-steps
 
 module.exports = function (api) {
+  require('dotenv').config({ path: '.env.local' });
+
   api.cache(true);
 
   const isExpo = process.env.IS_EXPO === 'true';
@@ -9,9 +11,13 @@ module.exports = function (api) {
   return {
     presets: [isExpo ? '@expo/next-adapter/babel' : 'next/babel'],
     plugins: [
-      'babel-plugin-transform-typescript-metadata',
-      ['@babel/plugin-proposal-decorators', { legacy: true }],
-      ['@babel/plugin-proposal-class-properties', { loose: true }],
+      ...(!isExpo
+        ? [
+            'babel-plugin-transform-typescript-metadata',
+            ['@babel/plugin-proposal-decorators', { legacy: true }],
+            ['@babel/plugin-proposal-class-properties', { loose: true }],
+          ]
+        : []),
       [
         'module-resolver',
         {
