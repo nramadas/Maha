@@ -6,12 +6,12 @@ module.exports = function (api) {
 
   api.cache(true);
 
-  const isExpo = process.env.IS_EXPO === 'true';
+  const isWeb = process.env.IS_WEB !== 'true';
 
   return {
-    presets: [isExpo ? '@expo/next-adapter/babel' : 'next/babel'],
+    presets: [isWeb ? 'next/babel' : '@expo/next-adapter/babel'],
     plugins: [
-      ...(!isExpo
+      ...(isWeb
         ? [
             'babel-plugin-transform-typescript-metadata',
             ['@babel/plugin-proposal-decorators', { legacy: true }],

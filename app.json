@@ -19,13 +19,15 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.black.black"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./native/assets/images/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.black.black"
     },
     "web": {
       "favicon": "./native/assets/images/favicon.png"
