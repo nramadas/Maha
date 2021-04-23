@@ -1,0 +1,102 @@
+{
+    "name": "en",
+    "translations": {
+        "69ac930b9eec63105330d468d": {
+            "reference": "Could not sign into Google",
+            "template": "Could not sign into Google",
+            "variations": {}
+        },
+        "11c3fa617d937406eced7d7e0": {
+            "reference": "Incorrect username and/or password",
+            "template": "Incorrect username and/or password",
+            "variations": {}
+        },
+        "a2e17d0bad63b3aaaa2742196": {
+            "reference": "Missing Google credentials",
+            "template": "Missing Google credentials",
+            "variations": {}
+        },
+        "593470fa38add1c41839e6181": {
+            "reference": "Passwords do not match",
+            "template": "Passwords do not match",
+            "variations": {}
+        },
+        "986ce7b3f6403e89ef0d445f5": {
+            "reference": "You are unauthorized to perform that action",
+            "template": "You are unauthorized to perform that action",
+            "variations": {}
+        },
+        "32e98b02282c1012f66e95c8d": {
+            "reference": "That user already exists",
+            "template": "That user already exists",
+            "variations": {}
+        },
+        "cc89c7e09acbb0825d2786ed8": {
+            "reference": "Something went wrong",
+            "template": "Something went wrong",
+            "variations": {}
+        },
+        "22e6632e2dd4295af74541565": {
+            "reference": "Hello this is translated",
+            "template": "Hello this is translated",
+            "variations": {}
+        },
+        "64dfed5f1b92a48369d4c5941": {
+            "reference": "Welcome %%user, how are you doing?",
+            "template": "Welcome %%user, how are you doing?",
+            "variations": {}
+        },
+        "2f2bc294b7adcd03f2937412d": {
+            "reference": "%%agent will see you today",
+            "template": "%%agent will see you today",
+            "variations": {
+                "%%agent.M": "%%agent will see you today",
+                "%%agent.F": "%%agent will see you today",
+                "%%agent.N": "%%agent will see you today"
+            }
+        },
+        "266432ee65b133172e9138e6b": {
+            "reference": "There are %%bottleCount bottles on the wall",
+            "template": "There are %%bottleCount bottles on the wall",
+            "variations": {
+                "%%bottleCount.none": "There are no bottles on the wall",
+                "%%bottleCount.one": "There is %%bottleCount bottle on the wall",
+                "%%bottleCount.many": "There are %%bottleCount bottles on the wall"
+            }
+        },
+        "6a05218c6188d6b6589e0bbcb": {
+            "reference": "%%person can eat %%cookies before he feels sick.",
+            "template": "%%person can eat %%cookies before he feels sick.",
+            "variations": {
+                "%%person.M--%%cookies.none": "%%person can eat no cookies before he feels sick.",
+                "%%person.M--%%cookies.one": "%%person can eat one cookie before he feels sick.",
+                "%%person.M--%%cookies.many": "%%person can eat %%cookies before he feels sick.",
+                "%%person.F--%%cookies.none": "%%person can eat no cookies before he feels sick.",
+                "%%person.F--%%cookies.one": "%%person can eat one cookie before he feels sick.",
+                "%%person.F--%%cookies.many": "%%person can eat %%cookies before he feels sick.",
+                "%%person.N--%%cookies.none": "%%person can eat no cookies before he feels sick.",
+                "%%person.N--%%cookies.one": "%%person can eat one cookie before he feels sick.",
+                "%%person.N--%%cookies.many": "%%person can eat %%cookies before he feels sick."
+            }
+        },
+        "ae498e7bb578ea12447c2164f": {
+            "reference": "Hello this is also translated",
+            "template": "Hello this is also translated",
+            "variations": {}
+        },
+        "855309dd0a62c5c4677bb537e": {
+            "reference": "This uses a %%param, Isn't that cool?",
+            "template": "This uses a %%param, Isn't that cool?",
+            "variations": {}
+        },
+        "50697e5e9b8da744300827ee9": {
+            "reference": "This uses a %%person, Isn't that cool?",
+            "template": "This uses a %%person, Isn't that cool?",
+            "variations": {
+                "%%person.none": "This uses a %%person, Isn't that cool?",
+                "%%person.one": "This uses a %%person, Isn't that cool?",
+                "%%person.many": "This uses a %%person, Isn't that cool?"
+            }
+        }
+    }
+}

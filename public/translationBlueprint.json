@@ -1,0 +1,102 @@
+{
+    "name": "",
+    "translations": {
+        "69ac930b9eec63105330d468d": {
+            "reference": "Could not sign into Google",
+            "template": "",
+            "variations": {}
+        },
+        "11c3fa617d937406eced7d7e0": {
+            "reference": "Incorrect username and/or password",
+            "template": "",
+            "variations": {}
+        },
+        "a2e17d0bad63b3aaaa2742196": {
+            "reference": "Missing Google credentials",
+            "template": "",
+            "variations": {}
+        },
+        "593470fa38add1c41839e6181": {
+            "reference": "Passwords do not match",
+            "template": "",
+            "variations": {}
+        },
+        "986ce7b3f6403e89ef0d445f5": {
+            "reference": "You are unauthorized to perform that action",
+            "template": "",
+            "variations": {}
+        },
+        "32e98b02282c1012f66e95c8d": {
+            "reference": "That user already exists",
+            "template": "",
+            "variations": {}
+        },
+        "cc89c7e09acbb0825d2786ed8": {
+            "reference": "Something went wrong",
+            "template": "",
+            "variations": {}
+        },
+        "22e6632e2dd4295af74541565": {
+            "reference": "Hello this is translated",
+            "template": "",
+            "variations": {}
+        },
+        "64dfed5f1b92a48369d4c5941": {
+            "reference": "Welcome %%user, how are you doing?",
+            "template": "",
+            "variations": {}
+        },
+        "2f2bc294b7adcd03f2937412d": {
+            "reference": "%%agent will see you today",
+            "template": "",
+            "variations": {
+                "%%agent.M": "",
+                "%%agent.F": "",
+                "%%agent.N": ""
+            }
+        },
+        "266432ee65b133172e9138e6b": {
+            "reference": "There are %%bottleCount bottles on the wall",
+            "template": "",
+            "variations": {
+                "%%bottleCount.none": "",
+                "%%bottleCount.one": "",
+                "%%bottleCount.many": ""
+            }
+        },
+        "6a05218c6188d6b6589e0bbcb": {
+            "reference": "%%person can eat %%cookies before he feels sick.",
+            "template": "",
+            "variations": {
+                "%%person.M--%%cookies.none": "",
+                "%%person.M--%%cookies.one": "",
+                "%%person.M--%%cookies.many": "",
+                "%%person.F--%%cookies.none": "",
+                "%%person.F--%%cookies.one": "",
+                "%%person.F--%%cookies.many": "",
+                "%%person.N--%%cookies.none": "",
+                "%%person.N--%%cookies.one": "",
+                "%%person.N--%%cookies.many": ""
+            }
+        },
+        "ae498e7bb578ea12447c2164f": {
+            "reference": "Hello this is also translated",
+            "template": "",
+            "variations": {}
+        },
+        "855309dd0a62c5c4677bb537e": {
+            "reference": "This uses a %%param, Isn't that cool?",
+            "template": "",
+            "variations": {}
+        },
+        "50697e5e9b8da744300827ee9": {
+            "reference": "This uses a %%person, Isn't that cool?",
+            "template": "",
+            "variations": {
+                "%%person.none": "",
+                "%%person.one": "",
+                "%%person.many": ""
+            }
+        }
+    }
+}

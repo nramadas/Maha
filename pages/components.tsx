@@ -1,3 +1,4 @@
+import { Param } from 'lib/translate/element';
 import React from 'react';
 
 import { Autocomplete } from '@/components/controls/Autocomplete';
@@ -24,6 +25,9 @@ import { Home } from '@/components/icons/Home';
 
 import * as T from '@/components/typography';
 
+import { useLanguagePack } from '@/hooks/useLanguagePack';
+import { i18n } from '@/lib/translate';
+
 const iconStyle = {
   height: 40,
   width: 40,
@@ -31,8 +35,81 @@ const iconStyle = {
 };
 
 export default function Components() {
+  const languagePack = useLanguagePack();
+
   return (
     <div>
+      <h1>Translation</h1>
+      <h2>Using JSX to translate</h2>
+      <div>
+        <i18n.Translate>Hello this is translated</i18n.Translate>
+      </div>
+
+      <div>
+        <i18n.Translate>
+          Welcome <i18n.Param name="user">Joe</i18n.Param>, how are you doing?
+        </i18n.Translate>
+      </div>
+
+      <div>
+        <i18n.Translate>
+          <i18n.Param name="agent" gender="F">
+            Cathy
+          </i18n.Param>{' '}
+          will see you today
+        </i18n.Translate>
+      </div>
+
+      <div>
+        <i18n.Translate>
+          There are{' '}
+          <i18n.Param name="bottleCount" count={4}>
+            4
+          </i18n.Param>{' '}
+          bottles on the wall
+        </i18n.Translate>
+      </div>
+
+      <div>
+        <i18n.Translate>
+          <i18n.Param name="person" gender="M">
+            Henry
+          </i18n.Param>{' '}
+          can eat{' '}
+          <i18n.Param name="cookies" count={10}>
+            many cookies
+          </i18n.Param>{' '}
+          before he feels sick.
+        </i18n.Translate>
+      </div>
+
+      <h2>Using functions to translate</h2>
+      <div>
+        {i18n.translate`You can also translate with a tagged template`(
+          languagePack,
+        )}
+      </div>
+      <div>
+        {i18n.translate`Tagged templates take on ${{
+          name: 'param',
+          value: 'params',
+        }} as well.`(languagePack)}
+      </div>
+      <div>
+        {i18n.translate`The params can include ${{
+          name: 'gender',
+          value: 'gender',
+          gender: 'M',
+        }} too.`(languagePack)}
+      </div>
+      <div>
+        {i18n.translate`Same with (${{
+          name: 'person',
+          value: '4',
+          count: 4,
+        }}) count`(languagePack)}
+      </div>
+
       <h1>Controls</h1>
 
       <h2>Autocomplete</h2>

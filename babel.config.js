@@ -6,7 +6,7 @@ module.exports = function (api) {
 
   api.cache(true);
 
-  const isWeb = process.env.IS_WEB !== 'true';
+  const isWeb = process.env.IS_WEB === 'true';
 
   return {
     presets: [isWeb ? 'next/babel' : '@expo/next-adapter/babel'],
@@ -18,6 +18,7 @@ module.exports = function (api) {
             ['@babel/plugin-proposal-class-properties', { loose: true }],
           ]
         : []),
+      ...(!isWeb ? ['transform-inline-environment-variables'] : []),
       [
         'module-resolver',
         {

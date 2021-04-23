@@ -8,9 +8,11 @@ import '@/styles/normalize.css';
 import { JWTRefresh } from '@/components/JWTRefresh';
 import { DialogProvider } from '@/contexts/Dialog';
 import { JWTProvider } from '@/contexts/JWT';
+import { LanguagePackProvider } from '@/contexts/LanguagePack';
 import { TooltipProvider } from '@/contexts/Tooltip';
 import { URQLProvider } from '@/contexts/URQL';
 import { establishAuthentication } from '@/lib/ssr';
+import { DEFAULT as DEFAULT_LANGUAGE_PACK } from '@/models/LanguagePack';
 
 function getBody() {
   if (typeof window === 'undefined') {
@@ -42,7 +44,14 @@ export default establishAuthentication(
               <JWTRefresh />
               <DialogProvider getContainer={getBody}>
                 <TooltipProvider getContainer={getBody}>
-                  <Component {...pageProps} />
+                  <LanguagePackProvider
+                    initialLanguagePack={DEFAULT_LANGUAGE_PACK}
+                    getLanguagePack={language =>
+                      Promise.resolve(DEFAULT_LANGUAGE_PACK)
+                    }
+                  >
+                    <Component {...pageProps} />
+                  </LanguagePackProvider>
                 </TooltipProvider>
               </DialogProvider>
             </URQLProvider>

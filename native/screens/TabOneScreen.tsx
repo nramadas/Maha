@@ -14,6 +14,9 @@ import { Switch } from '@/components/controls/Switch/index.native';
 
 import * as T from '@/components/typography/index.native';
 
+import { useLanguagePack } from '@/hooks/useLanguagePack';
+import { i18n } from '@/lib/translate/index.native';
+
 const Container = styled.ScrollView`
   background-color: ${props => props.theme.background};
 `;
@@ -32,10 +35,90 @@ export default function TabOneScreen() {
   const [radioValue, setRadioValue] = React.useState(0);
   const [selectValue, setSelectValue] = React.useState<any>(null);
   const [switchValue, setSwitchValue] = React.useState(false);
+  const languagePack = useLanguagePack();
 
   return (
     <Container keyboardShouldPersistTaps="handled">
       <Section>
+        <T.H3>Translation</T.H3>
+        <T.H4>Using JSX to translate</T.H4>
+        <Section>
+          <i18n.Translate TextComponent={T.Body1}>
+            Hello this is translated
+          </i18n.Translate>
+        </Section>
+        <Section>
+          <i18n.Translate TextComponent={T.Body1}>
+            Welcome{' '}
+            <i18n.Param name="user">
+              <T.Body1>Joe</T.Body1>
+            </i18n.Param>
+            , how are you doing?
+          </i18n.Translate>
+        </Section>
+        <Section>
+          <i18n.Translate TextComponent={T.Body1}>
+            <i18n.Param name="agent" gender="F">
+              <T.Body1>Cathy</T.Body1>
+            </i18n.Param>{' '}
+            will see you today
+          </i18n.Translate>
+        </Section>
+        <Section>
+          <i18n.Translate TextComponent={T.Body1}>
+            There are{' '}
+            <i18n.Param name="bottleCount" count={4}>
+              <T.Body1>4</T.Body1>
+            </i18n.Param>{' '}
+            bottles on the wall
+          </i18n.Translate>
+        </Section>
+        <Section>
+          <i18n.Translate TextComponent={T.Body1}>
+            <i18n.Param name="person" gender="M">
+              <T.Body1>Henry</T.Body1>
+            </i18n.Param>{' '}
+            can eat{' '}
+            <i18n.Param name="cookies" count={10}>
+              <T.Body1>many cookies</T.Body1>
+            </i18n.Param>{' '}
+            before he feels sick.
+          </i18n.Translate>
+        </Section>
+        <T.H4>Using functions to translate</T.H4>
+        <Section>
+          <T.Body1>
+            {i18n.translate`You can also translate with a tagged template`(
+              languagePack,
+            )}
+          </T.Body1>
+        </Section>
+        <Section>
+          <T.Body1>
+            {i18n.translate`Tagged templates take on ${{
+              name: 'param',
+              value: 'params',
+            }} as well.`(languagePack)}
+          </T.Body1>
+        </Section>
+        <Section>
+          <T.Body1>
+            {i18n.translate`The params can include ${{
+              name: 'gender',
+              value: 'gender',
+              gender: 'M',
+            }} too.`(languagePack)}
+          </T.Body1>
+        </Section>
+        <Section>
+          <T.Body1>
+            {i18n.translate`Same with (${{
+              name: 'person',
+              value: '4',
+              count: 4,
+            }}) count`(languagePack)}
+          </T.Body1>
+        </Section>
         <T.H3>Autocomplete</T.H3>
         <Section>
           <Autocomplete
