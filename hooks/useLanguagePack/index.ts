@@ -5,7 +5,7 @@ import {
   LanguagePackDetails,
 } from '@/contexts/LanguagePack';
 
-export function useLanguagePack<L extends string>() {
-  const details = useContext(LanguagePackContext) as LanguagePackDetails<L>;
+export function useLanguagePack() {
+  const details = useContext(LanguagePackContext) as LanguagePackDetails;
   return details.languagePack;
 }

@@ -1,23 +1,24 @@
 import React, { createContext, useCallback, useState } from 'react';
 
+import { Language } from '@/models/Language';
 import { LanguagePack as LanguagePackModel } from '@/models/LanguagePack';
 
-interface Props<L extends string> {
+interface Props {
   children?: React.ReactNode;
-  initialLanguagePack: LanguagePackModel<L>;
-  getLanguagePack: (language: L) => Promise<LanguagePackModel<L>>;
+  initialLanguagePack: LanguagePackModel;
+  getLanguagePack: (language: Language) => Promise<LanguagePackModel>;
 }
 
-export interface LanguagePackDetails<L extends string> {
-  languagePack: LanguagePackModel<L>;
-  setLanguage(language: L): void;
+export interface LanguagePackDetails {
+  languagePack: LanguagePackModel;
+  setLanguage(language: Language): void;
 }
 
-export const LanguagePackContext = createContext<
-  Partial<LanguagePackDetails<string>>
->({});
+export const LanguagePackContext = createContext<Partial<LanguagePackDetails>>(
+  {},
+);
 
-export function LanguagePackProvider<L extends string>(props: Props<L>) {
+export function LanguagePackProvider(props: Props) {
   const { children, initialLanguagePack, getLanguagePack } = props;
   const [languagePack, setLanguagePack] = useState(initialLanguagePack);
 

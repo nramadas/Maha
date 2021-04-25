@@ -3,7 +3,7 @@ import { LanguagePack } from '@/models/LanguagePack';
 import { Param, makeParamToken } from './param';
 
 interface Options<S, R> {
-  translation: LanguagePack<any>['translations'][string];
+  translation: LanguagePack['translations'][string];
   substitutions: S[];
   getParam: (s: S) => Param;
   getValue: (s: S) => R;

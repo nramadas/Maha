@@ -1,5 +1,7 @@
-export interface LanguagePack<L extends string> {
-  name: L;
+import { Language } from '@/models/Language';
+
+export interface LanguagePack {
+  name: Language;
   translations: {
     [hash: string]: {
       reference: string;
@@ -11,7 +13,7 @@ export interface LanguagePack<L extends string> {
   };
 }
 
-export const DEFAULT: LanguagePack<'default'> = {
-  name: 'default',
+export const DEFAULT: LanguagePack = {
+  name: Language.en,
   translations: {},
 };

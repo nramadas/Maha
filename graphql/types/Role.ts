@@ -1,24 +1,19 @@
-import { registerEnumType } from 'type-graphql';
+import { Field, ObjectType, ID } from 'type-graphql';
 
-import { Role } from '@/models/Role';
+import { OrganizationId } from '@/models/Organization';
+import { Role as RoleModel } from '@/models/Role';
 
-registerEnumType(Role, {
-  name: 'Role',
-  description: 'Different roles a User can acquire',
-  valuesConfig: {
-    Agent: {
-      description: 'A user that works for a property developer',
-    },
-    Customer: {
-      description: 'A user that is interested in purchasing a property',
-    },
-    Manager: {
-      description: 'A user that is able to manage Agents',
-    },
-    Owner: {
-      description: 'The owner of a property development organization',
-    },
-  },
-});
+@ObjectType({ description: 'The role of the user in an organization' })
+export class Role implements RoleModel {
+  @Field({ description: 'When the user created the account' })
+  created!: Date;
 
-export { Role };
+  @Field(type => ID, { description: 'Role ID' })
+  id!: RoleModel['id'];
+
+  @Field({ description: 'What the role is called' })
+  name!: string;
+
+  @Field(type => ID, { description: 'The ID of the organization' })
+  organizationId!: OrganizationId;
+}

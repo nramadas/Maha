@@ -1,10 +1,13 @@
 import { Field, ObjectType, ID } from 'type-graphql';
 
-import { NominalID } from '@/lib/typeHelpers/nominal';
-import { User as BaseUserModel } from '@/models/User';
+import { Gender } from '@/graphql/types/Gender';
+import { Language } from '@/graphql/types/Language';
+import { Gender as GenderModel } from '@/models/Gender';
+import { Language as LanguageModel } from '@/models/Language';
+import { User as UserModel } from '@/models/User';
 
 @ObjectType({ description: 'A user' })
-export class User implements BaseUserModel {
+export class User implements UserModel {
   @Field({ description: 'When the user created the account' })
   created!: Date;
 
@@ -12,5 +15,23 @@ export class User implements BaseUserModel {
   email!: string;
 
   @Field(type => ID, { description: 'User ID' })
-  id!: NominalID<'id'>;
+  id!: UserModel['id'];
+
+  @Field({ description: "The user's first name", nullable: true })
+  firstName!: string;
+
+  @Field({ description: "The user's last name", nullable: true })
+  lastName!: string;
+
+  @Field(type => Gender, { description: "The user's gender", nullable: true })
+  gender!: GenderModel;
+
+  @Field(type => Language, {
+    description: 'What language the user prefers to interact in',
+    nullable: true,
+  })
+  preferredLanguage!: LanguageModel;
+
+  @Field({ description: "The user's phone number", nullable: true })
+  phoneNumber!: string;
 }

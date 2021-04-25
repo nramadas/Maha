@@ -1,6 +1,8 @@
-export enum Role {
-  Agent = 'agent',
-  Customer = 'customer',
-  Manager = 'manager',
-  Owner = 'owner',
+import { NominalID } from '@/lib/typeHelpers/nominal';
+import { OrganizationId } from '@/models/Organization';
+
+export interface Role {
+  id: NominalID<'role id'>;
+  name: string;
+  organizationId: OrganizationId;
 }
