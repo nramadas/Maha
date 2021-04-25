@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "black",
-    "slug": "black",
+    "name": "maha",
+    "slug": "maha",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./native/assets/images/icon.png",
@@ -20,14 +20,14 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.black.black"
+      "bundleIdentifier": "com.maha.ios"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./native/assets/images/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.black.black"
+      "package": "com.maha.android"
     },
     "web": {
       "favicon": "./native/assets/images/favicon.png"
