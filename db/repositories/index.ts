@@ -5,11 +5,18 @@ import * as entities from '@/db/entities';
 type Entities = typeof entities;
 type EntityName = keyof Entities;
 
-export default Object.keys(entities).reduce((acc, name) => {
-  acc[name as EntityName] = () => {
-    const entity = entities[name as EntityName];
-    const connection = getConnection();
-    return connection.getRepository(entity);
-  };
-  return acc;
-}, {} as { [K in EntityName]: () => Repository<InstanceType<Entities[K]>> });
+type Acc = {
+  [K in EntityName]: () => Repository<InstanceType<Entities[K]>>;
+};
+
+export default (Object.keys(entities) as EntityName[]).reduce<Acc>(
+  <N extends EntityName>(acc: Acc, name: N) => {
+    acc[name] = (() => {
+      const entity = entities[name];
+      const connection = getConnection();
+      return connection.getRepository(entity);
+    }) as Acc[N];
+    return acc;
+  },
+  {} as Acc,
+);

@@ -129,7 +129,7 @@ export const createUser = (email: string) =>
       publicRequest({
         url: '/accounts',
         method: 'POST',
-        body: { email, password },
+        body: { username: email, password },
       }),
     )
     .then<CreateUser>(async res => {

@@ -1,8 +1,13 @@
+import once from 'lodash/once';
 import Cors from 'micro-cors';
 import { NextApiRequest, NextApiResponse } from 'next';
 
+import { connectToDb } from '@/db';
+import repos from '@/db/repositories';
 import { sendEmail } from '@/emails';
 import { getEmail } from '@/lib/authn/api';
+
+const dbConnect = once(() => connectToDb());
 
 const cors = Cors({
   allowMethods: ['GET', 'POST', 'OPTIONS'],
@@ -17,11 +22,25 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (response.ok) {
       const email = response.email;
 
-      sendEmail({
-        to: email,
-        template: 'Authentication',
-        props: { email, token },
-      });
+      await dbConnect();
+
+      const invite = await repos
+        .CreateOrganizationInvite()
+        .findOne({ where: { email } });
+
+      if (invite) {
+        sendEmail({
+          to: email,
+          template: 'CreateOrganization',
+          props: { email, token },
+        });
+      } else {
+        sendEmail({
+          to: email,
+          template: 'Authentication',
+          props: { email, token },
+        });
+      }
     }
   }
 

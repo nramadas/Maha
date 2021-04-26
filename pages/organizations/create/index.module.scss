@@ -1,0 +1,13 @@
+.container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 24px;
+  flex-grow: 1;
+}
+
+.wrapper {
+  max-width: 640px;
+  width: 100%;
+}

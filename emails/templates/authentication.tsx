@@ -10,7 +10,7 @@ interface Props {
 export const Authentication: Email<Props> = {
   rawText: 'Click to continue to Maha',
   subject: 'Continue to log in to Maha',
-  template: props => {
+  Template: props => {
     const urlSafeEmail = encodeURIComponent(props.email);
     const query = `?email=${urlSafeEmail}&token=${props.token}`;
 

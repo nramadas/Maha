@@ -19,7 +19,10 @@ export function establishAuthentication(App: typeof BaseApp) {
 
       if (result.ok) {
         jwt = result.idToken;
-        context.ctx.res?.setHeader('set-cookie', `token=${jwt}; SameSite=Lax`);
+        context.ctx.res?.setHeader(
+          'set-cookie',
+          `token=${jwt}; SameSite=Lax; path=/`,
+        );
       } else {
         jwt = undefined;
         aut = undefined;
@@ -37,7 +40,13 @@ export function establishAuthentication(App: typeof BaseApp) {
     const initialState = ssr.extractData();
 
     return {
-      pageProps: { jwt, aut, ssrInitialState: initialState },
+      pageProps: {
+        jwt,
+        aut,
+        ssrInitialState: initialState,
+        query: context.ctx.query,
+        pathname: context.ctx.pathname,
+      },
     };
   };
 
