@@ -1,13 +1,15 @@
 import cx from 'classnames';
-import React from 'react';
+import React, { useEffect } from 'react';
+
+import { useForm } from '@/hooks/useForm';
 
 import styles from './index.module.scss';
 
-interface Props
-  extends Omit<
-    React.HTMLAttributes<HTMLInputElement>,
-    'defaultValue' | 'onChange'
-  > {
+interface Props {
+  /**
+   * Extra styling
+   */
+  className?: string;
   /**
    * Starting value for the switch. One of `'on'` or `'off'`.
    */
@@ -31,7 +33,15 @@ interface Props
  * Switch, behaves like a checkbox
  */
 export function Switch(props: Props) {
-  const { className, disabled, defaultValue, onChange, ...rest } = props;
+  const { className, disabled, defaultValue, name, onChange } = props;
+
+  const form = useForm();
+
+  useEffect(() => {
+    if (defaultValue) {
+      form.setValue(name, defaultValue);
+    }
+  }, []);
 
   return (
     <div className={styles.wrapper}>
@@ -46,11 +56,10 @@ export function Switch(props: Props) {
           disabled={disabled}
           type="checkbox"
           onChange={e => {
-            if (onChange) {
-              onChange(e.currentTarget.checked);
-            }
+            const checked = e.currentTarget.checked;
+            form.setValue(name, checked);
+            onChange?.(e.currentTarget.checked);
           }}
-          {...rest}
         />
         <div className={styles.bg} />
         <div className={styles.thumb} />

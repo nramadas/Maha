@@ -1,12 +1,16 @@
 import React, { ReactNode } from 'react';
-import { Pressable } from 'react-native';
+import { StyleProp, ViewStyle } from 'react-native';
 import styled, { css } from 'styled-components/native';
 
-interface Props
-  extends Omit<React.ComponentProps<typeof Pressable>, 'children' | 'onPress'> {
+import { useForm } from '@/hooks/useForm';
+
+interface Props {
+  className?: string;
   children?: ReactNode;
   disabled?: boolean;
-  onPress?(): void;
+  style?: StyleProp<ViewStyle>;
+  type?: React.ButtonHTMLAttributes<HTMLButtonElement>['type'];
+  onClick?(): void;
 }
 
 interface ExtraProps {
@@ -59,14 +63,23 @@ const ButtonText = styled.Text<ExtraProps>`
 `;
 
 export function Hollow(props: Props) {
-  const { children, disabled, onPress, ...rest } = props;
+  const { children, disabled, style, type, onClick } = props;
+  const form = useForm();
 
   return (
-    <Container {...rest} onPress={onPress}>
+    <Container
+      style={style}
+      onPress={() => {
+        if (type === 'submit') {
+          form.triggerFormSubmit();
+        }
+        onClick?.();
+      }}
+    >
       {({ pressed }) => (
-        <Button disabled={props.disabled} pressed={pressed}>
-          <ButtonText disabled={props.disabled} pressed={pressed}>
-            {props.children}
+        <Button disabled={disabled} pressed={pressed}>
+          <ButtonText disabled={disabled} pressed={pressed}>
+            {children}
           </ButtonText>
         </Button>
       )}

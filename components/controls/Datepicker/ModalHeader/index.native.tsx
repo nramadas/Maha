@@ -29,7 +29,7 @@ export function ModalHeader(props: Props) {
   return (
     <Row>
       <H4>{props.title}</H4>
-      <Close onPress={props.onClose}>{props.done ? 'Done' : 'Cancel'}</Close>
+      <Close onClick={props.onClose}>{props.done ? 'Done' : 'Cancel'}</Close>
     </Row>
   );
 }

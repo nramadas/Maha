@@ -5,6 +5,7 @@ import styled, { css, useTheme } from 'styled-components/native';
 
 import { Checkmark } from '@/components/icons/Checkmark/index.native';
 import { Body2 } from '@/components/typography/Body2';
+import { useForm } from '@/hooks/useForm';
 
 interface ChoiceObj {
   disabled?: boolean;
@@ -17,9 +18,9 @@ interface Props<C> {
    */
   choices: C[];
   /**
-   * A list of choices that have been selected
+   * Reference name for chips value
    */
-  selected: C[];
+  name: string;
   /**
    * Callback that returns when an item is selected
    */
@@ -96,8 +97,10 @@ const PillText = styled(Body2)<{ disabled?: boolean; selected?: boolean }>`
 `;
 
 export function Pick<C extends ChoiceObj>(props: Props<C>) {
+  const form = useForm();
   const theme = useTheme();
-  const { choices, selected, onChoose } = props;
+  const { choices, name, onChoose } = props;
+  const selected: C[] = form.getValue(name) || [];
 
   return (
     <Container>
@@ -108,17 +111,17 @@ export function Pick<C extends ChoiceObj>(props: Props<C>) {
           <PillContainer
             key={choice.text}
             onPress={() => {
-              if (!onChoose || choice.disabled) {
+              if (choice.disabled) {
                 return;
               }
 
               const withoutChoice = selected.filter(s => !isEqual(s, choice));
-
-              if (withoutChoice.length === selected.length) {
-                onChoose(withoutChoice.concat(choice));
-              } else {
-                onChoose(withoutChoice);
-              }
+              const newSelected =
+                withoutChoice.length === selected.length
+                  ? withoutChoice.concat(choice)
+                  : withoutChoice;
+              form.setValue(name, newSelected);
+              onChoose?.(newSelected);
             }}
           >
             {({ pressed }) => (

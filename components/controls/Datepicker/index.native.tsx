@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Modal, SafeAreaView } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import styled, { useTheme } from 'styled-components/native';
@@ -6,7 +6,8 @@ import styled, { useTheme } from 'styled-components/native';
 import { Input } from '@/components/controls/Input/index.native';
 import { Calendar as _CalendarIcon } from '@/components/icons/Calendar/index.native';
 import { useDateFormatter } from '@/hooks/useDateFormatter';
-import { useRangeSelection } from '@/hooks/useDateSelection';
+import { useRangeSelection, Select } from '@/hooks/useDateSelection';
+import { useForm } from '@/hooks/useForm';
 import { today } from '@/lib/date';
 
 import { markDays, value as computeValue } from './_common';
@@ -16,6 +17,7 @@ interface Props<R extends boolean> {
   label: string;
   maxDate?: Date;
   minDate?: Date;
+  name: string;
   range?: R;
   onSelect?: R extends true
     ? (dates: [Date | null, Date | null]) => void
@@ -48,11 +50,20 @@ const TapArea = styled.Pressable`
 `;
 
 export function Datepicker<R extends boolean>(props: Props<R>) {
-  const { label, minDate, maxDate, range, onSelect } = props;
+  const { label, minDate, maxDate, name, range, onSelect } = props;
 
+  const form = useForm();
+  const selectDates = useCallback<Select<R>>(
+    // @ts-ignore
+    dates => {
+      form.setValue(name, dates);
+      onSelect?.(dates);
+    },
+    [form, onSelect],
+  );
   const [format] = useDateFormatter({});
   const [isOpen, setIsOpen] = useState(false);
-  const [{ start, end }, select] = useRangeSelection(range, onSelect);
+  const [{ start, end }, select] = useRangeSelection(range, selectDates);
   const theme = useTheme();
 
   return (

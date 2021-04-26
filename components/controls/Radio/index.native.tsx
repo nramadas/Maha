@@ -1,14 +1,21 @@
+import isEqual from 'lodash/isEqual';
 import React from 'react';
 import styled, { css } from 'styled-components/native';
 
 import { Body2 } from '@/components/typography/Body2/index.native';
+import { useForm } from '@/hooks/useForm';
 import { quick as quickAnimation } from '@/lib/animations/native';
 
-interface Props {
+interface Value {
+  text: string;
+}
+
+interface Props<V> {
   disabled?: boolean;
   label?: string;
-  selected?: boolean;
-  onSelect?(): void;
+  name: string;
+  value: V;
+  onSelect?(value: V): void;
 }
 
 const Circle = styled.View<{ disabled?: boolean }>`
@@ -80,12 +87,21 @@ const Press = styled.View<{ pressed?: boolean }>`
 /**
  * Custom radio button
  */
-export function Radio(props: Props) {
-  const { disabled, label, selected, onSelect } = props;
+export function Radio<V extends Value>(props: Props<V>) {
+  const { disabled, label, name, value, onSelect } = props;
+  const form = useForm();
   quickAnimation();
 
+  const currentlySelected = form.getValue(name);
+  const selected = isEqual(currentlySelected, value);
+
   return (
-    <Container onPress={onSelect}>
+    <Container
+      onPress={() => {
+        form.setValue(name, value);
+        onSelect?.(value);
+      }}
+    >
       {({ pressed }) => (
         <>
           <Press pressed={pressed} />

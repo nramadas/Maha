@@ -1,17 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled, { css } from 'styled-components/native';
 
+import { useForm } from '@/hooks/useForm';
 import { quick as quickAnimation } from '@/lib/animations/native';
 
 interface Props {
   /**
-   * When set to true, prevents the users for toggling teh Switch
+   * Starting value for the switch. One of `'on'` or `'off'`.
+   */
+  defaultValue?: boolean;
+  /**
+   * When set to true, prevents the users for toggling the Switch
    */
   disabled?: boolean;
   /**
    * Input name
    */
-  value: boolean;
+  name: string;
   /**
    * Callback, fired when the value changes. Signature is
    * `(value: boolean) => void`
@@ -102,15 +107,25 @@ const Wrapper = styled.Pressable`
  * Switch, behaves like a checkbox
  */
 export function Switch(props: Props) {
-  const { disabled, value, onChange } = props;
+  const { disabled, defaultValue, name, onChange } = props;
+  const form = useForm();
+
+  useEffect(() => {
+    if (defaultValue) {
+      form.setValue(name, defaultValue);
+    }
+  }, []);
+
   quickAnimation();
 
+  const selected = form.getValue(name) || defaultValue;
+
   return (
-    <Wrapper onPress={() => onChange?.(!value)}>
+    <Wrapper onPress={() => onChange?.(!selected)}>
       {({ pressed }) => (
         <Container disabled={disabled}>
-          <Bg disabled={disabled} selected={value} />
-          <Thumb disabled={disabled} pressed={pressed} selected={value} />
+          <Bg disabled={disabled} selected={!!selected} />
+          <Thumb disabled={disabled} pressed={pressed} selected={!!selected} />
         </Container>
       )}
     </Wrapper>

@@ -7,6 +7,7 @@ import '@/styles/normalize.css';
 
 import { JWTRefresh } from '@/components/JWTRefresh';
 import { DialogProvider } from '@/contexts/Dialog';
+import { NoopFormProvider } from '@/contexts/Form';
 import { JWTProvider } from '@/contexts/JWT';
 import { LanguagePackProvider } from '@/contexts/LanguagePack';
 import { TooltipProvider } from '@/contexts/Tooltip';
@@ -50,7 +51,9 @@ export default establishAuthentication(
                       Promise.resolve(DEFAULT_LANGUAGE_PACK)
                     }
                   >
-                    <Component {...pageProps} />
+                    <NoopFormProvider>
+                      <Component {...pageProps} />
+                    </NoopFormProvider>
                   </LanguagePackProvider>
                 </TooltipProvider>
               </DialogProvider>

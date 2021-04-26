@@ -1,14 +1,27 @@
 import React, { forwardRef } from 'react';
-import { TextInput, KeyboardAvoidingView, Platform } from 'react-native';
+import {
+  StyleProp,
+  ViewStyle,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import styled, { css } from 'styled-components/native';
 
 import { Caption } from '@/components/typography/Caption';
+import { useForm } from '@/hooks/useForm';
 import { quick as quickAnimation } from '@/lib/animations/native';
 
 export interface Props extends React.ComponentProps<typeof TextInput> {
+  __doNotWriteToForm?: boolean;
+  className?: string;
   disabled?: boolean;
   error?: string;
+  icon?: any;
   label: string;
+  name: string;
+  style?: StyleProp<ViewStyle>;
+  type?: React.InputHTMLAttributes<HTMLInputElement>['type'];
 }
 
 interface ExtraProps {
@@ -106,8 +119,19 @@ const RawInput = styled.TextInput<ExtraProps>`
 `;
 
 export const Input = forwardRef<TextInput, Props>((props, ref) => {
-  const { disabled, error, label, style, ...rest } = props;
+  const {
+    __doNotWriteToForm,
+    disabled,
+    error,
+    label,
+    name,
+    style,
+    type,
+    ...rest
+  } = props;
   const [isFocused, setIsFocused] = React.useState(false);
+  const form = useForm();
+  const hasText = __doNotWriteToForm ? !!rest.value : !!form.getValue(name);
 
   return (
     <KeyboardAvoidingView
@@ -119,15 +143,18 @@ export const Input = forwardRef<TextInput, Props>((props, ref) => {
           {...rest}
           disabled={disabled}
           error={error}
-          hasText={!!rest.value}
+          hasText={hasText}
           ref={ref}
-          secureTextEntry={rest.secureTextEntry}
+          secureTextEntry={type === 'password'}
           onBlur={e => {
             setIsFocused(false);
             rest.onBlur?.(e);
           }}
           onChangeText={text => {
             quickAnimation();
+            if (!__doNotWriteToForm) {
+              form.setValue(name, text);
+            }
             rest.onChangeText?.(text);
           }}
           onFocus={e => {
@@ -135,12 +162,12 @@ export const Input = forwardRef<TextInput, Props>((props, ref) => {
             rest.onFocus?.(e);
           }}
         />
-        <Label hasText={!!rest.value}>
+        <Label hasText={hasText}>
           <LabelText
             disabled={disabled}
             error={error}
             focused={isFocused}
-            hasText={!!rest.value}
+            hasText={hasText}
           >
             {label}
           </LabelText>

@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { TransitionMotion } from 'react-motion';
 
 import { Input } from '@/components/controls/Input';
 import { Calendar as CalendarIcon } from '@/components/icons/Calendar';
 import { useDateFormatter } from '@/hooks/useDateFormatter';
-import { useDateSelection } from '@/hooks/useDateSelection';
+import { useDateSelection, Select } from '@/hooks/useDateSelection';
+import { useForm } from '@/hooks/useForm';
 import { useTooltip } from '@/hooks/useTooltip';
 
 import { value } from './_common';
@@ -42,9 +43,7 @@ interface Props<R extends boolean>
    * `(dates: [Date | null, Date | null]) => void`. In the case of a single
    * selection, callback is `(date: Date | null) => void`
    */
-  onSelect?: R extends true
-    ? (dates: [Date | null, Date | null]) => void
-    : (date: Date | null) => void;
+  onSelect?: Select<R>;
 }
 
 /**
@@ -53,6 +52,16 @@ interface Props<R extends boolean>
  */
 export function Datepicker<R extends boolean>(props: Props<R>) {
   const { minDate, maxDate, name, range, onSelect, ...rest } = props;
+
+  const form = useForm();
+  const selectDates = useCallback<Select<R>>(
+    // @ts-ignore
+    dates => {
+      form.setValue(name, dates);
+      onSelect?.(dates);
+    },
+    [form, onSelect],
+  );
 
   // mm/dd/yyyy
   const [format] = useDateFormatter({});
@@ -70,7 +79,7 @@ export function Datepicker<R extends boolean>(props: Props<R>) {
     rangePosition,
     setView,
     select,
-  ] = useDateSelection(range, onSelect);
+  ] = useDateSelection(range, selectDates);
 
   return (
     <>
@@ -87,13 +96,13 @@ export function Datepicker<R extends boolean>(props: Props<R>) {
       <input
         name={range ? `${name}-start` : name}
         type="hidden"
-        value={rangeStart ? rangeStart.getTime() : undefined}
+        value={rangeStart ? rangeStart.getTime() : ''}
       />
       {range && (
         <input
           name={`${name}-end`}
           type="hidden"
-          value={rangeEnd ? rangeEnd.getTime() : undefined}
+          value={rangeEnd ? rangeEnd.getTime() : ''}
         />
       )}
       <Tooltip>

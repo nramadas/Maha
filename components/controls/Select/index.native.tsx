@@ -4,6 +4,7 @@ import styled, { css, useTheme } from 'styled-components/native';
 
 import { ChevronDown } from '@/components/icons/ChevronDown/index.native';
 import { Body1 } from '@/components/typography';
+import { useForm } from '@/hooks/useForm';
 
 import { sortOptions } from './sortOptions';
 
@@ -13,7 +14,8 @@ interface Option {
 
 interface Props<O> {
   children: (option: O) => JSX.Element;
-  value?: O;
+  defaultSelected?: O;
+  name: string;
   options: O[];
   placeholder?: string;
   onChange?(option: O): void;
@@ -68,10 +70,14 @@ const Placeholder = styled(Body1)`
 `;
 
 export function Select<O extends Option>(props: Props<O>) {
+  const form = useForm();
+  const [selected, setSelected] = useState<O | null>(
+    props.defaultSelected || (props.placeholder ? null : props.options[0]),
+  );
   const [isOpen, setIsOpen] = useState(false);
   const theme = useTheme();
-  const sortedOptions = sortOptions(props.options, props.value);
-  const showPlaceholder = !props.value && props.placeholder;
+  const sortedOptions = sortOptions(props.options, selected);
+  const showPlaceholder = !selected && props.placeholder;
 
   return (
     <Container open={isOpen}>
@@ -79,10 +85,10 @@ export function Select<O extends Option>(props: Props<O>) {
         {({ pressed }) => (
           <SelectOption pressed={pressed}>
             <View>
-              {showPlaceholder ? (
+              {selected ? (
+                props.children(selected)
+              ) : props.placeholder ? (
                 <Placeholder>{props.placeholder}</Placeholder>
-              ) : props.value ? (
-                props.children(props.value)
               ) : (
                 props.children(sortedOptions[0])
               )}
@@ -97,6 +103,8 @@ export function Select<O extends Option>(props: Props<O>) {
             <Pressable
               key={o.text}
               onPress={() => {
+                setSelected(o);
+                form.setValue(props.name, o);
                 props.onChange?.(o);
                 setIsOpen(false);
               }}

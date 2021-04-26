@@ -2,10 +2,19 @@ import React from 'react';
 
 import { Checkmark } from '@/components/icons/Checkmark';
 import { Caption } from '@/components/typography/Caption';
+import { useForm } from '@/hooks/useForm';
 
 import styles from './index.module.scss';
 
-interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
+interface Value {
+  text: string;
+}
+
+interface Props<V> {
+  /**
+   * Whether or not the checkbox is disabled
+   */
+  disabled?: boolean;
   /**
    * Optional label that is displayed next to the checkbox
    */
@@ -14,17 +23,42 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
    * Reference name for checkbox value
    */
   name: string;
+  /**
+   * Value of the checkbox option
+   */
+  value: V;
+  /**
+   * Callback for when this checkbox option is selected
+   */
+  onSelect?(value: V): void;
 }
 
 /**
  * Custom checkbox
  */
-export function Checkbox(props: Props) {
-  const { label, ...rest } = props;
+export function Checkbox<V extends Value>(props: Props<V>) {
+  const { disabled, label, name, value, onSelect } = props;
+  const form = useForm();
 
   return (
     <label className={styles.container}>
-      <input {...rest} className={styles.input} type="checkbox" />
+      <input
+        className={styles.input}
+        disabled={disabled}
+        type="checkbox"
+        onInput={e => {
+          const currentlySelected = new Set<V>(form.getValue(name) || []);
+
+          if (e.currentTarget.checked) {
+            currentlySelected.add(value);
+          } else {
+            currentlySelected.delete(value);
+          }
+
+          form.setValue(name, Array.from(currentlySelected.values()));
+          onSelect?.(value);
+        }}
+      />
       <div className={styles.hover} />
       <div className={styles.box}>
         <Checkmark className={styles.check} />

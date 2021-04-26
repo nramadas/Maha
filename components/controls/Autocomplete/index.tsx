@@ -6,6 +6,8 @@ import { debounceTime, concatMap, tap, map } from 'rxjs/operators';
 
 import { Input } from '@/components/controls/Input';
 import { Body2 } from '@/components/typography/Body2';
+import { NoopFormProvider } from '@/contexts/Form';
+import { useForm } from '@/hooks/useForm';
 import { useTooltip } from '@/hooks/useTooltip';
 
 import styles from './index.module.scss';
@@ -21,8 +23,11 @@ interface Option {
   text: string;
 }
 
-interface Props<O>
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onSelect'> {
+interface Props<O> {
+  /**
+   * Add additional styles
+   */
+  className?: string;
   /**
    * Display an icon on the right hand side of the input field
    */
@@ -48,7 +53,9 @@ interface Props<O>
 }
 
 export function Autocomplete<O extends Option>(props: Props<O>) {
-  const { className, getItems, onSelect, ...rest } = props;
+  const { className, icon, label, name, getItems, onSelect } = props;
+  const form = useForm();
+
   const [Target, Tooltip] = useTooltip({
     alignment: 'full',
     position: 'below',
@@ -84,7 +91,8 @@ export function Autocomplete<O extends Option>(props: Props<O>) {
   const selectItem = useCallback(
     (item: O) => {
       itemsCallback(item.text);
-      onSelect && onSelect(item);
+      onSelect?.(item);
+      form.setValue(name, item);
 
       if (input.current) {
         input.current.value = item.text;
@@ -99,56 +107,65 @@ export function Autocomplete<O extends Option>(props: Props<O>) {
 
   return (
     <>
-      <Target>
-        <Input
-          {...rest}
-          className={cx(className, { [styles.input]: !error })}
-          error={error}
-          ref={input}
-          onBlur={e => {
-            // if the input is empty, don't make any selections
-            if (e.currentTarget.value && highlightedItem) {
-              selectItem(highlightedItem);
-            }
-          }}
-          onInput={e => itemsCallback(e.currentTarget.value)}
-          onKeyDown={e => {
-            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-              // the prevent default is require to keep the cursor from moving
-              e.preventDefault();
-              const length = items.length;
-              let selectedIndex = 0;
-
-              // if we already have something highlighted, find the next item
-              // to highlight based on key that was pressed
-              if (highlightedItem) {
-                const modifier = e.key === 'ArrowDown' ? 1 : -1;
-
-                for (let i = 0; i < items.length; i++) {
-                  if (items[i] === highlightedItem) {
-                    selectedIndex = clamp(i + modifier, 0, length - 1);
-                  }
-                }
-              }
-              // nothing was previously highlighted, so pick either the first
-              // or last item in the list
-              else if (e.key === 'ArrowUp') {
-                selectedIndex = length - 1;
-              }
-
-              setHighlightedItem(items[selectedIndex]);
-            }
-
-            if (e.key === 'Enter') {
-              if (highlightedItem) {
+      <NoopFormProvider>
+        <Target>
+          <Input
+            __doNotWriteToForm
+            className={cx(className, { [styles.input]: !error })}
+            error={error}
+            icon={icon}
+            label={label}
+            name={name}
+            ref={input}
+            onBlur={e => {
+              // if the input is empty, don't make any selections
+              if (e.currentTarget.value && highlightedItem) {
                 selectItem(highlightedItem);
               }
 
-              e.currentTarget.blur();
-            }
-          }}
-        />
-      </Target>
+              if (!e.currentTarget.value) {
+                form.setValue(name, null);
+              }
+            }}
+            onInput={e => itemsCallback(e.currentTarget.value)}
+            onKeyDown={e => {
+              if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                // the prevent default is require to keep the cursor from moving
+                e.preventDefault();
+                const length = items.length;
+                let selectedIndex = 0;
+
+                // if we already have something highlighted, find the next item
+                // to highlight based on key that was pressed
+                if (highlightedItem) {
+                  const modifier = e.key === 'ArrowDown' ? 1 : -1;
+
+                  for (let i = 0; i < items.length; i++) {
+                    if (items[i] === highlightedItem) {
+                      selectedIndex = clamp(i + modifier, 0, length - 1);
+                    }
+                  }
+                }
+                // nothing was previously highlighted, so pick either the first
+                // or last item in the list
+                else if (e.key === 'ArrowUp') {
+                  selectedIndex = length - 1;
+                }
+
+                setHighlightedItem(items[selectedIndex]);
+              }
+
+              if (e.key === 'Enter') {
+                if (highlightedItem) {
+                  selectItem(highlightedItem);
+                }
+
+                e.currentTarget.blur();
+              }
+            }}
+          />
+        </Target>
+      </NoopFormProvider>
       {!!items.length && (
         <Tooltip>
           <div

@@ -3,8 +3,14 @@ import React from 'react';
 
 import styles from './index.module.scss';
 
-interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
-
+interface Props {
+  className?: string;
+  children?: React.ReactNode;
+  disabled?: boolean;
+  style?: React.ButtonHTMLAttributes<HTMLButtonElement>['style'];
+  type?: React.ButtonHTMLAttributes<HTMLButtonElement>['type'];
+  onClick?(): void;
+}
 /**
  * Text-only button
  */

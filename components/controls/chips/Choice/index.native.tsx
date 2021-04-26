@@ -3,6 +3,7 @@ import React from 'react';
 import styled, { css } from 'styled-components/native';
 
 import { Body2 } from '@/components/typography/Body2';
+import { useForm } from '@/hooks/useForm';
 
 interface ChoiceObj {
   disabled?: boolean;
@@ -15,9 +16,9 @@ interface Props<C> {
    */
   choices: C[];
   /**
-   * A list of choices that have been selected
+   * Reference name for chips value
    */
-  selected: C;
+  name: string;
   /**
    * Callback that returns when an item is selected
    */
@@ -82,14 +83,22 @@ const PillText = styled(Body2)<{ disabled?: boolean; selected?: boolean }>`
 `;
 
 export function Choice<C extends ChoiceObj>(props: Props<C>) {
-  const { choices, selected, onChoose } = props;
+  const form = useForm();
+  const { name, choices, onChoose } = props;
+  const selected = form.getValue(name);
 
   return (
     <Container>
       {choices.map(choice => (
         <PillContainer
           key={choice.text}
-          onPress={() => !choice.disabled && onChoose?.(choice)}
+          onPress={() => {
+            if (choice.disabled) {
+              return;
+            }
+            form.setValue(name, choice);
+            onChoose?.(choice);
+          }}
         >
           {({ pressed }) => (
             <Pill

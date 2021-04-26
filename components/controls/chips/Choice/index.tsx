@@ -2,6 +2,7 @@ import cx from 'classnames';
 import React from 'react';
 
 import { Caption } from '@/components/typography/Caption';
+import { useForm } from '@/hooks/useForm';
 
 import styles from './index.module.scss';
 
@@ -30,6 +31,7 @@ interface Props<C> extends React.InputHTMLAttributes<HTMLInputElement> {
  */
 export function Choice<C extends ChoiceObj>(props: Props<C>) {
   const { choices, onChoose, ...rest } = props;
+  const form = useForm();
 
   return (
     <div className={styles.container}>
@@ -45,7 +47,10 @@ export function Choice<C extends ChoiceObj>(props: Props<C>) {
             className={styles.hidden}
             disabled={choice.disabled}
             type="radio"
-            onSelect={() => onChoose && onChoose(choice)}
+            onInput={() => {
+              form.setValue(rest.name, choice);
+              onChoose?.(choice);
+            }}
           />
           <div className={styles.choice}>
             <Caption>{choice.text}</Caption>

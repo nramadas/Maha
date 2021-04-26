@@ -4,19 +4,11 @@ import { debounceTime, mergeMap } from 'rxjs/operators';
 
 import { Input } from '@/components/controls/Input';
 
-interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
+interface Props extends React.ComponentProps<typeof Input> {
   /**
-   * Display an icon on the right hand side of the input field
+   * Error text to display on the Input.
    */
-  icon?: React.ReactElement;
-  /**
-   * Placeholder text to show inside the input
-   */
-  label: string;
-  /**
-   * Reference name for input value
-   */
-  name: string;
+  error?: string;
   /**
    * Function to validate the input. First validation is performed on blur,
    * after which the input value will be validated with each change in input
@@ -30,9 +22,23 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
  * Custom input with either synchronous or asynchronous validation
  */
 export function InputWithValidation(props: Props) {
-  const { onValidate, ...rest } = props;
+  const {
+    className,
+    disabled,
+    error,
+    icon,
+    label,
+    name,
+    style,
+    type,
+    onValidate,
+    ...rest
+  } = props;
 
-  const [validationCallback, error] = useEventCallback<string, string>(
+  const [validationCallback, validationError] = useEventCallback<
+    string,
+    string
+  >(
     event =>
       event.pipe(
         debounceTime(150),
@@ -48,8 +54,14 @@ export function InputWithValidation(props: Props) {
 
   return (
     <Input
-      {...rest}
-      error={error}
+      className={className}
+      disabled={disabled}
+      error={error || validationError}
+      icon={icon}
+      label={label}
+      name={name}
+      style={style}
+      type={type}
       onBlur={e => {
         if (!firstBlur.current) {
           firstBlur.current = true;

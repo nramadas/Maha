@@ -9,7 +9,9 @@ export enum Range {
 
 type RangeSelect = (dates: [Date | null, Date | null]) => void;
 type SingleSelect = (date: Date | null) => void;
-type Select<R extends boolean> = R extends true ? RangeSelect : SingleSelect;
+export type Select<R extends boolean> = R extends true
+  ? RangeSelect
+  : SingleSelect;
 type Return = [
   Date,
   Date | null,

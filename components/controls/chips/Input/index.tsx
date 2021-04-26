@@ -7,6 +7,7 @@ import { debounceTime, concatMap, tap, map } from 'rxjs/operators';
 import { Close } from '@/components/icons/Close';
 import { Body2 } from '@/components/typography/Body2';
 import { Caption } from '@/components/typography/Caption';
+import { useForm } from '@/hooks/useForm';
 import { useTooltip } from '@/hooks/useTooltip';
 
 import styles from './index.module.scss';
@@ -52,6 +53,8 @@ interface Props<C> extends React.InputHTMLAttributes<HTMLInputElement> {
  */
 export function Input<C extends Choice>(props: Props<C>) {
   const { getChoices, label, name, onChoose, ...rest } = props;
+
+  const form = useForm();
 
   const [Target, Tooltip] = useTooltip({
     alignment: 'full',
@@ -104,6 +107,7 @@ export function Input<C extends Choice>(props: Props<C>) {
       }
 
       setSelected(newSelected);
+      form.setValue(name, newSelected);
       onChoose && onChoose(newSelected);
 
       if (inputRef.current) {
@@ -141,6 +145,7 @@ export function Input<C extends Choice>(props: Props<C>) {
             {selected.map(choice => (
               <div className={styles.choiceContainer} key={choice.text}>
                 <input
+                  checked
                   readOnly
                   className={styles.hidden}
                   onKeyDown={e => {

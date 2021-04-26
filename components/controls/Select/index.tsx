@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 
 import { ChevronDown } from '@/components/icons/ChevronDown';
 import { Body1 } from '@/components/typography';
+import { useForm } from '@/hooks/useForm';
 import { useTooltip } from '@/hooks/useTooltip';
 
 import styles from './index.module.scss';
@@ -12,8 +13,7 @@ interface Option {
   text: string;
 }
 
-interface Props<O>
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
+interface Props<O> {
   /**
    * Render method for each option in the select. Has the signature
    * `<O extends Option>(option: O) => JSX.Element`
@@ -47,6 +47,7 @@ interface Props<O>
  * Select component, extends standard `<input/>` props.
  */
 export function Select<O extends Option>(props: Props<O>) {
+  const form = useForm();
   const [selected, setSelected] = useState<O | null>(
     props.defaultSelected || (props.placeholder ? null : props.options[0]),
   );
@@ -102,6 +103,7 @@ export function Select<O extends Option>(props: Props<O>) {
               key={option.text}
               onClick={() => {
                 setSelected(option);
+                form.setValue(props.name, option);
                 props.onChange?.(option);
               }}
             >

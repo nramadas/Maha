@@ -1,9 +1,15 @@
+import isEqual from 'lodash/isEqual';
 import React from 'react';
 import styled, { css, useTheme } from 'styled-components/native';
 
 import { Checkmark } from '@/components/icons/Checkmark/index.native';
 import { Body2 } from '@/components/typography/Body2/index.native';
+import { useForm } from '@/hooks/useForm';
 import { quick as quickAnimation } from '@/lib/animations/native';
+
+interface Value {
+  text: string;
+}
 
 interface ExtraProps {
   checked?: boolean;
@@ -56,23 +62,40 @@ const Press = styled.View<ExtraProps>`
     `}
 `;
 
-interface Props {
+interface Props<V> {
+  disabled?: boolean;
   label?: string;
-  value: boolean;
-  onChange(value: boolean): void;
+  name: string;
+  value: V;
+  onSelect?(value: V): void;
 }
 
-export function Checkbox(props: Props) {
+export function Checkbox<V extends Value>(props: Props<V>) {
+  const form = useForm();
   const theme = useTheme();
-  const { label, value, onChange } = props;
+  const { disabled, label, name, value, onSelect } = props;
+  const currentSelections: V[] = form.getValue(name) || [];
+  const isSelected = !!currentSelections.find(s => isEqual(s, value));
+
   quickAnimation();
 
   return (
-    <Container onPress={() => onChange(!value)}>
+    <Container
+      onPress={() => {
+        const newSelections = isSelected
+          ? currentSelections.filter(s => !isEqual(s, value))
+          : currentSelections.concat(value);
+
+        form.setValue(name, newSelections);
+        onSelect?.(value);
+      }}
+    >
       {({ pressed }) => (
         <>
           <Press pressed={pressed} />
-          <Box>{value && <Checkmark height={24} fill={theme.onPrimary} />}</Box>
+          <Box>
+            {isSelected && <Checkmark height={24} fill={theme.onPrimary} />}
+          </Box>
           <Label>
             <Body2>{label}</Body2>
           </Label>

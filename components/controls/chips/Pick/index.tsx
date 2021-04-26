@@ -3,6 +3,7 @@ import React, { useRef } from 'react';
 
 import { Checkmark } from '@/components/icons/Checkmark';
 import { Caption } from '@/components/typography/Caption';
+import { useForm } from '@/hooks/useForm';
 
 import styles from './index.module.scss';
 
@@ -32,6 +33,7 @@ interface Props<C> extends React.InputHTMLAttributes<HTMLInputElement> {
  */
 export function Pick<C extends Choice>(props: Props<C>) {
   const { choices, onChoose, ...rest } = props;
+  const form = useForm();
   const selected = useRef(new Set<C>());
 
   return (
@@ -48,18 +50,17 @@ export function Pick<C extends Choice>(props: Props<C>) {
             className={styles.hidden}
             disabled={choice.disabled}
             type="checkbox"
+            value={choice.text}
             onChange={e => {
-              if (!onChoose) {
-                return;
-              }
-
               if (e.currentTarget.checked) {
                 selected.current.add(choice);
               } else {
                 selected.current.delete(choice);
               }
 
-              onChoose(Array.from(selected.current.values()));
+              const selectedItems = Array.from(selected.current.values());
+              form.setValue(rest.name, selectedItems);
+              onChoose?.(selectedItems);
             }}
           />
           <div className={styles.choice}>

@@ -6,6 +6,7 @@ import * as buttons from '@/components/controls/buttons';
 import { Checkbox } from '@/components/controls/Checkbox';
 import * as chips from '@/components/controls/chips';
 import { Datepicker } from '@/components/controls/Datepicker';
+import { Form } from '@/components/controls/Form';
 import { Input } from '@/components/controls/Input';
 import { InputWithValidation } from '@/components/controls/InputWithValidation';
 import * as links from '@/components/controls/links';
@@ -38,7 +39,7 @@ export default function Components() {
   const languagePack = useLanguagePack();
 
   return (
-    <div>
+    <Form onSubmit={values => console.log(values)}>
       <h1>Translation</h1>
       <h2>Using JSX to translate</h2>
       <div>
@@ -115,7 +116,7 @@ export default function Components() {
       <h2>Autocomplete</h2>
       <Autocomplete
         label="example"
-        name="example"
+        name="autocomplete"
         getItems={inputText =>
           ['Apple', 'Bat', 'Cat', 'Dog', 'Elephant', 'Frog', 'Garden']
             .filter(str =>
@@ -130,7 +131,7 @@ export default function Components() {
       <buttons.Empty disabled>Empty</buttons.Empty>
 
       <h2>Button - Filled</h2>
-      <buttons.Filled>Filled</buttons.Filled>
+      <buttons.Filled type="submit">Filled</buttons.Filled>
       <buttons.Filled disabled>Filled</buttons.Filled>
 
       <h2>Button - Hollow</h2>
@@ -138,10 +139,15 @@ export default function Components() {
       <buttons.Hollow disabled>Hollow</buttons.Hollow>
 
       <h2>Checkbox</h2>
-      <Checkbox name="checkbox" label="Checkbox" />
-      <Checkbox name="checkbox" label="Checkbox" />
-      <Checkbox name="checkbox" label="Checkbox" />
-      <Checkbox name="checkbox" label="Checkbox" disabled />
+      <Checkbox value={{ text: 'optionA' }} name="checkbox" label="Checkbox" />
+      <Checkbox value={{ text: 'optionB' }} name="checkbox" label="Checkbox" />
+      <Checkbox value={{ text: 'optionC' }} name="checkbox" label="Checkbox" />
+      <Checkbox
+        value={{ text: 'optionD' }}
+        name="checkbox"
+        label="Checkbox"
+        disabled
+      />
 
       <h2>Chips - Choice</h2>
       <chips.Choice
@@ -154,7 +160,7 @@ export default function Components() {
           { text: 'Frog', disabled: true },
           { text: 'Garden' },
         ]}
-        name="choice"
+        name="chips_Choice"
       />
 
       <h2>Chips - Input</h2>
@@ -167,7 +173,7 @@ export default function Components() {
             .map(text => ({ text }))
         }
         label="input chips"
-        name="input"
+        name="chips_Input"
       />
 
       <h2>Chips - Pick</h2>
@@ -181,19 +187,19 @@ export default function Components() {
           { text: 'Frog', disabled: true },
           { text: 'Garden' },
         ]}
-        name="choice"
+        name="chips_Pick"
       />
 
       <h2>Datepicker</h2>
       <Datepicker label="datepicker" name="datepicker" />
-      <Datepicker label="datepicker" name="datepicker" range />
+      <Datepicker label="datepicker" name="datepicker_range" range />
 
       <h2>Input</h2>
       <Input name="input" label="input" />
 
       <h2>InputWithValidation</h2>
       <InputWithValidation
-        name="input"
+        name="input_with_validation"
         label="input"
         onValidate={text =>
           text.startsWith('is valid') ? '' : "text must start with 'is valid'"
@@ -210,10 +216,10 @@ export default function Components() {
       <links.Hollow>Hollow</links.Hollow>
 
       <h2>Radio</h2>
-      <Radio name="radio" label="Radio" />
-      <Radio name="radio" label="Radio" />
-      <Radio name="radio" label="Radio" />
-      <Radio name="radio" label="Radio" disabled />
+      <Radio value={{ text: 'optionA' }} name="radio" label="Radio" />
+      <Radio value={{ text: 'optionB' }} name="radio" label="Radio" />
+      <Radio value={{ text: 'optionC' }} name="radio" label="Radio" />
+      <Radio value={{ text: 'optionD' }} name="radio" label="Radio" disabled />
 
       <h2>Select</h2>
       <Select
@@ -234,7 +240,8 @@ export default function Components() {
 
       <h2>Switch</h2>
       <Switch name="switch" />
-      <Switch name="switch" disabled />
+      <Switch name="switch2" defaultValue />
+      <Switch name="switch_disabled" disabled />
 
       <h1>Icons</h1>
       <div
@@ -302,6 +309,6 @@ export default function Components() {
       <div>
         <T.Subtitle2>Subtitle2</T.Subtitle2>
       </div>
-    </div>
+    </Form>
   );
 }

@@ -7,6 +7,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ThemeProvider } from 'styled-components/native';
 
 import { JWTRefresh } from '@/components/JWTRefresh';
+import { NoopFormProvider } from '@/contexts/Form';
 import { JWTProvider } from '@/contexts/JWT';
 import { LanguagePackProvider } from '@/contexts/LanguagePack';
 import { URQLProvider } from '@/contexts/URQL';
@@ -45,7 +46,9 @@ export default function App() {
           >
             <ThemeProvider theme={makeTheme()}>
               <SafeAreaProvider>
-                <Navigation colorScheme="dark" />
+                <NoopFormProvider>
+                  <Navigation colorScheme="dark" />
+                </NoopFormProvider>
                 <StatusBar />
               </SafeAreaProvider>
             </ThemeProvider>

@@ -1,4 +1,3 @@
-// import clamp from 'lodash/clamp';
 import React, { useCallback, useRef, useState } from 'react';
 import { Pressable, TextInput } from 'react-native';
 import { useEventCallback } from 'rxjs-hooks';
@@ -7,6 +6,7 @@ import styled, { css } from 'styled-components/native';
 
 import { Input } from '@/components/controls/Input/index.native';
 import { Body1 } from '@/components/typography/Body1/index.native';
+import { useForm } from '@/hooks/useForm';
 
 function makeItems<O>(items: O[], text: string) {
   return {
@@ -37,8 +37,7 @@ interface Option {
   text: string;
 }
 
-interface Props<O>
-  extends Omit<React.ComponentProps<typeof TextInput>, 'value'> {
+interface Props<O> {
   /**
    * Display an icon on the right hand side of the input field
    */
@@ -48,9 +47,9 @@ interface Props<O>
    */
   label: string;
   /**
-   * Selected value
-   * */
-  value: O | null;
+   * Reference name for autocomplete value
+   */
+  name: string;
   /**
    * Function that returns a list of items to display in the autocomplete.
    * Function can return a `Promise` if needed. Signature:
@@ -64,10 +63,11 @@ interface Props<O>
 }
 
 export function Autocomplete<O extends Option>(props: Props<O>) {
-  const { getItems, value, onSelect, ...rest } = props;
+  const { getItems, name, onSelect, ...rest } = props;
   const [error, setError] = useState<string | undefined>(undefined);
   const [focused, setFocused] = useState(false);
-  const [localValue, setLocalValue] = useState(value?.text || '');
+  const [localValue, setLocalValue] = useState('');
+  const form = useForm();
 
   const [itemsCallback, items] = useEventCallback<string, O[]>(
     event =>
@@ -88,11 +88,13 @@ export function Autocomplete<O extends Option>(props: Props<O>) {
   );
 
   const input = useRef<TextInput>(null);
+  const selectionLock = useRef(false);
 
   const selectItem = useCallback(
     (item: O) => {
       itemsCallback(item.text);
       setLocalValue(item.text);
+      form.setValue(name, item);
       onSelect?.(item);
     },
     [itemsCallback, setLocalValue, onSelect],
@@ -101,23 +103,16 @@ export function Autocomplete<O extends Option>(props: Props<O>) {
   const doneEditing = useCallback(
     e => {
       setFocused(false);
-      // This component sort of acts like a controlled input. The "value" of
-      // the component will be reset to `null` as the user types. If there is
-      // typed text that results in a potentially valid choice, and the user
-      // has not already made a choice (through selecting an item from the
-      // dropdown), then auto select the first item in the list. There is also
-      // a race case that this logic solves for. When the user makes a
-      // selection from the dropdown, `value` will be defined. However, unless
-      // the user types, this value won't reset to `null`. So, the user
-      // selection won't be overwritten.
-      if (!value && e.nativeEvent.text && items.length) {
+      if (!selectionLock.current && e.nativeEvent.text && items.length) {
         selectItem(items[0]);
-      } else if (!value) {
+      } else if (!selectionLock.current) {
+        form.setValue(name, null);
         onSelect?.(null);
       }
-      rest.onEndEditing?.(e);
+
+      selectionLock.current = false;
     },
-    [items, value, setFocused, selectItem, onSelect],
+    [items, setFocused, selectItem, onSelect],
   );
 
   React.useEffect(() => {
@@ -128,19 +123,19 @@ export function Autocomplete<O extends Option>(props: Props<O>) {
     <>
       <Input
         {...rest}
+        __doNotWriteToForm
         error={error}
+        name={name}
         ref={input}
         value={localValue}
         onChangeText={text => {
           setLocalValue(text);
           itemsCallback(text);
-          rest.onChangeText?.(text);
           onSelect?.(null);
         }}
         onEndEditing={doneEditing}
-        onFocus={e => {
+        onFocus={() => {
           setFocused(true);
-          rest.onFocus?.(e);
         }}
       />
       {!!items.length && focused && (
@@ -149,6 +144,7 @@ export function Autocomplete<O extends Option>(props: Props<O>) {
             <Pressable
               key={item.text}
               onPress={() => {
+                selectionLock.current = true;
                 selectItem(item);
                 input.current?.blur();
               }}

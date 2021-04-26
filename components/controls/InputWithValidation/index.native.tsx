@@ -1,15 +1,10 @@
 import React, { useEffect } from 'react';
-import { TextInput } from 'react-native';
 import { useEventCallback } from 'rxjs-hooks';
 import { debounceTime, mergeMap } from 'rxjs/operators';
 
 import { Input } from '@/components/controls/Input/index.native';
 
-interface Props extends React.ComponentProps<typeof TextInput> {
-  /**
-   * Placeholder text to show inside the input
-   */
-  label: string;
+interface Props extends React.ComponentProps<typeof Input> {
   /**
    * Function to validate the input. First validation is performed on blur,
    * after which the input value will be validated with each change in input
@@ -23,7 +18,7 @@ interface Props extends React.ComponentProps<typeof TextInput> {
  * Custom input with either synchronous or asynchronous validation
  */
 export function InputWithValidation(props: Props) {
-  const { label, onValidate, ...rest } = props;
+  const { label, name, onValidate, ...rest } = props;
 
   const [validationCallback, error] = useEventCallback<string, string>(
     event =>
@@ -50,6 +45,7 @@ export function InputWithValidation(props: Props) {
       {...rest}
       error={error}
       label={label}
+      name={name}
       onBlur={e => {
         if (!firstBlur.current && rest.value) {
           firstBlur.current = true;
