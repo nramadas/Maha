@@ -32,7 +32,7 @@ import { i18n } from '@/lib/translate';
 const iconStyle = {
   height: 40,
   width: 40,
-  fill: 'var(--color-onPrimary)',
+  fill: 'var(--color-primary)',
 };
 
 export default function Components() {

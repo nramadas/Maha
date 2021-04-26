@@ -28,7 +28,7 @@ export function Form(props: Props) {
 
   return (
     <FormControl className={styles.container} onSubmit={props.onSubmit}>
-      <header>
+      <header className={styles.header}>
         <H1>
           <i18n.Translate>Welcome to Maha!</i18n.Translate>
         </H1>
@@ -37,7 +37,8 @@ export function Form(props: Props) {
         <Body1>
           <i18n.Translate>
             Before you can get started, please take a moment to register your
-            company with us. To begin, what does your company call itself?
+            company with us. Once you register, you'll be able to add
+            properties, employees, and much more.
           </i18n.Translate>
         </Body1>
         <InputWithValidation
@@ -45,7 +46,6 @@ export function Form(props: Props) {
           error={errorMessage}
           name="name"
           label="Your Company's Name"
-          value={name}
           onInput={e => setName(e.currentTarget.value)}
           onValidate={text =>
             !text.length
@@ -55,7 +55,7 @@ export function Form(props: Props) {
         />
       </article>
       <footer className={styles.footer}>
-        <Filled type="submit">
+        <Filled disabled={!name} type="submit">
           <i18n.Translate>Submit</i18n.Translate>
         </Filled>
       </footer>

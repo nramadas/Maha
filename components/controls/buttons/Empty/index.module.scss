@@ -3,8 +3,8 @@
   border: 1px solid transparent;
   border-radius: 2px;
   box-sizing: border-box;
-  color: var(--color-onPrimary);
-  fill: var(--color-onPrimary);
+  color: var(--color-primary);
+  fill: var(--color-primary);
   cursor: pointer;
   font-size: 0.875rem;
   font-weight: 500;
@@ -17,16 +17,16 @@
   transition: color 0.15s, background-color 0.15s;
 
   &:focus {
-    background-color: var(--color-primaryFocused);
+    color: var(--color-primaryFocused);
   }
 
   &:hover,
   &:hover &:focus {
-    background-color: var(--color-primaryHovered);
+    color: var(--color-primaryHovered);
   }
 
   &:active {
-    background-color: var(--color-primaryPressed);
+    color: var(--color-primaryPressed);
   }
 
   &:disabled,
