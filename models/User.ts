@@ -4,10 +4,10 @@ import { Language } from '@/models/Language';
 
 export interface Data {
   firstName?: string;
-  lastName?: string;
   gender?: Gender;
-  preferredLanguage?: Language;
+  lastName?: string;
   phoneNumber?: string;
+  preferredLanguage?: Language;
 }
 
 export const DEFAULT_DATA: Data = {};
@@ -15,6 +15,7 @@ export const DEFAULT_DATA: Data = {};
 export interface User extends Data {
   created: Date;
   email: string;
+  organizationId?: string;
   id: NominalID<'user id'>;
 }
 

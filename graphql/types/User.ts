@@ -26,6 +26,12 @@ export class User implements UserModel {
   @Field(type => Gender, { description: "The user's gender", nullable: true })
   gender!: GenderModel;
 
+  @Field(type => ID, {
+    description: 'The ID of the organization the user belongs to',
+    nullable: true,
+  })
+  organizationId!: string;
+
   @Field(type => Language, {
     description: 'What language the user prefers to interact in',
     nullable: true,

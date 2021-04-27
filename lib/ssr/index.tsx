@@ -14,6 +14,13 @@ export function establishAuthentication(App: typeof BaseApp) {
     let aut: string | undefined = cookies.authn;
     let jwt: string | undefined = cookies.token;
 
+    if (ctx.pathname === '/auth/continue') {
+      aut = undefined;
+      jwt = undefined;
+      context.ctx.res?.setHeader('set-cookie', 'token=; SameSite=Lax; path=/');
+      context.ctx.res?.setHeader('set-cookie', 'authn=; SameSite=Lax; path=/');
+    }
+
     if (aut) {
       const result = await refreshSession(aut);
 
@@ -26,8 +33,14 @@ export function establishAuthentication(App: typeof BaseApp) {
       } else {
         jwt = undefined;
         aut = undefined;
-        context.ctx.res?.setHeader('set-cookie', 'token=');
-        context.ctx.res?.setHeader('set-cookie', 'authn=');
+        context.ctx.res?.setHeader(
+          'set-cookie',
+          'token=; SameSite=Lax; path=/',
+        );
+        context.ctx.res?.setHeader(
+          'set-cookie',
+          'authn=; SameSite=Lax; path=/',
+        );
       }
     }
 

@@ -6,7 +6,12 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   Unique,
+  ManyToOne,
+  ManyToMany,
 } from 'typeorm';
+
+import { Organization } from '../entities/Organization';
+import { Role } from '../entities/Role';
 
 @Entity()
 @Unique(['email', 'googleId', 'appleId', 'authId'])
@@ -25,6 +30,15 @@ export class User {
 
   @Column()
   email!: string;
+
+  @Column({ nullable: true })
+  organizationId!: number;
+
+  @ManyToOne('Organization', 'users', { nullable: true })
+  organization!: Organization;
+
+  @ManyToMany('Role', 'users')
+  roles!: Role[];
 
   @Column({ type: 'jsonb' })
   data!: object;

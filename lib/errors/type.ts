@@ -1,9 +1,9 @@
 export enum ErrorType {
+  AlreadyTaken = 'ALREADY_TAKEN',
+  DoesNotExist = 'DOES_NOT_EXIST',
   FailedGoogleLogin = 'FAILED_GOOGLE_LOGIN',
-  IncorrectUsernamePassword = 'INCORRECT_USERNAME_PASSWORD',
   MissingGoogleCredentials = 'MISSING_GOOGLE_CREDENTIALS',
-  PasswordsDontMatch = 'PASSWORDS_DONT_MATCH',
+  SomethingElse = 'SOMETHING_ELSE',
   Unauthorized = 'UNAUTHORIZED',
   UserAlreadyExists = 'USER_ALREADY_EXISTS',
-  SomethingElse = 'SOMETHING_ELSE',
 }

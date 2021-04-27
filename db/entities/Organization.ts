@@ -6,7 +6,11 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   Unique,
+  OneToMany,
 } from 'typeorm';
+
+import { Role } from '../entities/Role';
+import { User } from '../entities/User';
 
 @Entity()
 @Unique(['name'])
@@ -19,6 +23,12 @@ export class Organization {
 
   @Column({ type: 'jsonb' })
   data!: object;
+
+  @OneToMany('User', 'organization')
+  users!: User[];
+
+  @OneToMany('Role', 'organization')
+  roles!: Role[];
 
   @CreateDateColumn()
   created!: Date;

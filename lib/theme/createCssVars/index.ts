@@ -15,7 +15,6 @@ export function createCssVars() {
     ...cssColors,
     '--font-body':
       "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
-    '--font-logo': "'Fascinate', cursive",
     '--font-title': "'Oswald', sans-serif",
     '--z-header': 11,
     '--z-dialog': 90,

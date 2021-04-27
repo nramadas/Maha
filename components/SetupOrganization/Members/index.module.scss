@@ -1,0 +1,10 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 250px;
+  grid-gap: 12px;
+  margin-top: 24px;
+}
+
+.gridHeader {
+  color: var(--color-metadata);
+}

@@ -1,0 +1,15 @@
+.email,
+.firstName,
+.lastName,
+.phoneNumber,
+.roles {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.roles {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+}

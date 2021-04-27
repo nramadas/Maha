@@ -1,6 +1,10 @@
-import { User } from '@/graphql/types/User';
+import { Organization } from '@/models/Organization';
+import { Role } from '@/models/Role';
+import { User } from '@/models/User';
 
 export interface Context {
-  me: User | null;
   jwt: string | null;
+  me: User | null;
+  organization: Organization | null;
+  roles: Role[];
 }

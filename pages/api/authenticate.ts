@@ -6,6 +6,7 @@ import { connectToDb } from '@/db';
 import repos from '@/db/repositories';
 import { sendEmail } from '@/emails';
 import { getEmail } from '@/lib/authn/api';
+import { InviteType } from '@/models/InviteType';
 
 const dbConnect = once(() => connectToDb());
 
@@ -24,11 +25,19 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
       await dbConnect();
 
-      const invite = await repos
-        .CreateOrganizationInvite()
-        .findOne({ where: { email } });
+      const invites = await repos
+        .Invite()
+        .find({ where: { email, expired: false } });
 
-      if (invite) {
+      const createOrgInvite = invites.find(
+        invite => invite.type === InviteType.CreateOrganization,
+      );
+
+      const joinOrgInvite = invites.find(
+        invite => invite.type === InviteType.JoinOrganization,
+      );
+
+      if (createOrgInvite) {
         sendEmail({
           to: email,
           template: 'CreateOrganization',

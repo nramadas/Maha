@@ -1,6 +1,7 @@
-import { Field, ObjectType, ID } from 'type-graphql';
+import { Authorized, Field, ObjectType, ID } from 'type-graphql';
 
 import { Organization as OrganizationModel } from '@/models/Organization';
+import { Permission } from '@/models/Permission';
 import { Property as PropertyModel } from '@/models/Property';
 import { User as UserModel } from '@/models/User';
 
@@ -14,6 +15,7 @@ export class Organization implements OrganizationModel {
   @Field(type => ID, { description: 'User ID' })
   id!: OrganizationModel['id'];
 
+  @Authorized(Permission.ViewMembers)
   @Field(type => [ID], {
     description: 'List of user ids that are associated with this organization',
   })

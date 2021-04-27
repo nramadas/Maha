@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Workspace } from '@/components/chrome/Workspace';
+import { SetupOrganization } from '@/components/SetupOrganization';
 import { Organization as OrganizationModel } from '@/models/Organization';
 
 interface Props {
@@ -14,7 +15,7 @@ export default function Setup(props: Props) {
 
   return (
     <Workspace breadcrumbs={['setup']} orgId={orgId}>
-      <div />
+      <SetupOrganization organizationId={orgId} />
     </Workspace>
   );
 }

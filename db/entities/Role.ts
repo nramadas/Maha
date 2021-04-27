@@ -5,11 +5,15 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-  Unique,
+  ManyToOne,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 
+import { Organization } from '../entities/Organization';
+import { User } from '../entities/User';
+
 @Entity()
-@Unique('UQ_ROLE', ['name', 'organizationId', 'userId'])
 export class Role {
   @PrimaryGeneratedColumn()
   id!: number;
@@ -17,11 +21,18 @@ export class Role {
   @Column()
   name!: string;
 
-  @Column()
+  @Column({ nullable: true })
   organizationId!: number;
 
-  @Column()
-  userId!: number;
+  @ManyToOne('Organization', 'roles')
+  organization!: Organization;
+
+  @ManyToMany('User', 'roles')
+  @JoinTable()
+  users!: User[];
+
+  @Column({ type: 'jsonb' })
+  data!: object;
 
   @CreateDateColumn()
   created!: Date;

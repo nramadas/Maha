@@ -3,10 +3,9 @@ import { Arg, Ctx, Mutation, Resolver } from 'type-graphql';
 import { Repository } from 'typeorm';
 import { InjectRepository } from 'typeorm-typedi-extensions';
 
-import { CreateOrganizationInvite as CreateOrganizationInviteEntity } from '@/db/entities/CreateOrganizationInvite';
+import { Invite as InviteEntity } from '@/db/entities/Invite';
 import { User as UserEntity } from '@/db/entities/User';
 import { Context } from '@/graphql/context';
-import { BeginAuthenticationInput } from '@/graphql/types/BeginAuthenticationInput';
 import { SideEffect } from '@/graphql/types/SideEffect';
 import {
   initiatePasswordlessLogin,
@@ -15,6 +14,7 @@ import {
 } from '@/lib/authn/api';
 import { ErrorType } from '@/lib/errors/type';
 import { userIsAdmin } from '@/lib/permissions/userIsAdmin';
+import { InviteType } from '@/models/InviteType';
 
 async function doAuthentication(email: string) {
   const existingUser = await userExists(email);
@@ -39,15 +39,12 @@ export class SideEffectResolver {
   constructor(
     @InjectRepository(UserEntity)
     private readonly users: Repository<UserEntity>,
-    @InjectRepository(CreateOrganizationInviteEntity)
-    private readonly createOrganizationInvites: Repository<CreateOrganizationInviteEntity>,
+    @InjectRepository(InviteEntity)
+    private readonly invites: Repository<InviteEntity>,
   ) {}
 
   @Mutation(returns => SideEffect, { description: 'Register a new user' })
-  async beginAuthentication(
-    @Arg('credentials') credentials: BeginAuthenticationInput,
-  ) {
-    const { email } = credentials;
+  async beginAuthentication(@Arg('email') email: string) {
     await doAuthentication(email);
     return { ok: true };
   }
@@ -65,13 +62,16 @@ export class SideEffectResolver {
       throw new AuthenticationError(ErrorType.Unauthorized);
     }
 
-    const existingInvite = await this.createOrganizationInvites.findOne({
-      where: { email },
+    const existingInvite = await this.invites.findOne({
+      where: { email, type: InviteType.CreateOrganization, expired: false },
     });
 
     if (!existingInvite) {
-      const invite = this.createOrganizationInvites.create({ email });
-      await this.createOrganizationInvites.save(invite);
+      const invite = this.invites.create({
+        email,
+        type: InviteType.CreateOrganization,
+      });
+      await this.invites.save(invite);
     }
 
     await doAuthentication(email);

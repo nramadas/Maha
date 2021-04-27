@@ -40,7 +40,7 @@ export function Account(props: Props) {
 
   const [result] = useQuery({ query: me });
 
-  if (!result.data || result.error) {
+  if (result.fetching || !result.data || result.error) {
     return null;
   }
 

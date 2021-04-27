@@ -10,7 +10,7 @@ import { Navigation, PageKey } from './Navigation';
 import { Title } from './Title';
 
 const orgById = `
-  query ($orgId: String!) {
+  query ($orgId: ID!) {
     organizationById (id: $orgId) {
       id
       name
@@ -52,7 +52,7 @@ export function Workspace(props: Props) {
           orgId={props.orgId}
         />
       </nav>
-      <article>{props.children}</article>
+      <article className={styles.content}>{props.children}</article>
     </div>
   );
 }

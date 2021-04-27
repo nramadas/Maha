@@ -8,6 +8,8 @@ interface Props extends React.AnchorHTMLAttributes<HTMLAnchorElement> {}
 /**
  * Secondary link component
  */
-export function Hollow(props: Props) {
-  return <a {...props} className={cx(styles.button, props.className)} />;
-}
+export const Hollow = React.forwardRef<HTMLAnchorElement, Props>(
+  (props: Props, ref) => (
+    <a {...props} ref={ref} className={cx(styles.button, props.className)} />
+  ),
+);

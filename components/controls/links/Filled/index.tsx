@@ -8,6 +8,8 @@ interface Props extends React.AnchorHTMLAttributes<HTMLAnchorElement> {}
 /**
  * Primary link component
  */
-export function Filled(props: Props) {
-  return <a {...props} className={cx(styles.button, props.className)} />;
-}
+export const Filled = React.forwardRef<HTMLAnchorElement, Props>(
+  (props: Props, ref) => (
+    <a {...props} ref={ref} className={cx(styles.button, props.className)} />
+  ),
+);

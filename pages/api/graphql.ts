@@ -7,6 +7,7 @@ import { Container } from 'typedi';
 import { useContainer } from 'typeorm';
 
 import { connectToDb } from '@/db';
+import { authChecker } from '@/graphql/helpers/authChecker';
 import * as resolvers from '@/graphql/resolvers';
 import { contextFromHeaders } from '@/lib/authn/contextFromHeaders';
 
@@ -18,9 +19,7 @@ const setup = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      authChecker: data => {
-        return !!data.context.me;
-      },
+      authChecker,
       container: Container,
       resolvers: (Object.values(resolvers) as unknown) as [
         Function,

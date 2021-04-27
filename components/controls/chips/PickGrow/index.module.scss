@@ -1,0 +1,128 @@
+.iconCircle {
+  align-items: center;
+  background-color: var(--color-primaryFaded);
+  border-radius: 16px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  height: 16px;
+  justify-content: center;
+  margin-right: 8px;
+  transition: background-color 0.15s;
+  width: 16px;
+}
+
+.add, .close {
+  fill: var(--color-onBackground);
+  height: 8px;
+  opacity: 1;
+  transition: fill 0.15s;
+}
+
+.container {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-bottom: -8px;
+  margin-left: -8px;
+}
+
+.addChoice, .label {
+  margin-bottom: 8px;
+  margin-left: 8px;
+  position: relative;
+}
+
+.addChoice {
+  cursor: pointer;
+
+  &:hover {
+    .choice {
+      background-color: var(--color-primaryFocused);
+    }
+  }
+}
+
+.label {
+  .iconCircle {
+    &:hover {
+    background-color: var(--color-primary);
+
+    .close {
+      fill: var(--color-background);
+    }
+  }
+  }
+}
+
+.choice {
+  align-items: center;
+  background-color: var(--color-primary);
+  border-radius: 24px;
+  border: 1px solid var(--color-fieldFocused);
+  display: flex;
+  flex-direction: row;
+  height: 24px;
+  justify-content: center;
+  padding: 0 16px 0 4px;
+  transition: background-color 0.15s;
+}
+
+.disabled {
+  .choice {
+    &, &:hover {
+      background-color: var(--color-disabled);
+      color: var(--color-onDisabled);
+
+      .iconCircle {
+        background-color: var(--color-disabled);
+        cursor: not-allowed;
+
+        .add, .close {
+          &, &:hover {
+            fill: var(--color-onDisabled);
+          }
+        }
+      }
+    }
+  }
+}
+
+.hidden {
+  opacity: 0;
+  position: absolute;
+
+  &:focus ~ .iconCircle {
+    background-color: var(--color-primaryFocused);
+  }
+}
+
+.remainingChoice {
+  align-items: center;
+  border-left: 1px solid var(--color-fieldBorder);
+  border-right: 1px solid var(--color-fieldBorder);
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  padding: 8px;
+  transition: border-color 0.15s, background-color 0.15s;
+
+  &:first-child {
+    border-top: 1px solid var(--color-fieldBorder);
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+  }
+
+  &:last-child {
+    border-bottom: 1px solid var(--color-fieldBorder);
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
+
+  &:hover {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+}

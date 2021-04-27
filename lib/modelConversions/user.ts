@@ -1,7 +1,7 @@
 import type { User as UserDBModel } from '@/db/entities/User';
 import { Data, User as UserModel, DEFAULT_DATA } from '@/models/User';
 
-export function covertFromDBModel(dbModel: UserDBModel): UserModel {
+export function convertFromDBModel(dbModel: UserDBModel): UserModel {
   const data = {
     ...DEFAULT_DATA,
     ...(dbModel.data as Data),
@@ -11,6 +11,9 @@ export function covertFromDBModel(dbModel: UserDBModel): UserModel {
     id: String(dbModel.id),
     created: dbModel.created,
     email: dbModel.email,
+    organizationId: dbModel.organizationId
+      ? String(dbModel.organizationId)
+      : undefined,
     ...data,
   };
 }

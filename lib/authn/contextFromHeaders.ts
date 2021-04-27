@@ -2,15 +2,19 @@ import respositories from '@/db/repositories';
 import { Context } from '@/graphql/context';
 import { extractAuthId } from '@/lib/authn/token';
 import { log } from '@/lib/log/server';
-import { covertFromDBModel } from '@/lib/modelConversions/user';
+import { convertFromDBModel as convertFromOrganizationDBModel } from '@/lib/modelConversions/organization';
+import { convertFromDBModel as convertFromRoleDBModel } from '@/lib/modelConversions/role';
+import { convertFromDBModel as convertFromUserDBModel } from '@/lib/modelConversions/user';
 
 interface Headers {
   authorization?: string;
 }
 
 const ERR: Context = {
-  me: null,
   jwt: null,
+  me: null,
+  organization: null,
+  roles: [],
 };
 
 export async function contextFromHeaders<H extends Headers>(headers: H) {
@@ -29,14 +33,27 @@ export async function contextFromHeaders<H extends Headers>(headers: H) {
 
     const user = await respositories.User().findOne({
       where: { authId },
+      relations: ['organization', 'roles'],
     });
 
     if (!user) {
       return ERR;
     }
 
-    const me = covertFromDBModel(user);
-    return { me, jwt };
+    const roles = user.roles.map(convertFromRoleDBModel);
+    const organization = user.organization
+      ? convertFromOrganizationDBModel(user.organization)
+      : null;
+
+    const me = convertFromUserDBModel(user);
+
+    const context: Context = {
+      jwt,
+      me,
+      roles,
+      organization,
+    };
+    return context;
   } catch (e) {
     log({
       error: true,

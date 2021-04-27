@@ -18,6 +18,10 @@ interface Props<C> {
    */
   choices: C[];
   /**
+   * Choices that are selected by default
+   */
+  defaultSelected?: C[];
+  /**
    * Reference name for chips value
    */
   name: string;
@@ -99,8 +103,8 @@ const PillText = styled(Body2)<{ disabled?: boolean; selected?: boolean }>`
 export function Pick<C extends ChoiceObj>(props: Props<C>) {
   const form = useForm();
   const theme = useTheme();
-  const { choices, name, onChoose } = props;
-  const selected: C[] = form.getValue(name) || [];
+  const { choices, defaultSelected, name, onChoose } = props;
+  const selected: C[] = form.getValue(name) || defaultSelected || [];
 
   return (
     <Container>

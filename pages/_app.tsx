@@ -35,8 +35,8 @@ export default establishAuthentication(
           <JWTProvider
             initialJwt={jwt}
             initialAut={aut}
-            preserveJwt={jwt => Cookies.set('token', jwt)}
-            preserveAut={aut => Cookies.set('authn', aut)}
+            preserveJwt={jwt => Cookies.set('token', jwt, { path: '/' })}
+            preserveAut={aut => Cookies.set('authn', aut, { path: '/' })}
           >
             <URQLProvider
               ssrExchange={pageProps.ssrExchange}
