@@ -1,0 +1,23 @@
+.button {
+  color: var(--color-onBackground);
+  flex-grow: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.container {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  padding: 0 8px;
+}
+
+.icon {
+  fill: var(--color-primary);
+  flex-grow: 0;
+  flex-shrink: 0;
+  height: 16px;
+  width: 16px;
+}

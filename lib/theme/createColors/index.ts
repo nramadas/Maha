@@ -1,4 +1,4 @@
-import { mix } from 'polished';
+import { mix, rgba } from 'polished';
 
 enum Color {
   ERROR = '#b00020',
@@ -29,6 +29,9 @@ export function createColors() {
     fieldFocused: mix(0.05, Color.G000, Color.G950),
     fieldHovered: mix(0.05, Color.G000, Color.G950),
     metadata: mix(0.5, Color.G950, Color.G050),
+    navBackground: '#263238',
+    navBorderDark: rgba(0, 0, 0, 0.1),
+    navBorderLight: rgba(255, 255, 255, 0.07),
     onBackground: Color.G050,
     onDisabled: Color.G600,
     onError: Color.G050,

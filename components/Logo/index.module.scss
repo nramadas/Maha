@@ -1,0 +1,23 @@
+.container {
+  align-items: center;
+  background-color: var(--color-primary);
+  border-radius: 4px;
+  color: var(--color-background);
+  display: flex;
+  flex-direction: row;
+  font-family: var(--font-title);
+  font-size: 30px;
+  font-weight: 700;
+  height: 42px;
+  justify-content: center;
+  transition: background-color 0.15s;
+  width: 42px;
+
+  &:hover {
+    background-color: var(--color-primaryHovered);
+  }
+
+  &:active {
+    background-color: var(--color-primaryPressed);
+  }
+}

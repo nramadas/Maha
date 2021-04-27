@@ -12,8 +12,8 @@ export default function CreateOrganizationPage() {
     <div className={styles.container}>
       <div className={styles.wrapper}>
         <CreateOrganization
-          onComplete={({ id, name }) => {
-            router.push(`/organization/${id}/${encodeURIComponent(name)}`);
+          onComplete={({ id }) => {
+            router.push(`/organization/${id}/setup`);
           }}
         />
       </div>

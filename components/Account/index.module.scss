@@ -1,0 +1,91 @@
+.container {
+  align-items: center;
+  background-color: var(--color-background);
+  border-radius: 2px;
+  border: 1px solid var(--color-background);
+  box-sizing: border-box;
+  color: var(--color-onBackground);
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  outline: none;
+  padding: 6px 12px;
+  transition:
+    border-color 0.15s,
+    background-color 0.15s,
+    border-bottom-left-radius 0.15s,
+    border-bottom-right-radius 0.15s,
+    color 0.15s;
+
+  &:focus {
+    border-color: var(--color-primaryFocused);
+  }
+
+  &:hover,
+  &:hover &:focus {
+    background-color: var(--color-field);
+    border-color: var(--color-primaryHovered);
+  }
+
+  &:active {
+    background-color: var(--color-field);
+    border-color: var(--color-primaryPressed);
+  }
+
+  &[data-tooltipopen="true"] {
+    border-color: var(--color-primaryFocused);
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+}
+
+.icon {
+  fill: rgba(0, 0, 0, 0.15);
+  height: 24px;
+  margin-left: 3px;
+  margin-right: 13px;
+  width: 24px;
+}
+
+.menu {
+  background-color: var(--color-background);
+  border: 1px solid var(--color-primaryFocused);
+  border-top: 1px solid var(--color-fieldBorder);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  padding: 6px 0;
+}
+
+.menuItem {
+  align-items: center;
+  color: var(--color-onBackground);
+  display: flex;
+  flex-direction: row;
+  padding: 6px 12px;
+
+  &:focus {
+    border-color: var(--color-primaryFocused);
+  }
+
+  &:hover,
+  &:hover &:focus {
+    background-color: var(--color-field);
+    border-color: var(--color-primaryHovered);
+  }
+
+  &:active {
+    background-color: var(--color-field);
+    border-color: var(--color-primaryPressed);
+  }
+}
+
+.personIcon {
+  background-color: rgba(0, 0, 0, 0.15);
+  border-radius: 30px;
+  fill: var(--color-background);
+  height: 30px;
+  margin-right: 8px;
+  padding: 6px;
+  width: 30px;
+}

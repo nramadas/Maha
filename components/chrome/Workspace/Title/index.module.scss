@@ -1,0 +1,21 @@
+.container {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  padding: 0 8px;
+}
+
+.logo {
+  flex-grow: 0;
+  flex-shrink: 0;
+  margin-right: 8px;
+}
+
+.button {
+  color: var(--color-background);
+  flex-grow: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

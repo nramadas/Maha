@@ -36,16 +36,22 @@ export function establishAuthentication(App: typeof BaseApp) {
       initialState: undefined,
     });
 
-    await ssrPrepass(<AppTree pageProps={{ jwt, aut, ssrExchange: ssr }} />);
+    const basePageProps = {
+      jwt,
+      aut,
+      query: context.ctx.query,
+      pathname: context.ctx.pathname,
+    };
+
+    await ssrPrepass(
+      <AppTree pageProps={{ ...basePageProps, ssrExchange: ssr }} />,
+    );
     const initialState = ssr.extractData();
 
     return {
       pageProps: {
-        jwt,
-        aut,
+        ...basePageProps,
         ssrInitialState: initialState,
-        query: context.ctx.query,
-        pathname: context.ctx.pathname,
       },
     };
   };

@@ -14,7 +14,7 @@
   padding: 6px 12px 6px;
   text-decoration: none;
   text-transform: uppercase;
-  transition: color 0.15s, border-color 0.15s, background-color 0.15s;
+  transition: color 0.15s, border-color 0.15s, background-color 0.15s, fill 0.15s;
 
   &:focus {
     background-color: var(--color-primaryFocused);
@@ -37,6 +37,7 @@
     background-color: var(--color-disabled);
     border-color: var(--color-disabled);
     color: var(--color-onDisabled);
+    fill: var(--color-onDisabled);
     cursor: not-allowed;
   }
 }

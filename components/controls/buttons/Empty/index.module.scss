@@ -14,25 +14,29 @@
   padding: 6px;
   text-decoration: none;
   text-transform: uppercase;
-  transition: color 0.15s, background-color 0.15s;
+  transition: color 0.15s, background-color 0.15s, fill 0.15s;
 
   &:focus {
     color: var(--color-primaryFocused);
+    fill: var(--color-primaryFocused);
   }
 
   &:hover,
   &:hover &:focus {
     color: var(--color-primaryHovered);
+    fill: var(--color-primaryHovered);
   }
 
   &:active {
     color: var(--color-primaryPressed);
+    fill: var(--color-primaryPressed);
   }
 
   &:disabled,
   &[disabled] {
     background-color: transparent;
     color: var(--color-onDisabled);
+    fill: var(--color-onDisabled);
     cursor: not-allowed;
   }
 }
