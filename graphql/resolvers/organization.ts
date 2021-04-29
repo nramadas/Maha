@@ -16,9 +16,11 @@ import { Invite as InviteEntity } from '@/db/entities/Invite';
 import { Organization as OrganizationEntity } from '@/db/entities/Organization';
 import { Role as RoleEntity } from '@/db/entities/Role';
 import { User as UserEntity } from '@/db/entities/User';
-import { Me } from '@/graphql/decorators';
+import { Me, MyPermissions } from '@/graphql/decorators';
+import { buildOrganizationPage } from '@/graphql/helpers/buildOrganizationPage';
 import { CreateOrganizationInput } from '@/graphql/types/CreateOrganizationInput';
 import { Organization } from '@/graphql/types/Organization';
+import { OrganizationPage } from '@/graphql/types/OrganizationPage';
 import { Role } from '@/graphql/types/Role';
 import { User } from '@/graphql/types/User';
 import { PG_UNIQUE_VIOLATION } from '@/lib/errors/pg';
@@ -65,6 +67,14 @@ export class OrganizationResolver {
     });
 
     return dbUsers.map(convertFromUserDBModel);
+  }
+
+  @Authorized()
+  @FieldResolver(returns => [OrganizationPage], {
+    description: 'Returns the possible company pages the user can view',
+  })
+  async pages(@MyPermissions() permissions: Permission[]) {
+    return buildOrganizationPage(permissions);
   }
 
   @Query(returns => Organization, {

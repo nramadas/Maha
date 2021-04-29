@@ -14,7 +14,7 @@ export function convertFromDBModel(
   };
 
   return {
-    id: String(dbModel.id),
+    id: dbModel.id,
     created: dbModel.created,
     name: dbModel.name,
     ...data,

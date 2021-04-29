@@ -1,29 +1,3 @@
 .container {
   padding: 12px 0;
 }
-
-.icon {
-  height: 24px;
-  margin-right: 8px;
-  width: 24px;
-}
-
-.item {
-  padding: 6px 2px;
-}
-
-.link {
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-}
-
-.notSelected {
-  color: var(--color-background);
-  fill: var(--color-background);
-}
-
-.subItem {
-  padding-left: 18px;
-  text-transform: lowercase;
-}

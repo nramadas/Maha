@@ -1,12 +1,12 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class Init1619525820627 implements MigrationInterface {
-    name = 'Init1619525820627'
+export class Init1619702319044 implements MigrationInterface {
+    name = 'Init1619702319044'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
             CREATE TABLE "organization" (
-                "id" SERIAL NOT NULL,
+                "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
                 "name" character varying NOT NULL,
                 "data" jsonb NOT NULL,
                 "created" TIMESTAMP NOT NULL DEFAULT now(),
@@ -25,11 +25,11 @@ export class Init1619525820627 implements MigrationInterface {
         `);
         await queryRunner.query(`
             CREATE TABLE "invite" (
-                "id" SERIAL NOT NULL,
+                "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
                 "email" character varying NOT NULL,
                 "expired" boolean NOT NULL DEFAULT false,
                 "type" "invite_type_enum" NOT NULL DEFAULT 'unknown',
-                "organizationId" integer,
+                "organizationId" uuid,
                 "created" TIMESTAMP NOT NULL DEFAULT now(),
                 "updated" TIMESTAMP NOT NULL DEFAULT now(),
                 "deleted" TIMESTAMP,
@@ -39,9 +39,9 @@ export class Init1619525820627 implements MigrationInterface {
         `);
         await queryRunner.query(`
             CREATE TABLE "role" (
-                "id" SERIAL NOT NULL,
+                "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
                 "name" character varying NOT NULL,
-                "organizationId" integer,
+                "organizationId" uuid NOT NULL,
                 "data" jsonb NOT NULL,
                 "created" TIMESTAMP NOT NULL DEFAULT now(),
                 "updated" TIMESTAMP NOT NULL DEFAULT now(),
@@ -51,12 +51,12 @@ export class Init1619525820627 implements MigrationInterface {
         `);
         await queryRunner.query(`
             CREATE TABLE "user" (
-                "id" SERIAL NOT NULL,
+                "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
                 "googleId" character varying,
                 "appleId" character varying,
                 "authId" character varying NOT NULL,
                 "email" character varying NOT NULL,
-                "organizationId" integer,
+                "organizationId" uuid,
                 "data" jsonb NOT NULL,
                 "created" TIMESTAMP NOT NULL DEFAULT now(),
                 "updated" TIMESTAMP NOT NULL DEFAULT now(),
@@ -67,8 +67,8 @@ export class Init1619525820627 implements MigrationInterface {
         `);
         await queryRunner.query(`
             CREATE TABLE "role_users_user" (
-                "roleId" integer NOT NULL,
-                "userId" integer NOT NULL,
+                "roleId" uuid NOT NULL,
+                "userId" uuid NOT NULL,
                 CONSTRAINT "PK_46403d6ce64cde119287c876ca3" PRIMARY KEY ("roleId", "userId")
             )
         `);

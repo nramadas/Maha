@@ -85,7 +85,7 @@ export class RoleResolver {
 
     const newRole = this._roles.create({
       name,
-      organizationId: parseInt(org.id, 10),
+      organizationId: org.id,
       data: { description },
     });
 

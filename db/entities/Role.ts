@@ -15,14 +15,14 @@ import { User } from '../entities/User';
 
 @Entity()
 export class Role {
-  @PrimaryGeneratedColumn()
-  id!: number;
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
 
   @Column()
   name!: string;
 
-  @Column({ nullable: true })
-  organizationId!: number;
+  @Column()
+  organizationId!: string;
 
   @ManyToOne('Organization', 'roles')
   organization!: Organization;

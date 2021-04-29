@@ -17,8 +17,8 @@ import { Role } from '../entities/Role';
 @Entity()
 @Unique(['email'])
 export class Invite {
-  @PrimaryGeneratedColumn()
-  id!: number;
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
 
   @Column()
   email!: string;
@@ -34,7 +34,7 @@ export class Invite {
   type!: InviteType;
 
   @Column({ nullable: true })
-  organizationId!: number;
+  organizationId!: string;
 
   @ManyToOne('Organization', 'users', { nullable: true })
   organization!: Organization;

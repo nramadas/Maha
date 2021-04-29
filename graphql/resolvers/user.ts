@@ -95,7 +95,7 @@ export class UserResolver {
 
     // Check that we found all the roles
     for (const roleId of roleIds) {
-      const role = dbRoles.find(r => r.id === parseInt(roleId, 10));
+      const role = dbRoles.find(r => r.id === roleId);
 
       if (!role) {
         throw new UserInputError(ErrorType.DoesNotExist, {

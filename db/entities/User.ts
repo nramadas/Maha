@@ -16,8 +16,8 @@ import { Role } from '../entities/Role';
 @Entity()
 @Unique(['email', 'googleId', 'appleId', 'authId'])
 export class User {
-  @PrimaryGeneratedColumn()
-  id!: number;
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
 
   @Column({ nullable: true })
   googleId!: string;
@@ -32,7 +32,7 @@ export class User {
   email!: string;
 
   @Column({ nullable: true })
-  organizationId!: number;
+  organizationId!: string;
 
   @ManyToOne('Organization', 'users', { nullable: true })
   organization!: Organization;

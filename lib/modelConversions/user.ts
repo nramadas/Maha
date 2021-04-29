@@ -8,12 +8,10 @@ export function convertFromDBModel(dbModel: UserDBModel): UserModel {
   };
 
   return {
-    id: String(dbModel.id),
+    id: dbModel.id,
     created: dbModel.created,
     email: dbModel.email,
-    organizationId: dbModel.organizationId
-      ? String(dbModel.organizationId)
-      : undefined,
+    organizationId: dbModel.organizationId ? dbModel.organizationId : undefined,
     ...data,
   };
 }

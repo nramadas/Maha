@@ -15,8 +15,8 @@ import { User } from '../entities/User';
 @Entity()
 @Unique(['name'])
 export class Organization {
-  @PrimaryGeneratedColumn()
-  id!: number;
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
 
   @Column()
   name!: string;

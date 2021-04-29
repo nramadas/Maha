@@ -8,10 +8,10 @@ export function convertFromDBModel(dbModel: RoleDBModel): RoleModel {
   };
 
   return {
-    id: String(dbModel.id),
+    id: dbModel.id,
     created: dbModel.created,
     name: dbModel.name,
-    organizationId: String(dbModel.organizationId),
+    organizationId: dbModel.organizationId,
     ...data,
   };
 }

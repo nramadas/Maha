@@ -1,55 +1,39 @@
 import React from 'react';
-import { useQuery } from 'urql';
 
 import { Account } from '@/components/Account';
+import { breadcrumbsFromPages } from '@/lib/breadcrumbsFromPages';
 import { Organization } from '@/models/Organization';
+import { OrganizationPage } from '@/models/OrganizationPage';
 
 import { Breadcrumbs } from './Breadcrumbs';
 import styles from './index.module.scss';
-import { Navigation, PageKey } from './Navigation';
+import { Navigation } from './Navigation';
 import { Title } from './Title';
 
-const orgById = `
-  query ($orgId: ID!) {
-    organizationById (id: $orgId) {
-      id
-      name
-    }
-  }
-`;
-
 interface Props {
-  breadcrumbs: PageKey[];
-  orgId: Organization['id'];
+  breadcrumbs: ReturnType<typeof breadcrumbsFromPages>;
   children?: React.ReactNode;
+  organization: Pick<Organization, 'name'>;
+  pages: OrganizationPage[];
+  pathParts: string[];
 }
 
 export function Workspace(props: Props) {
-  const [result] = useQuery({
-    query: orgById,
-    variables: { orgId: props.orgId },
-  });
-
-  const organization = result.data?.organizationById;
-
   return (
     <div className={styles.container}>
       <header className={styles.header}>
         <Breadcrumbs
           breadcrumbs={props.breadcrumbs}
           className={styles.breadcrumbs}
-          orgId={props.orgId}
         />
         <Account />
       </header>
       <nav className={styles.nav}>
-        {organization && (
-          <Title className={styles.title} organization={organization} />
-        )}
+        <Title className={styles.title} organization={props.organization} />
         <Navigation
-          className={styles.navList}
           breadcrumbs={props.breadcrumbs}
-          orgId={props.orgId}
+          className={styles.navList}
+          pages={props.pages}
         />
       </nav>
       <article className={styles.content}>{props.children}</article>
