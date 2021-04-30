@@ -1,19 +1,23 @@
+import { gql } from '@urql/core';
 import React from 'react';
 import { useQuery } from 'urql';
 
-import { Members } from '@/components/biz/Members';
+import { Members } from '@/components/biz/pages/Members';
+import { Roles } from '@/components/biz/pages/Roles';
 import { Workspace } from '@/components/chrome/Workspace';
-import { breadcrumbsFromPages } from '@/lib/breadcrumbsFromPages';
+import { Breadcrumb, breadcrumbsFromPages } from '@/lib/breadcrumbsFromPages';
 import { OrganizationPageType } from '@/models/OrganizationPageType';
 
-const pages = `
+const pages = gql`
   query {
     me {
+      id
+      permissions
       organization {
         id
         name
         pages {
-          type,
+          type
           url
           children {
             type
@@ -25,12 +29,14 @@ const pages = `
   }
 `;
 
-function pageComponent(breadcrumbs: ReturnType<typeof breadcrumbsFromPages>) {
-  const crumb = breadcrumbs[breadcrumbs.length - 1];
+function pageComponent(breadcrumbs: Breadcrumb[]) {
+  const lastCrumb = breadcrumbs[breadcrumbs.length - 1];
 
-  switch (crumb.type) {
+  switch (lastCrumb.type) {
     case OrganizationPageType.Members:
       return Members;
+    case OrganizationPageType.Roles:
+      return Roles;
     default:
       return null;
   }
@@ -46,6 +52,7 @@ export default function Biz(props: Props) {
   const slug = props.query.slug || [];
   const [results] = useQuery({ query: pages });
 
+  const permissions = results.data?.me.permissions;
   const organization = results.data?.me.organization;
   const breadcrumbs = breadcrumbsFromPages(organization.pages, slug);
   const PageComponent = pageComponent(breadcrumbs);
@@ -57,7 +64,7 @@ export default function Biz(props: Props) {
       pages={organization.pages}
       pathParts={slug}
     >
-      {PageComponent && <PageComponent />}
+      {PageComponent && <PageComponent permissions={permissions} />}
     </Workspace>
   );
 }

@@ -1,4 +1,4 @@
 export enum UtilityConfiguration {
-  Central = 'central',
-  PerRoom = 'perRoom',
+  Central = 'Central',
+  PerRoom = 'PerRoom',
 }

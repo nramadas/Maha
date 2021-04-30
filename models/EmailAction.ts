@@ -1,3 +1,3 @@
 export enum EmailAction {
-  CreateOrganization = 'createOrganization',
+  CreateOrganization = 'CreateOrganization',
 }

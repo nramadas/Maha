@@ -17,12 +17,14 @@ import { Role as RoleEntity } from '@/db/entities/Role';
 import { User as UserEntity } from '@/db/entities/User';
 import { Context } from '@/graphql/context';
 import { Organization } from '@/graphql/types/Organization';
+import { Permission as PermissionType } from '@/graphql/types/Permission';
 import { Role } from '@/graphql/types/Role';
 import { User } from '@/graphql/types/User';
 import { ErrorType } from '@/lib/errors/type';
 import { convertFromDBModel as convertFromOrganizationDBModel } from '@/lib/modelConversions/organization';
 import { convertFromDBModel as convertFromRoleDBModel } from '@/lib/modelConversions/role';
 import { convertFromDBModel as convertFromUserDBModel } from '@/lib/modelConversions/user';
+import { fromRoles } from '@/lib/permissions/fromRoles';
 import { hasPermission } from '@/lib/permissions/hasPermission';
 import { Permission } from '@/models/Permission';
 
@@ -34,6 +36,14 @@ export class UserResolver {
     @InjectRepository(UserEntity)
     private readonly _users: Repository<UserEntity>,
   ) {}
+
+  @FieldResolver(type => [PermissionType], {
+    description: 'A list of permissions this user has',
+  })
+  async permissions(@Ctx() ctx: Context, @Root() root: User) {
+    const roles = await this.roles(ctx, root);
+    return fromRoles(roles);
+  }
 
   @FieldResolver(type => [Role], {
     description: 'The roles that this users is assigned to',

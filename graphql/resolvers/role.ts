@@ -3,6 +3,7 @@ import {
   Arg,
   Authorized,
   FieldResolver,
+  ID,
   Mutation,
   Resolver,
   Root,
@@ -13,6 +14,7 @@ import { InjectRepository } from 'typeorm-typedi-extensions';
 import { Role as RoleEntity } from '@/db/entities/Role';
 import { MyOrganization } from '@/graphql/decorators';
 import { Organization } from '@/graphql/types/Organization';
+import { Permission as PermissionType } from '@/graphql/types/Permission';
 import { Role } from '@/graphql/types/Role';
 import { User } from '@/graphql/types/User';
 import { ErrorType } from '@/lib/errors/type';
@@ -70,6 +72,8 @@ export class RoleResolver {
     @MyOrganization() org: Organization,
     @Arg('name') name: string,
     @Arg('description', { nullable: true }) description?: string,
+    @Arg('permissions', type => [PermissionType], { nullable: true })
+    permissions?: Permission[],
   ) {
     const dbRoles = await this._roles.find({
       where: { organizationId: org.id },
@@ -86,11 +90,58 @@ export class RoleResolver {
     const newRole = this._roles.create({
       name,
       organizationId: org.id,
-      data: { description },
+      data: { description, permissions },
     });
 
     await this._roles.save(newRole);
 
     return [...dbRoles, newRole].map(convertFromRoleDBModel);
+  }
+
+  @Authorized(Permission.ModifyRoles)
+  @Mutation(returns => [Role], {
+    description: 'Remove a role from an organization',
+  })
+  async deleteRole(
+    @MyOrganization() org: Organization,
+    @Arg('id', type => ID) id: string,
+  ) {
+    const dbRole = await this._roles.findOne({ where: { id } });
+
+    if (!dbRole) {
+      throw new UserInputError(ErrorType.DoesNotExist, {
+        field: 'id',
+      });
+    }
+
+    await this._roles.delete(dbRole);
+
+    const remainingRoles = await this._roles.find({
+      where: { organizationId: org.id },
+    });
+
+    return remainingRoles.map(convertFromRoleDBModel);
+  }
+
+  @Authorized(Permission.ModifyRoles)
+  @Mutation(returns => Role, {
+    description: 'Change the permissions on a role',
+  })
+  async setRolePermissions(
+    @Arg('roleId', type => ID) roleId: string,
+    @Arg('permissions', type => [PermissionType]) permissions: Permission[],
+  ) {
+    const dbRole = await this._roles.findOne({ where: { id: roleId } });
+
+    if (!dbRole) {
+      throw new UserInputError(ErrorType.DoesNotExist, {
+        field: 'roleId',
+      });
+    }
+
+    dbRole.data = { ...dbRole.data, permissions };
+    await this._roles.save(dbRole);
+
+    return convertFromRoleDBModel(dbRole);
   }
 }

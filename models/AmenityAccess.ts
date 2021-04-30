@@ -1,5 +1,5 @@
 export enum AmenityAccess {
-  Private = 'private',
-  Shared = 'shared',
-  None = 'none',
+  Private = 'Private',
+  Shared = 'Shared',
+  None = 'None',
 }

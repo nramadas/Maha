@@ -1,3 +1,4 @@
+import { gql } from '@urql/core';
 import React, { useContext, useEffect, useState } from 'react';
 import { useMutation } from 'urql';
 
@@ -8,9 +9,9 @@ import { ErrorType } from '@/lib/errors/type';
 import { Error } from './Error';
 import { Processing } from './Processing';
 
-const completeAuthorization = `
+const completeAuthorization = gql`
   mutation($email: String!, $token: String!) {
-    completeAuthentication(credentials: {email: $email, token: $token}) {
+    completeAuthentication(credentials: { email: $email, token: $token }) {
       jwt
       aut
     }

@@ -5,12 +5,12 @@ import React from 'react';
 import { Empty } from '@/components/controls/links/Empty';
 import { ChevronRight } from '@/components/icons/ChevronRight';
 import { useLanguagePack } from '@/hooks/useLanguagePack';
-import { breadcrumbsFromPages } from '@/lib/breadcrumbsFromPages';
+import { Breadcrumb } from '@/lib/breadcrumbsFromPages';
 
 import styles from './index.module.scss';
 
 interface Props {
-  breadcrumbs: ReturnType<typeof breadcrumbsFromPages>;
+  breadcrumbs: Breadcrumb[];
   className?: string;
 }
 

@@ -1,5 +1,5 @@
 export enum PropertyCondition {
-  New = 'new',
-  Resale = 'resale',
-  Unknown = 'unknown',
+  New = 'New',
+  Resale = 'Resale',
+  Unknown = 'Unknown',
 }

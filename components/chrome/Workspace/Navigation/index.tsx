@@ -1,14 +1,14 @@
 import cx from 'classnames';
 import React from 'react';
 
-import { breadcrumbsFromPages } from '@/lib/breadcrumbsFromPages';
+import { Breadcrumb } from '@/lib/breadcrumbsFromPages';
 import { OrganizationPage } from '@/models/OrganizationPage';
 
 import styles from './index.module.scss';
 import { Page } from './Page';
 
 interface Props {
-  breadcrumbs: ReturnType<typeof breadcrumbsFromPages>;
+  breadcrumbs: Breadcrumb[];
   className?: string;
   pages: OrganizationPage[];
 }

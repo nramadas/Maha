@@ -1,12 +1,13 @@
+import { gql } from '@urql/core';
 import { useCallback, useContext, useEffect, useRef } from 'react';
 import { useMutation } from 'urql';
 
 import { JWTContext } from '@/contexts/JWT';
 import { extractPayload } from '@/lib/authn/extractPayload';
 
-const refreshAuthentication = `
-  mutation ($refreshToken: String!) {
-    refreshAuthentication (credentials: {refreshToken: $refreshToken}) {
+const refreshAuthentication = gql`
+  mutation($refreshToken: String!) {
+    refreshAuthentication(credentials: { refreshToken: $refreshToken }) {
       jwt
     }
   }

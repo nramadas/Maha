@@ -3,7 +3,7 @@ import { CommonRoleType } from '@/models/CommonRoleType';
 import { LanguagePack } from '@/models/LanguagePack';
 import { Role } from '@/models/Role';
 
-export function roleName(role: Pick<Role, 'name'>, languagePack: LanguagePack) {
+export function name(role: Pick<Role, 'name'>, languagePack: LanguagePack) {
   switch (role.name) {
     case CommonRoleType.Owner:
       return i18n.translate`Owner`(languagePack);

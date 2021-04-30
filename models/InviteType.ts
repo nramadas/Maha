@@ -1,5 +1,5 @@
 export enum InviteType {
-  CreateOrganization = 'createOrganization',
-  JoinOrganization = 'joinOrganization',
-  Unknown = 'unknown',
+  CreateOrganization = 'CreateOrganization',
+  JoinOrganization = 'JoinOrganization',
+  Unknown = 'Unknown',
 }

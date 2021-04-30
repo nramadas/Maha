@@ -1,3 +1,4 @@
+import { gql } from '@urql/core';
 import cx from 'classnames';
 import Link from 'next/link';
 import React from 'react';
@@ -12,7 +13,7 @@ import { i18n } from '@/lib/translate';
 
 import styles from './index.module.scss';
 
-const me = `
+const me = gql`
   query {
     me {
       id

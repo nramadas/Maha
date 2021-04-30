@@ -1,5 +1,5 @@
 export enum UtilityWaterFilter {
-  CentrallyFiltered = 'centralFiltered',
-  TapFiltered = 'tapFiltered',
-  NoFilter = 'noFilter',
+  CentrallyFiltered = 'CentralFiltered',
+  TapFiltered = 'TapFiltered',
+  NoFilter = 'NoFilter',
 }

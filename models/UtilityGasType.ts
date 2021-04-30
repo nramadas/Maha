@@ -1,4 +1,4 @@
 export enum UtilityGasType {
-  Integrated = 'integrated',
-  Canister = 'canister',
+  Integrated = 'Integrated',
+  Canister = 'Canister',
 }

@@ -2,7 +2,7 @@ import { toName } from '@/lib/organizationPageType/toName';
 import { OrganizationPage } from '@/models/OrganizationPage';
 import { OrganizationPageType } from '@/models/OrganizationPageType';
 
-interface Breadcrumb {
+export interface Breadcrumb {
   name: ReturnType<typeof toName>;
   type: OrganizationPageType;
   url: string;

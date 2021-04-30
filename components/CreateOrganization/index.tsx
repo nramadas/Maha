@@ -1,3 +1,4 @@
+import { gql } from '@urql/core';
 import React from 'react';
 import { useMutation } from 'urql';
 
@@ -5,7 +6,7 @@ import { ErrorType } from '@/lib/errors/type';
 
 import { Form } from './Form';
 
-const createOrganization = `
+const createOrganization = gql`
   mutation($name: String!) {
     createOrganization(details: { name: $name }) {
       id

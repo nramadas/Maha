@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Account } from '@/components/Account';
-import { breadcrumbsFromPages } from '@/lib/breadcrumbsFromPages';
+import { Breadcrumb } from '@/lib/breadcrumbsFromPages';
 import { Organization } from '@/models/Organization';
 import { OrganizationPage } from '@/models/OrganizationPage';
 
@@ -11,7 +11,7 @@ import { Navigation } from './Navigation';
 import { Title } from './Title';
 
 interface Props {
-  breadcrumbs: ReturnType<typeof breadcrumbsFromPages>;
+  breadcrumbs: Breadcrumb[];
   children?: React.ReactNode;
   organization: Pick<Organization, 'name'>;
   pages: OrganizationPage[];

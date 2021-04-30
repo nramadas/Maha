@@ -17,15 +17,17 @@ useContainer(Container);
 const setup = async () => {
   await connectToDb();
 
+  const schema = await buildSchema({
+    authChecker,
+    container: Container,
+    resolvers: (Object.values(resolvers) as unknown) as [
+      Function,
+      ...Function[]
+    ],
+  });
+
   const apolloServer = new ApolloServer({
-    schema: await buildSchema({
-      authChecker,
-      container: Container,
-      resolvers: (Object.values(resolvers) as unknown) as [
-        Function,
-        ...Function[]
-      ],
-    }),
+    schema,
     cache: new RedisCache({
       host: process.env.REDIS_HOST,
       port: process.env.REDIS_PORT,

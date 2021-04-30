@@ -1,3 +1,4 @@
+import { cacheExchange } from '@urql/exchange-graphcache';
 import React, { useContext } from 'react';
 import {
   createClient,
@@ -5,18 +6,20 @@ import {
   ssrExchange,
   fetchExchange,
   dedupExchange,
-  cacheExchange,
 } from 'urql';
 
 import { JWTContext } from '@/contexts/JWT';
+import { config } from '@/graphcache';
 
 type SSRExchange = ReturnType<typeof ssrExchange>;
 
 const isServerSide = typeof window === 'undefined';
 
 const setupClient = (ssr: SSRExchange, jwt?: string) => {
+  const exchanges = [dedupExchange, cacheExchange(config), ssr, fetchExchange];
+
   return createClient({
-    exchanges: [dedupExchange, cacheExchange, ssr, fetchExchange],
+    exchanges,
     fetchOptions: () => ({
       headers: {
         Authorization: jwt ? `Bearer ${jwt}` : '',

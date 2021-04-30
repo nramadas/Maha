@@ -47,12 +47,12 @@
 .label {
   .iconCircle {
     &:hover {
-    background-color: var(--color-primary);
+      background-color: var(--color-error);
 
-    .close {
-      fill: var(--color-background);
+      .close {
+        fill: var(--color-background);
+      }
     }
-  }
   }
 }
 
@@ -100,6 +100,7 @@
 
 .remainingChoice {
   align-items: center;
+  background-color: var(--color-background);
   border-left: 1px solid var(--color-fieldBorder);
   border-right: 1px solid var(--color-fieldBorder);
   cursor: pointer;
