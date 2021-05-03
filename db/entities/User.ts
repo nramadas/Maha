@@ -32,10 +32,10 @@ export class User {
   email!: string;
 
   @Column({ nullable: true })
-  organizationId!: string;
+  organizationId?: string;
 
   @ManyToOne('Organization', 'users', { nullable: true })
-  organization!: Organization;
+  organization?: Organization | null;
 
   @ManyToMany('Role', 'users')
   roles!: Role[];

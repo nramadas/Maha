@@ -4,7 +4,7 @@ import { UtilityWaterFilter } from '@/models/UtilityWaterFilter';
 
 registerEnumType(UtilityWaterFilter, {
   name: 'UtilityWaterFilter',
-  description: '',
+  description: 'How the water is filtered',
   valuesConfig: {
     CentrallyFiltered: {
       description:

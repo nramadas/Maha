@@ -11,7 +11,8 @@ import * as templates from './templates';
 
 const THEME = {
   ...createColors(),
-  font: 'Arial',
+  font:
+    "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
 };
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
@@ -26,15 +27,16 @@ interface Options<T extends TemplateType> {
 }
 
 export function sendEmail<T extends TemplateType>(options: Options<T>) {
-  const template = templates[options.template];
-  const props = options.props;
+  const template: Template<T> = templates[options.template];
+  const Component = template.Template;
+  const props = options.props as any;
 
   sgMail
     .send({
       from: 'mail@niranjan.me',
       html: ReactDomServer.renderToStaticMarkup(
         <ThemeProvider theme={THEME}>
-          <template.Template {...props} />
+          <Component {...props} />
         </ThemeProvider>,
       ),
       subject: template.subject,

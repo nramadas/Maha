@@ -1,0 +1,10 @@
+$padding: 4px;
+
+.container {
+  overflow: hidden;
+  position: absolute;
+  right: 20px;
+  top: 80px - $padding;
+  width: 300px + 2 * $padding;
+  padding: $padding;
+}

@@ -1,17 +1,16 @@
 import { i18n } from '@/lib/translate';
 import { CommonRoleType } from '@/models/CommonRoleType';
-import { LanguagePack } from '@/models/LanguagePack';
 import { Role } from '@/models/Role';
 
-export function name(role: Pick<Role, 'name'>, languagePack: LanguagePack) {
+export function name(role: Pick<Role, 'name'>) {
   switch (role.name) {
     case CommonRoleType.Owner:
-      return i18n.translate`Owner`(languagePack);
+      return i18n.translate`Owner`;
     case CommonRoleType.Manager:
-      return i18n.translate`Manager`(languagePack);
+      return i18n.translate`Manager`;
     case CommonRoleType.SalesAgent:
-      return i18n.translate`Sales Agent`(languagePack);
+      return i18n.translate`Sales Agent`;
     default:
-      return role.name;
+      return () => role.name;
   }
 }

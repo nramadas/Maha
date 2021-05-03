@@ -12,14 +12,14 @@ import { EmailAction } from '@/models/EmailAction';
 interface Props {
   action?: EmailAction;
   email?: string;
+  orgName?: string;
   token?: string;
 }
 
 export default function Continue(props: Props) {
   const router = useRouter();
   const redirectUrl = useGetFromStorage<string>('redirectUrl') || '/';
-  const gotoUrl =
-    (props.action && emailActionToUrl(props.action)) || redirectUrl;
+  const gotoUrl = (props.action && emailActionToUrl(props)) || redirectUrl;
 
   if (!(props.email && props.token)) {
     return <Error errorType={ErrorType.SomethingElse} />;
@@ -35,12 +35,13 @@ export default function Continue(props: Props) {
 }
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const { action, email, token } = context.query;
+  const { action, email, orgName, token } = context.query;
 
   return {
     props: {
       action: typeof action === 'string' ? action : null,
       email: typeof email === 'string' ? decodeURIComponent(email) : null,
+      orgName: typeof orgName === 'string' ? decodeURIComponent(orgName) : null,
       token: typeof token === 'string' ? decodeURIComponent(token) : null,
     },
   };

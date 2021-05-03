@@ -3,7 +3,7 @@ import Link from 'next/link';
 import React from 'react';
 
 import { Empty } from '@/components/controls/links/Empty';
-import { useLanguagePack } from '@/hooks/useLanguagePack';
+import { useTextToString } from '@/hooks/useTextToString';
 import { breadcrumbsFromPages } from '@/lib/breadcrumbsFromPages';
 import { toIcon } from '@/lib/organizationPageType/toIcon';
 import { toName } from '@/lib/organizationPageType/toName';
@@ -17,9 +17,9 @@ interface Props {
 }
 
 export function Page(props: Props) {
-  const languagePack = useLanguagePack();
+  const textToString = useTextToString();
   const Icon = toIcon(props.page.type);
-  const title = toName(props.page.type)(languagePack);
+  const title = textToString(toName(props.page.type));
   const isSelected = !!props.breadcrumbs.find(
     crumb => crumb.type === props.page.type,
   );

@@ -1,0 +1,37 @@
+$closeContainerWidth: 24px;
+
+.close {
+  fill: var(--color-background);
+  height: 16px;
+  width: 16px;
+}
+
+.closeContainer {
+  align-items: center;
+  bottom: 0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  left: 0;
+  padding: 10px 0;
+  position: absolute;
+  top: 0;
+  width: $closeContainerWidth;
+}
+
+.container {
+  box-shadow: var(--elevation-2);
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-bottom: 12px;
+  overflow: hidden;
+  position: relative;
+  width: 300px;
+}
+
+.content {
+  background-color: var(--color-background);
+  border-radius: 2px;
+  padding: 8px;
+  margin-left: $closeContainerWidth;
+}

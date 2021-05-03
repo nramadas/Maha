@@ -6,10 +6,12 @@ import '@/styles/fonts.css';
 import '@/styles/normalize.css';
 
 import { JWTRefresh } from '@/components/JWTRefresh';
+import { ConfirmationProvider } from '@/contexts/Confirmation';
 import { DialogProvider } from '@/contexts/Dialog';
 import { NoopFormProvider } from '@/contexts/Form';
 import { JWTProvider } from '@/contexts/JWT';
 import { LanguagePackProvider } from '@/contexts/LanguagePack';
+import { NotificationsProvider } from '@/contexts/Notifications';
 import { TooltipProvider } from '@/contexts/Tooltip';
 import { URQLProvider } from '@/contexts/URQL';
 import { establishAuthentication } from '@/lib/ssr';
@@ -43,20 +45,25 @@ export default establishAuthentication(
               initialState={pageProps.ssrInitialState}
             >
               <JWTRefresh />
-              <DialogProvider getContainer={getBody}>
-                <TooltipProvider getContainer={getBody}>
-                  <LanguagePackProvider
-                    initialLanguagePack={DEFAULT_LANGUAGE_PACK}
-                    getLanguagePack={language =>
-                      Promise.resolve(DEFAULT_LANGUAGE_PACK)
-                    }
-                  >
-                    <NoopFormProvider>
-                      <Component {...pageProps} />
-                    </NoopFormProvider>
-                  </LanguagePackProvider>
-                </TooltipProvider>
-              </DialogProvider>
+              <LanguagePackProvider
+                initialLanguagePack={DEFAULT_LANGUAGE_PACK}
+                getLanguagePack={language =>
+                  Promise.resolve(DEFAULT_LANGUAGE_PACK)
+                }
+              >
+                <DialogProvider getContainer={getBody}>
+                  <TooltipProvider getContainer={getBody}>
+                    <NotificationsProvider getContainer={getBody}>
+                      <ConfirmationProvider>
+                        <NoopFormProvider>
+                          <Component {...pageProps} />
+                          <div id="extra-container" />
+                        </NoopFormProvider>
+                      </ConfirmationProvider>
+                    </NotificationsProvider>
+                  </TooltipProvider>
+                </DialogProvider>
+              </LanguagePackProvider>
             </URQLProvider>
           </JWTProvider>
         </>

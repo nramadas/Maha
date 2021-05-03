@@ -4,7 +4,7 @@ import { Permission } from '@/models/Permission';
 
 registerEnumType(Permission, {
   name: 'Permission',
-  description: '',
+  description: 'User permissions to access various resources',
   valuesConfig: {
     ManageMembers: {
       description: 'Can add/remove members and assign roles to members',

@@ -10,15 +10,17 @@ import styled, { css } from 'styled-components/native';
 
 import { Caption } from '@/components/typography/Caption';
 import { useForm } from '@/hooks/useForm';
+import { useTextToString } from '@/hooks/useTextToString';
 import { quick as quickAnimation } from '@/lib/animations/native';
+import { Text } from '@/models/Text';
 
 export interface Props extends React.ComponentProps<typeof TextInput> {
   __doNotWriteToForm?: boolean;
   className?: string;
   disabled?: boolean;
-  error?: string;
+  error?: Text;
   icon?: any;
-  label: string;
+  label: Text;
   name: string;
   style?: StyleProp<ViewStyle>;
   type?: React.InputHTMLAttributes<HTMLInputElement>['type'];
@@ -26,7 +28,7 @@ export interface Props extends React.ComponentProps<typeof TextInput> {
 
 interface ExtraProps {
   disabled?: boolean;
-  error?: string;
+  error?: boolean;
   focused?: boolean;
   hasText?: boolean;
 }
@@ -131,6 +133,7 @@ export const Input = forwardRef<TextInput, Props>((props, ref) => {
   } = props;
   const [isFocused, setIsFocused] = React.useState(false);
   const form = useForm();
+  const textToString = useTextToString();
   const hasText = __doNotWriteToForm ? !!rest.value : !!form.getValue(name);
 
   return (
@@ -142,7 +145,7 @@ export const Input = forwardRef<TextInput, Props>((props, ref) => {
         <RawInput
           {...rest}
           disabled={disabled}
-          error={error}
+          error={!!error}
           hasText={hasText}
           ref={ref}
           secureTextEntry={type === 'password'}
@@ -165,15 +168,15 @@ export const Input = forwardRef<TextInput, Props>((props, ref) => {
         <Label hasText={hasText}>
           <LabelText
             disabled={disabled}
-            error={error}
+            error={!!error}
             focused={isFocused}
             hasText={hasText}
           >
-            {label}
+            {textToString(label)}
           </LabelText>
         </Label>
       </Container>
-      {!!error && <Error>{error}</Error>}
+      {!!error && <Error>{textToString(error)}</Error>}
     </KeyboardAvoidingView>
   );
 });

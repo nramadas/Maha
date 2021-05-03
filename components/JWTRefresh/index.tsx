@@ -43,6 +43,7 @@ export function JWTRefresh() {
           if (now >= refreshAt || now < _iat) {
             refreshSession();
           } else {
+            clearTimeout(timer.current);
             timer.current = setTimeout(() => refreshSession(), refreshAt - now);
           }
         }

@@ -99,9 +99,11 @@ export class UserResolver {
     @Arg('roleIds', type => [ID]) roleIds: string[],
     @Arg('userId', type => ID) userId: string,
   ) {
-    const dbRoles = await this._roles.find({
-      where: roleIds.map(id => ({ id })),
-    });
+    const dbRoles = roleIds.length
+      ? await this._roles.find({
+          where: roleIds.map(id => ({ id })),
+        })
+      : [];
 
     // Check that we found all the roles
     for (const roleId of roleIds) {

@@ -7,14 +7,16 @@ import { Add } from '@/components/icons/Add';
 import { Close } from '@/components/icons/Close';
 import { Caption } from '@/components/typography/Caption';
 import { useForm } from '@/hooks/useForm';
+import { useTextToString } from '@/hooks/useTextToString';
 import { useTooltip } from '@/hooks/useTooltip';
 import { i18n } from '@/lib/translate';
+import { Text } from '@/models/Text';
 
 import styles from './index.module.scss';
 
 interface Choice {
   disabled?: boolean;
-  text: string;
+  text: Text;
 }
 
 interface Props<C> extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -42,7 +44,6 @@ interface Props<C> extends React.InputHTMLAttributes<HTMLInputElement> {
  * chosen from a dropdown.
  */
 export function PickGrow<C extends Choice>(props: Props<C>) {
-  const { choices, defaultSelected, name, onChoose, ...rest } = props;
   const form = useForm();
   const [Target, Tooltip] = useTooltip({
     alignment: 'center',
@@ -50,6 +51,9 @@ export function PickGrow<C extends Choice>(props: Props<C>) {
     positionOffset: 4,
     type: 'click',
   });
+  const textToString = useTextToString();
+
+  const { choices, defaultSelected, name, onChoose, ...rest } = props;
   const selected: C[] = form.getValue(name) || defaultSelected || [];
   const remaining: C[] = choices.filter(choice => {
     return isNil(selected.find(c => isEqual(c, choice)));
@@ -62,7 +66,7 @@ export function PickGrow<C extends Choice>(props: Props<C>) {
           className={cx(styles.label, {
             [styles.disabled]: !!choice.disabled,
           })}
-          key={choice.text}
+          key={textToString(choice.text)}
         >
           <input
             {...rest}
@@ -72,7 +76,7 @@ export function PickGrow<C extends Choice>(props: Props<C>) {
             disabled={choice.disabled}
             name={name}
             type="checkbox"
-            value={choice.text}
+            value={textToString(choice.text)}
           />
           <div className={styles.choice}>
             <div
@@ -89,7 +93,7 @@ export function PickGrow<C extends Choice>(props: Props<C>) {
             >
               <Close className={styles.close} />
             </div>
-            <Caption>{choice.text}</Caption>
+            <Caption>{textToString(choice.text)}</Caption>
           </div>
         </label>
       ))}
@@ -111,7 +115,7 @@ export function PickGrow<C extends Choice>(props: Props<C>) {
             <div className={styles.remainingChoices}>
               {remaining.map(choice => (
                 <div
-                  key={choice.text}
+                  key={textToString(choice.text)}
                   className={styles.remainingChoice}
                   onClick={() => {
                     const newSelected = selected.concat(choice);
@@ -119,7 +123,7 @@ export function PickGrow<C extends Choice>(props: Props<C>) {
                     onChoose?.(newSelected);
                   }}
                 >
-                  <Caption>{choice.text}</Caption>
+                  <Caption>{textToString(choice.text)}</Caption>
                 </div>
               ))}
             </div>

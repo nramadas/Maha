@@ -2,6 +2,7 @@ import React from 'react';
 import { useTheme } from 'styled-components';
 
 import { Email } from '@/emails/models';
+import { buildQuery } from '@/lib/url/buildQuery';
 import { EmailAction } from '@/models/EmailAction';
 
 interface Props {
@@ -14,14 +15,16 @@ export const CreateOrganization: Email<Props> = {
   subject: 'Finish setting up your company on Maha',
   Template: props => {
     const theme = useTheme();
-    const urlSafeEmail = encodeURIComponent(props.email);
-    const query = `?email=${urlSafeEmail}&token=${props.token}&action=${EmailAction.CreateOrganization}`;
+    const query = buildQuery({
+      action: EmailAction.CreateOrganization,
+      email: props.email,
+      token: props.token,
+    });
 
     return (
       <div
         style={{
           backgroundColor: theme.field,
-          border: `2px solid ${theme.primary}`,
           borderRadius: 24,
           fontFamily: theme.font,
           padding: 12,

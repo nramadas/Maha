@@ -4,7 +4,7 @@ import React from 'react';
 
 import { Empty } from '@/components/controls/links/Empty';
 import { ChevronRight } from '@/components/icons/ChevronRight';
-import { useLanguagePack } from '@/hooks/useLanguagePack';
+import { useTextToString } from '@/hooks/useTextToString';
 import { Breadcrumb } from '@/lib/breadcrumbsFromPages';
 
 import styles from './index.module.scss';
@@ -15,7 +15,7 @@ interface Props {
 }
 
 export function Breadcrumbs(props: Props) {
-  const languagePack = useLanguagePack();
+  const textToString = useTextToString();
 
   return (
     <div className={cx(styles.container, props.className)}>
@@ -24,7 +24,7 @@ export function Breadcrumbs(props: Props) {
           <React.Fragment key={crumb.type}>
             <Link href={`/biz${crumb.url}`}>
               <Empty className={styles.button}>
-                {crumb.name(languagePack)}
+                {textToString(crumb.name)}
               </Empty>
             </Link>
             {index !== props.breadcrumbs.length - 1 && (

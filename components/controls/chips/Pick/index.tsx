@@ -6,12 +6,14 @@ import React from 'react';
 import { Checkmark } from '@/components/icons/Checkmark';
 import { Caption } from '@/components/typography/Caption';
 import { useForm } from '@/hooks/useForm';
+import { useTextToString } from '@/hooks/useTextToString';
+import { Text } from '@/models/Text';
 
 import styles from './index.module.scss';
 
 interface Choice {
   disabled?: boolean;
-  text: string;
+  text: Text;
 }
 
 interface Props<C> extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -38,8 +40,10 @@ interface Props<C> extends React.InputHTMLAttributes<HTMLInputElement> {
  * component.
  */
 export function Pick<C extends Choice>(props: Props<C>) {
-  const { choices, defaultSelected, name, onChoose, ...rest } = props;
   const form = useForm();
+  const textToString = useTextToString();
+
+  const { choices, defaultSelected, name, onChoose, ...rest } = props;
   const selected: C[] = form.getValue(name) || defaultSelected || [];
 
   return (
@@ -52,7 +56,7 @@ export function Pick<C extends Choice>(props: Props<C>) {
             className={cx(styles.label, {
               [styles.disabled]: !!choice.disabled,
             })}
-            key={choice.text}
+            key={textToString(choice.text)}
           >
             <input
               {...rest}
@@ -61,7 +65,7 @@ export function Pick<C extends Choice>(props: Props<C>) {
               disabled={choice.disabled}
               name={name}
               type="checkbox"
-              value={choice.text}
+              value={textToString(choice.text)}
               onChange={() => {
                 if (choice.disabled) {
                   return;
@@ -81,7 +85,7 @@ export function Pick<C extends Choice>(props: Props<C>) {
               <div className={styles.checkCircle}>
                 <Checkmark className={styles.check} />
               </div>
-              <Caption>{choice.text}</Caption>
+              <Caption>{textToString(choice.text)}</Caption>
             </div>
           </label>
         );

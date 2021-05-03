@@ -34,7 +34,7 @@ export function Account(props: Props) {
   const [Target, Tooltip] = useTooltip({
     alignment: 'full',
     position: 'below',
-    positionOffset: -1,
+    positionOffset: 4,
     preventTooltipClickPropagation: true,
     type: 'click',
   });

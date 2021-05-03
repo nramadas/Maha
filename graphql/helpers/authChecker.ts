@@ -14,6 +14,8 @@ function getOrgId(
   const type = info.path.typename;
 
   switch (type) {
+    case 'Invite':
+      return root.organizationId;
     case 'Organization':
       return root.id;
     case 'Role':

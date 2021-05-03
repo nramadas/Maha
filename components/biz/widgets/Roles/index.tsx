@@ -9,7 +9,9 @@ import { Body1 } from '@/components/typography/Body1';
 import { Body2 } from '@/components/typography/Body2';
 import { H4 } from '@/components/typography/H4';
 import { Overline } from '@/components/typography/Overline';
-import { useLanguagePack } from '@/hooks/useLanguagePack';
+import { useConfirmation } from '@/hooks/useConfirmation';
+import { useDisplayError } from '@/hooks/useDisplayNotification';
+import { useTextToString } from '@/hooks/useTextToString';
 import { name as makePermissionName } from '@/lib/permissions/name';
 import { description as makeRoleDescription } from '@/lib/role/description';
 import { name as makeRoleName } from '@/lib/role/name';
@@ -18,6 +20,7 @@ import { CommonRoleType } from '@/models/CommonRoleType';
 import { Permission } from '@/models/Permission';
 import { Role } from '@/models/Role';
 
+import { Add } from './Add';
 import styles from './index.module.scss';
 
 const getRoles = gql`
@@ -46,13 +49,34 @@ const setPermissions = gql`
   }
 `;
 
+const addRole = gql`
+  mutation($name: String!, $description: String, $permissions: [Permission!]) {
+    createRole(
+      name: $name
+      description: $description
+      permissions: $permissions
+    ) {
+      id
+      roles {
+        id
+        description
+        name
+        permissions
+      }
+    }
+  }
+`;
+
 const removeRole = gql`
   mutation($id: ID!) {
     deleteRole(id: $id) {
       id
-      description
-      name
-      permissions
+      roles {
+        id
+        description
+        name
+        permissions
+      }
     }
   }
 `;
@@ -62,9 +86,13 @@ interface Props {
 }
 
 export function Roles(props: Props) {
-  const languagePack = useLanguagePack();
+  const confirm = useConfirmation();
+  const displayError = useDisplayError();
   const [rolesResult] = useQuery({ query: getRoles });
   const [, setRolePermissions] = useMutation(setPermissions);
+  const [, deleteRole] = useMutation(removeRole);
+  const [, createRole] = useMutation(addRole);
+  const textToString = useTextToString();
 
   const roles: Pick<Role, 'id' | 'name' | 'description' | 'permissions'>[] =
     rolesResult.data?.me.organization.roles;
@@ -90,12 +118,12 @@ export function Roles(props: Props) {
         {roles.map((role, i) => {
           const selected = role.permissions.map(p => ({
             value: p,
-            text: makePermissionName(p, languagePack),
+            text: makePermissionName(p),
           }));
 
           const allPermissions = Object.values(Permission).map(p => ({
             value: p,
-            text: makePermissionName(p, languagePack),
+            text: makePermissionName(p),
           }));
 
           return (
@@ -105,14 +133,14 @@ export function Roles(props: Props) {
                   [styles.notLast]: i < roles.length - 1,
                 })}
               >
-                <Body1>{makeRoleName(role, languagePack)}</Body1>
+                <Body1>{textToString(makeRoleName(role))}</Body1>
               </div>
               <div
                 className={cx(styles.description, styles.gridMiddle, {
                   [styles.notLast]: i < roles.length - 1,
                 })}
               >
-                <Body2>{makeRoleDescription(role, languagePack)}</Body2>
+                <Body2>{textToString(makeRoleDescription(role))}</Body2>
               </div>
               <div
                 className={cx(styles.permissions, styles.gridMiddle, {
@@ -120,9 +148,9 @@ export function Roles(props: Props) {
                 })}
               >
                 {role.name === CommonRoleType.Owner ? (
-                  <Body1>
+                  <Body2>
                     <i18n.Translate>Everything</i18n.Translate>
-                  </Body1>
+                  </Body2>
                 ) : (
                   <PickGrow
                     defaultSelected={selected}
@@ -132,6 +160,12 @@ export function Roles(props: Props) {
                       setRolePermissions({
                         roleId: role.id,
                         permissions: permissions.map(p => p.value),
+                      }).then(result => {
+                        if (result.error) {
+                          displayError(
+                            i18n.translate`Could not change permissions for role`,
+                          );
+                        }
                       });
                     }}
                   />
@@ -139,13 +173,35 @@ export function Roles(props: Props) {
               </div>
               <div className={styles.delete}>
                 {role.name !== CommonRoleType.Owner && (
-                  <Trash className={styles.trash} />
+                  <Trash
+                    className={styles.trash}
+                    onClick={async () => {
+                      await confirm(
+                        i18n.translate`Are you sure you want to delete this role?`,
+                      );
+                      const result = await deleteRole({ id: role.id });
+                      if (result.error) {
+                        displayError(i18n.translate`Could not remove role`);
+                      }
+                    }}
+                  />
                 )}
               </div>
             </React.Fragment>
           );
         })}
       </article>
+      <footer className={styles.addContainer}>
+        <Add
+          onSubmit={formValues =>
+            createRole(formValues).then(result => {
+              if (result.error) {
+                displayError(i18n.translate`Could not create a new role`);
+              }
+            })
+          }
+        />
+      </footer>
     </div>
   );
 }

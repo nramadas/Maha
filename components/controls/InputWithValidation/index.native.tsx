@@ -3,6 +3,7 @@ import { useEventCallback } from 'rxjs-hooks';
 import { debounceTime, mergeMap } from 'rxjs/operators';
 
 import { Input } from '@/components/controls/Input/index.native';
+import { Text } from '@/models/Text';
 
 interface Props extends React.ComponentProps<typeof Input> {
   /**
@@ -11,7 +12,7 @@ interface Props extends React.ComponentProps<typeof Input> {
    * value. The validation can be asynchronous, in which case the validator
    * should return a Promise. Signature: `(text: string) => string | Promise<string>`
    */
-  onValidate?: (text: string) => string | Promise<string>;
+  onValidate?: (text: Text) => string | Promise<Text>;
 }
 
 /**
@@ -20,7 +21,7 @@ interface Props extends React.ComponentProps<typeof Input> {
 export function InputWithValidation(props: Props) {
   const { label, name, onValidate, ...rest } = props;
 
-  const [validationCallback, error] = useEventCallback<string, string>(
+  const [validationCallback, error] = useEventCallback<string, Text>(
     event =>
       event.pipe(
         debounceTime(150),

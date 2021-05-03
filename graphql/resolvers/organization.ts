@@ -16,20 +16,22 @@ import { Invite as InviteEntity } from '@/db/entities/Invite';
 import { Organization as OrganizationEntity } from '@/db/entities/Organization';
 import { Role as RoleEntity } from '@/db/entities/Role';
 import { User as UserEntity } from '@/db/entities/User';
-import { Me, MyPermissions } from '@/graphql/decorators';
+import { Me, MyOrganization, MyPermissions } from '@/graphql/decorators';
 import { buildOrganizationPage } from '@/graphql/helpers/buildOrganizationPage';
 import { CreateOrganizationInput } from '@/graphql/types/CreateOrganizationInput';
+import { Invite } from '@/graphql/types/Invite';
 import { Organization } from '@/graphql/types/Organization';
 import { OrganizationPage } from '@/graphql/types/OrganizationPage';
 import { Role } from '@/graphql/types/Role';
 import { User } from '@/graphql/types/User';
 import { PG_UNIQUE_VIOLATION } from '@/lib/errors/pg';
 import { ErrorType } from '@/lib/errors/type';
+import { convertFromDBModel as convertFromInviteDBModel } from '@/lib/modelConversions/invite';
 import { convertFromDBModel as convertFromOrganizationDBModel } from '@/lib/modelConversions/organization';
 import { convertFromDBModel as convertFromRoleDBModel } from '@/lib/modelConversions/role';
 import { convertFromDBModel as convertFromUserDBModel } from '@/lib/modelConversions/user';
 import { CommonRoleType } from '@/models/CommonRoleType';
-import { InviteType } from '@/models/InviteType';
+import { InviteType as InviteTypeModel } from '@/models/InviteType';
 import { Permission } from '@/models/Permission';
 
 @Resolver(of => Organization)
@@ -45,19 +47,7 @@ export class OrganizationResolver {
     private readonly _users: Repository<UserEntity>,
   ) {}
 
-  @Authorized(Permission.ModifyRoles)
-  @FieldResolver(type => [Role], {
-    description: 'All the roles that members of this organization can acquire',
-  })
-  async roles(@Root() root: Organization) {
-    const dbRoles = await this._roles.find({
-      where: { organizationId: root.id },
-    });
-
-    return dbRoles.map(convertFromRoleDBModel);
-  }
-
-  @Authorized(Permission.ViewMembers)
+  @Authorized(Permission.ViewMembers, Permission.ManageMembers)
   @FieldResolver(type => [User], {
     description: 'All the members of this organization',
   })
@@ -75,6 +65,31 @@ export class OrganizationResolver {
   })
   async pages(@MyPermissions() permissions: Permission[]) {
     return buildOrganizationPage(permissions);
+  }
+
+  @Authorized(Permission.ManageMembers)
+  @FieldResolver(type => [Invite], {
+    description:
+      'Returns all the pending invites originating from this organization',
+  })
+  async pendingInvites(@Root() root: Organization) {
+    const dbInvites = await this._invites.find({
+      where: { organizationId: root.id, expired: false },
+    });
+
+    return dbInvites.map(convertFromInviteDBModel);
+  }
+
+  @Authorized(Permission.ModifyRoles)
+  @FieldResolver(type => [Role], {
+    description: 'All the roles that members of this organization can acquire',
+  })
+  async roles(@Root() root: Organization) {
+    const dbRoles = await this._roles.find({
+      where: { organizationId: root.id },
+    });
+
+    return dbRoles.map(convertFromRoleDBModel);
   }
 
   @Query(returns => Organization, {
@@ -95,7 +110,9 @@ export class OrganizationResolver {
     return org ? convertFromOrganizationDBModel(org) : null;
   }
 
-  @Mutation(returns => Organization, { description: 'Get info for self' })
+  @Mutation(returns => Organization, {
+    description: 'Create a new organization',
+  })
   async createOrganization(
     @Me() user: User | null,
     @Arg('details') details: CreateOrganizationInput,
@@ -115,8 +132,8 @@ export class OrganizationResolver {
     const invite = await this._invites.findOne({
       where: {
         email: user.email,
-        type: InviteType.CreateOrganization,
         expired: false,
+        type: InviteTypeModel.CreateOrganization,
       },
     });
 
@@ -179,5 +196,104 @@ export class OrganizationResolver {
       }
       throw new AuthenticationError(ErrorType.SomethingElse);
     }
+  }
+
+  @Mutation(returns => Organization, {
+    description: 'Create a new organization',
+  })
+  async joinOrganization(
+    @Me() user: User | null,
+    @Arg('firstName') firstName: string,
+    @Arg('lastName') lastName: string,
+    @Arg('phoneNumber') phoneNumber: string,
+    @Arg('organizationName') organizationName: string,
+  ) {
+    if (!user) {
+      throw new AuthenticationError(ErrorType.Unauthorized);
+    }
+
+    const dbOrganization = await this._organizations.findOne({
+      where: { name: organizationName },
+      relations: ['users'],
+    });
+
+    if (!dbOrganization) {
+      throw new UserInputError(ErrorType.DoesNotExist, {
+        field: 'organizationName',
+      });
+    }
+
+    const dbUser = await this._users.findOne({
+      where: { email: user.email },
+      relations: ['roles'],
+    });
+
+    if (!dbUser) {
+      throw new AuthenticationError(ErrorType.Unauthorized);
+    }
+
+    const dbInvite = await this._invites.findOne({
+      where: {
+        organizationId: dbOrganization.id,
+        email: user.email,
+        expired: false,
+        type: InviteTypeModel.JoinOrganization,
+      },
+      relations: ['roles'],
+    });
+
+    if (!dbInvite) {
+      throw new AuthenticationError(ErrorType.Unauthorized);
+    }
+
+    dbUser.data = {
+      ...dbUser.data,
+      firstName,
+      lastName,
+      phoneNumber,
+    };
+
+    dbUser.roles = dbInvite.roles;
+
+    await this._users.save(dbUser);
+
+    dbOrganization.users.push(dbUser);
+    await this._organizations.save(dbOrganization);
+
+    dbInvite.expired = true;
+    await this._invites.save(dbInvite);
+
+    return convertFromOrganizationDBModel(dbOrganization);
+  }
+
+  @Authorized(Permission.ManageMembers)
+  @Mutation(returns => Organization, {
+    description: 'Remove a member from your organization',
+  })
+  async removeMember(
+    @MyOrganization() org: Organization | null,
+    @Arg('userId', type => ID) userId: string,
+  ) {
+    if (!org) {
+      throw new AuthenticationError(ErrorType.Unauthorized);
+    }
+
+    const dbUser = await this._users.findOne({
+      where: { id: userId },
+      relations: ['organization'],
+    });
+
+    if (!dbUser) {
+      throw new UserInputError(ErrorType.DoesNotExist, {
+        field: 'userId',
+      });
+    }
+
+    dbUser.organization = null;
+    dbUser.organizationId = undefined;
+
+    await this._users.save(dbUser);
+
+    return org;
   }
 }

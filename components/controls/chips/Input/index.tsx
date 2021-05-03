@@ -8,26 +8,35 @@ import { Close } from '@/components/icons/Close';
 import { Body2 } from '@/components/typography/Body2';
 import { Caption } from '@/components/typography/Caption';
 import { useForm } from '@/hooks/useForm';
+import { useTextToString } from '@/hooks/useTextToString';
 import { useTooltip } from '@/hooks/useTooltip';
+import { i18n } from '@/lib/translate';
+import { Text } from '@/models/Text';
 
 import styles from './index.module.scss';
 
 function makeItems<O>(items: O[], text: string) {
   return {
     items,
-    error: !items.length && text ? `No results matching '${text}'` : undefined,
+    error:
+      !items.length && text
+        ? i18n.translate`No results matching '${{
+            name: 'matchText',
+            value: text,
+          }}'`
+        : undefined,
   };
 }
 
 interface Choice {
-  text: string;
+  text: Text;
 }
 
 interface Props<C> extends React.InputHTMLAttributes<HTMLInputElement> {
   /**
    * Placeholder text to show inside the input
    */
-  label: string;
+  label: Text;
   /**
    * Reference name for chips value
    */
@@ -55,6 +64,7 @@ export function Input<C extends Choice>(props: Props<C>) {
   const { getChoices, label, name, onChoose, ...rest } = props;
 
   const form = useForm();
+  const textToString = useTextToString();
 
   const [Target, Tooltip] = useTooltip({
     alignment: 'full',
@@ -66,7 +76,7 @@ export function Input<C extends Choice>(props: Props<C>) {
     undefined,
   );
 
-  const [error, setError] = useState<string | undefined>(undefined);
+  const [error, setError] = useState<Text | undefined>(undefined);
   const [selected, setSelected] = useState<C[]>([]);
   const [focused, setFocused] = useState(false);
   const getSelected = useRef(() => selected);
@@ -143,7 +153,10 @@ export function Input<C extends Choice>(props: Props<C>) {
             })}
           >
             {selected.map(choice => (
-              <div className={styles.choiceContainer} key={choice.text}>
+              <div
+                className={styles.choiceContainer}
+                key={textToString(choice.text)}
+              >
                 <input
                   checked
                   readOnly
@@ -156,7 +169,7 @@ export function Input<C extends Choice>(props: Props<C>) {
                   }}
                   name={name}
                   type="checkbox"
-                  value={choice.text}
+                  value={textToString(choice.text)}
                 />
                 <div
                   className={styles.choice}
@@ -165,7 +178,7 @@ export function Input<C extends Choice>(props: Props<C>) {
                   <div className={styles.deleteCircle}>
                     <Close className={styles.delete} />
                   </div>
-                  <Caption>{choice.text}</Caption>
+                  <Caption>{textToString(choice.text)}</Caption>
                 </div>
               </div>
             ))}
@@ -235,11 +248,11 @@ export function Input<C extends Choice>(props: Props<C>) {
                 }
               }}
             />
-            <div className={styles.label}>{label}</div>
+            <div className={styles.label}>{textToString(label)}</div>
           </label>
           {error && (
             <div className={styles.error}>
-              <Caption>{error}</Caption>
+              <Caption>{textToString(error)}</Caption>
             </div>
           )}
         </div>
@@ -255,7 +268,7 @@ export function Input<C extends Choice>(props: Props<C>) {
                 className={cx(styles.result, {
                   [styles.focusedResult]: item === highlightedItem,
                 })}
-                key={item.text}
+                key={textToString(item.text)}
                 onMouseDown={() => selectChoice(item)}
                 onMouseEnter={() => setHighlightedItem(item)}
               >

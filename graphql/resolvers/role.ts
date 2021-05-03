@@ -65,7 +65,7 @@ export class RoleResolver {
   }
 
   @Authorized(Permission.ModifyRoles)
-  @Mutation(returns => [Role], {
+  @Mutation(returns => Organization, {
     description: 'Add a new role to an organization',
   })
   async createRole(
@@ -95,18 +95,20 @@ export class RoleResolver {
 
     await this._roles.save(newRole);
 
-    return [...dbRoles, newRole].map(convertFromRoleDBModel);
+    return org;
   }
 
   @Authorized(Permission.ModifyRoles)
-  @Mutation(returns => [Role], {
+  @Mutation(returns => Organization, {
     description: 'Remove a role from an organization',
   })
   async deleteRole(
     @MyOrganization() org: Organization,
     @Arg('id', type => ID) id: string,
   ) {
-    const dbRole = await this._roles.findOne({ where: { id } });
+    const dbRole = await this._roles.findOne({
+      where: { id },
+    });
 
     if (!dbRole) {
       throw new UserInputError(ErrorType.DoesNotExist, {
@@ -114,13 +116,8 @@ export class RoleResolver {
       });
     }
 
-    await this._roles.delete(dbRole);
-
-    const remainingRoles = await this._roles.find({
-      where: { organizationId: org.id },
-    });
-
-    return remainingRoles.map(convertFromRoleDBModel);
+    await this._roles.delete(dbRole.id);
+    return org;
   }
 
   @Authorized(Permission.ModifyRoles)

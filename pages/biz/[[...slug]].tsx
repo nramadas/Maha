@@ -52,7 +52,11 @@ export default function Biz(props: Props) {
   const slug = props.query.slug || [];
   const [results] = useQuery({ query: pages });
 
-  const permissions = results.data?.me.permissions;
+  if (!results.data?.me?.organization) {
+    return <div />;
+  }
+
+  const permissions = results.data?.me.permissions || [];
   const organization = results.data?.me.organization;
   const breadcrumbs = breadcrumbsFromPages(organization.pages, slug);
   const PageComponent = pageComponent(breadcrumbs);

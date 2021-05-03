@@ -1,3 +1,7 @@
+.delete {
+  padding-left: 12px;
+}
+
 .email,
 .firstName,
 .lastName,
@@ -23,4 +27,16 @@
   align-items: flex-start;
   display: flex;
   flex-direction: column;
+}
+
+.trash {
+  cursor: pointer;
+  fill: var(--color-metadata);
+  height: 24px;
+  width: 24px;
+  transition: fill 0.15s;
+
+  &:hover {
+    fill: var(--color-error);
+  }
 }

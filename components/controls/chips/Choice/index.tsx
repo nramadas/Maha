@@ -3,12 +3,14 @@ import React from 'react';
 
 import { Caption } from '@/components/typography/Caption';
 import { useForm } from '@/hooks/useForm';
+import { useTextToString } from '@/hooks/useTextToString';
+import { Text } from '@/models/Text';
 
 import styles from './index.module.scss';
 
 interface ChoiceObj {
   disabled?: boolean;
-  text: string;
+  text: Text;
 }
 
 interface Props<C> extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -32,6 +34,7 @@ interface Props<C> extends React.InputHTMLAttributes<HTMLInputElement> {
 export function Choice<C extends ChoiceObj>(props: Props<C>) {
   const { choices, onChoose, ...rest } = props;
   const form = useForm();
+  const textToString = useTextToString();
 
   return (
     <div className={styles.container}>
@@ -40,7 +43,7 @@ export function Choice<C extends ChoiceObj>(props: Props<C>) {
           className={cx(styles.label, {
             [styles.disabled]: !!choice.disabled,
           })}
-          key={choice.text}
+          key={textToString(choice.text)}
         >
           <input
             {...rest}
@@ -53,7 +56,7 @@ export function Choice<C extends ChoiceObj>(props: Props<C>) {
             }}
           />
           <div className={styles.choice}>
-            <Caption>{choice.text}</Caption>
+            <Caption>{textToString(choice.text)}</Caption>
           </div>
         </label>
       ))}

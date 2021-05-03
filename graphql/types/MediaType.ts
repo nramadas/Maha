@@ -4,7 +4,7 @@ import { MediaType } from '@/models/MediaType';
 
 registerEnumType(MediaType, {
   name: 'MediaType',
-  description: '',
+  description: 'Various types of media',
   valuesConfig: {
     Image: {
       description: 'An image (ex: png, jpeg, etc)',

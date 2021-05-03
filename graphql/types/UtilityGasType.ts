@@ -4,7 +4,7 @@ import { UtilityGasType } from '@/models/UtilityGasType';
 
 registerEnumType(UtilityGasType, {
   name: 'UtilityGasType',
-  description: '',
+  description: 'How the gas is integrated with the property',
   valuesConfig: {
     Integrated: {
       description: 'Gas lines are integrated into the property',

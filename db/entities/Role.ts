@@ -10,6 +10,7 @@ import {
   JoinTable,
 } from 'typeorm';
 
+import { Invite } from '../entities/Invite';
 import { Organization } from '../entities/Organization';
 import { User } from '../entities/User';
 
@@ -26,6 +27,9 @@ export class Role {
 
   @ManyToOne('Organization', 'roles')
   organization!: Organization;
+
+  @ManyToMany('Invite', 'roles')
+  invites!: Invite[];
 
   @ManyToMany('User', 'roles')
   @JoinTable()

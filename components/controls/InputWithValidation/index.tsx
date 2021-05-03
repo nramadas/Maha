@@ -3,19 +3,16 @@ import { useEventCallback } from 'rxjs-hooks';
 import { debounceTime, mergeMap } from 'rxjs/operators';
 
 import { Input } from '@/components/controls/Input';
+import { Text } from '@/models/Text';
 
 interface Props extends React.ComponentProps<typeof Input> {
-  /**
-   * Error text to display on the Input.
-   */
-  error?: string;
   /**
    * Function to validate the input. First validation is performed on blur,
    * after which the input value will be validated with each change in input
    * value. The validation can be asynchronous, in which case the validator
    * should return a Promise. Signature: `(text: string) => string | Promise<string>`
    */
-  onValidate?: (text: string) => string | Promise<string>;
+  onValidate?: (text: string) => Text | Promise<Text>;
 }
 
 /**
@@ -34,11 +31,7 @@ export function InputWithValidation(props: Props) {
     onValidate,
     ...rest
   } = props;
-
-  const [validationCallback, validationError] = useEventCallback<
-    string,
-    string
-  >(
+  const [validationCallback, validationError] = useEventCallback<string, Text>(
     event =>
       event.pipe(
         debounceTime(150),

@@ -7,8 +7,10 @@ import { PickGrow } from '@/components/controls/chips/PickGrow';
 import { Trash } from '@/components/icons/Trash';
 import { Body1 } from '@/components/typography/Body1';
 import { Body2 } from '@/components/typography/Body2';
-import { useLanguagePack } from '@/hooks/useLanguagePack';
+import { useConfirmation } from '@/hooks/useConfirmation';
+import { useDisplayError } from '@/hooks/useDisplayNotification';
 import { name as roleName } from '@/lib/role/name';
+import { i18n } from '@/lib/translate';
 import { CommonRoleType } from '@/models/CommonRoleType';
 import { Role } from '@/models/Role';
 import { User } from '@/models/User';
@@ -19,6 +21,20 @@ const setRoles = gql`
   mutation($userId: ID!, $roleIds: [ID!]!) {
     setUserRoles(userId: $userId, roleIds: $roleIds) {
       id
+      roles {
+        id
+      }
+    }
+  }
+`;
+
+const removeUser = gql`
+  mutation($userId: ID!) {
+    removeMember(userId: $userId) {
+      id
+      members {
+        id
+      }
     }
   }
 `;
@@ -41,8 +57,11 @@ interface Props {
 
 export function Member(props: Props) {
   const { allRoles, canManageMembers, canModifyRoles, member } = props;
-  const languagePack = useLanguagePack();
   const [, setUserRoles] = useMutation(setRoles);
+  const [, removeUserFromOrg] = useMutation(removeUser);
+  const displayError = useDisplayError();
+  const confirm = useConfirmation();
+
   const isOwner = !!(member.roles || []).find(
     role => role.name === CommonRoleType.Owner,
   );
@@ -50,7 +69,7 @@ export function Member(props: Props) {
   const selectedChoices = (member.roles || []).map(role => ({
     disabled: role.name === CommonRoleType.Owner,
     id: role.id,
-    text: roleName(role, languagePack),
+    text: roleName(role),
   }));
 
   const roleChoices = allRoles
@@ -58,7 +77,7 @@ export function Member(props: Props) {
     .map(role => ({
       disabled: role.name === CommonRoleType.Owner,
       id: role.id,
-      text: roleName(role, languagePack),
+      text: roleName(role),
     }));
 
   return (
@@ -107,6 +126,10 @@ export function Member(props: Props) {
               setUserRoles({
                 userId: props.member.id,
                 roleIds: choices.map(c => c.id),
+              }).then(result => {
+                if (result.error) {
+                  displayError(i18n.translate`Could not change user's roles`);
+                }
               });
             }}
           />
@@ -117,7 +140,20 @@ export function Member(props: Props) {
           <div />
         ) : (
           <div className={styles.delete}>
-            <Trash className={styles.trash} />
+            <Trash
+              className={styles.trash}
+              onClick={async () => {
+                await confirm(
+                  i18n.translate`Are you sure you want to remove this member?`,
+                );
+                const result = await removeUserFromOrg({
+                  userId: props.member.id,
+                });
+                if (result.error) {
+                  displayError(i18n.translate`Could not remove user`);
+                }
+              }}
+            />
           </div>
         ))}
     </>

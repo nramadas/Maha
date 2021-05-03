@@ -2,7 +2,7 @@
   align-items: center;
   background-color: var(--color-background);
   border-radius: 2px;
-  border: 1px solid var(--color-background);
+  border: none;
   box-sizing: border-box;
   color: var(--color-onBackground);
   cursor: pointer;
@@ -11,31 +11,20 @@
   outline: none;
   padding: 6px 12px;
   transition:
-    border-color 0.15s,
     background-color 0.15s,
-    border-bottom-left-radius 0.15s,
-    border-bottom-right-radius 0.15s,
     color 0.15s;
 
   &:focus {
-    border-color: var(--color-primaryFocused);
+    background-color: var(--color-field);
   }
 
   &:hover,
   &:hover &:focus {
     background-color: var(--color-field);
-    border-color: var(--color-primaryHovered);
   }
 
   &:active {
     background-color: var(--color-field);
-    border-color: var(--color-primaryPressed);
-  }
-
-  &[data-tooltipopen="true"] {
-    border-color: var(--color-primaryFocused);
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
   }
 }
 
@@ -49,7 +38,7 @@
 
 .menu {
   background-color: var(--color-background);
-  border: 1px solid var(--color-primaryFocused);
+  box-shadow: var(--elevation-1);
   border-top: 1px solid var(--color-fieldBorder);
   box-sizing: border-box;
   display: flex;

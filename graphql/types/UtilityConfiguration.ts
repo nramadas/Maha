@@ -4,7 +4,7 @@ import { UtilityConfiguration } from '@/models/UtilityConfiguration';
 
 registerEnumType(UtilityConfiguration, {
   name: 'UtilityConfiguration',
-  description: '',
+  description: 'How the utility is integrated with the property',
   valuesConfig: {
     Central: {
       description: 'This utility is centrally integrated',

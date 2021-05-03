@@ -43,6 +43,18 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           template: 'CreateOrganization',
           props: { email, token },
         });
+      } else if (joinOrgInvite) {
+        const organization = await repos
+          .Organization()
+          .findOne({ where: { id: joinOrgInvite.organizationId } });
+
+        if (organization) {
+          sendEmail({
+            to: email,
+            template: 'JoinOrganization',
+            props: { email, token, organizationName: organization.name },
+          });
+        }
       } else {
         sendEmail({
           to: email,

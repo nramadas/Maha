@@ -4,7 +4,7 @@ import { PropertyType } from '@/models/PropertyType';
 
 registerEnumType(PropertyType, {
   name: 'PropertyType',
-  description: '',
+  description: 'Various types of properties',
   valuesConfig: {
     Apartment: {
       description: 'Unit for rent',

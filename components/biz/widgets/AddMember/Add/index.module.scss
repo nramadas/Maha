@@ -1,0 +1,14 @@
+.button {
+  height: 45px;
+}
+
+.form {
+  display: grid;
+  grid-gap: 12px;
+  grid-template-columns: 1fr 182px 80px;
+}
+
+.label {
+  margin-bottom: 4px;
+  margin-top: -4px;
+}

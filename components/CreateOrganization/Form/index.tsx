@@ -5,7 +5,6 @@ import { Form as FormControl } from '@/components/controls/Form';
 import { InputWithValidation } from '@/components/controls/InputWithValidation';
 import { Body1 } from '@/components/typography/Body1';
 import { H1 } from '@/components/typography/H1';
-import { useLanguagePack } from '@/hooks/useLanguagePack';
 import { getMessage } from '@/lib/errors/getMessage';
 import { ErrorType } from '@/lib/errors/type';
 import { i18n } from '@/lib/translate';
@@ -23,8 +22,7 @@ interface Props {
 
 export function Form(props: Props) {
   const [name, setName] = useState('');
-  const languagePack = useLanguagePack();
-  const errorMessage = props.error && getMessage(props.error)(languagePack);
+  const errorMessage = props.error && getMessage(props.error);
 
   return (
     <FormControl className={styles.container} onSubmit={props.onSubmit}>
@@ -49,7 +47,7 @@ export function Form(props: Props) {
           onInput={e => setName(e.currentTarget.value)}
           onValidate={text =>
             !text.length
-              ? i18n.translate`You must enter your company's name`(languagePack)
+              ? i18n.translate`You must enter your company's name`
               : ''
           }
         />

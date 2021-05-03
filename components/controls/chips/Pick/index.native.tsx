@@ -6,10 +6,12 @@ import styled, { css, useTheme } from 'styled-components/native';
 import { Checkmark } from '@/components/icons/Checkmark/index.native';
 import { Body2 } from '@/components/typography/Body2';
 import { useForm } from '@/hooks/useForm';
+import { useTextToString } from '@/hooks/useTextToString';
+import { Text } from '@/models/Text';
 
 interface ChoiceObj {
   disabled?: boolean;
-  text: string;
+  text: Text;
 }
 
 interface Props<C> {
@@ -103,6 +105,8 @@ const PillText = styled(Body2)<{ disabled?: boolean; selected?: boolean }>`
 export function Pick<C extends ChoiceObj>(props: Props<C>) {
   const form = useForm();
   const theme = useTheme();
+  const textToString = useTextToString();
+
   const { choices, defaultSelected, name, onChoose } = props;
   const selected: C[] = form.getValue(name) || defaultSelected || [];
 
@@ -113,7 +117,7 @@ export function Pick<C extends ChoiceObj>(props: Props<C>) {
 
         return (
           <PillContainer
-            key={choice.text}
+            key={textToString(choice.text)}
             onPress={() => {
               if (choice.disabled) {
                 return;
@@ -139,7 +143,9 @@ export function Pick<C extends ChoiceObj>(props: Props<C>) {
                     <Checkmark fill={theme.onBackground} height={8} width={8} />
                   )}
                 </CheckCircle>
-                <PillText disabled={choice.disabled}>{choice.text}</PillText>
+                <PillText disabled={choice.disabled}>
+                  {textToString(choice.text)}
+                </PillText>
               </Pill>
             )}
           </PillContainer>

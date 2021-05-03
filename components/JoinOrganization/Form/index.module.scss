@@ -1,0 +1,36 @@
+.body {
+  margin: 24px 0;
+}
+
+.container {
+  align-items: center;
+  border-radius: 12px;
+  box-shadow: var(--elevation-5);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 24px;
+}
+
+.footer {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.header {
+  color: var(--color-primary);
+}
+
+.input {
+  margin-top: 24px;
+}
+
+.twoCol {
+  display: grid;
+  grid-gap: 24px;
+  grid-template-columns: 1fr 1fr;
+  margin: 24px 0;
+}

@@ -1,8 +1,10 @@
 import cx from 'classnames';
 import React, { forwardRef } from 'react';
 
-import { Caption } from '@/components/typography/Caption';
+import { ErrorText } from '@/components/controls/ErrorText';
 import { useForm } from '@/hooks/useForm';
+import { useTextToString } from '@/hooks/useTextToString';
+import { Text } from '@/models/Text';
 
 import styles from './index.module.scss';
 
@@ -19,7 +21,7 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   /**
    * Error text to display on the Input.
    */
-  error?: string;
+  error?: Text;
   /**
    * Display an icon on the right hand side of the input field
    */
@@ -27,7 +29,7 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   /**
    * Placeholder text to show inside the input
    */
-  label: string;
+  label: Text;
   /**
    * Reference name for input value
    */
@@ -62,6 +64,9 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(
     ...rest
   } = props;
   const form = useForm();
+  const textToString = useTextToString();
+  const labelText = textToString(label);
+  const errorText = error ? textToString(error) : undefined;
 
   return (
     <div className={className}>
@@ -89,17 +94,13 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(
             rest.onInput?.(e);
           }}
         />
-        <div className={styles.label}>{label}</div>
+        <div className={styles.label}>{labelText}</div>
         {icon &&
           React.cloneElement(icon, {
             className: cx(styles.icon, icon.props.className),
           })}
       </label>
-      {error && (
-        <div className={styles.error}>
-          <Caption>{error}</Caption>
-        </div>
-      )}
+      {errorText && <ErrorText>{errorText}</ErrorText>}
     </div>
   );
 });

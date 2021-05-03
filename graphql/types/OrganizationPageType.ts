@@ -4,7 +4,7 @@ import { OrganizationPageType } from '@/models/OrganizationPageType';
 
 registerEnumType(OrganizationPageType, {
   name: 'OrganizationPageType',
-  description: '',
+  description: "For the organization's workspace, all the potential page types",
   valuesConfig: {
     Insights: {
       description: 'Data graphs and other insights',

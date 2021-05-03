@@ -4,7 +4,7 @@ import { AmenityAccess } from '@/models/AmenityAccess';
 
 registerEnumType(AmenityAccess, {
   name: 'AmenityAccess',
-  description: '',
+  description: 'Access types for a given amenity',
   valuesConfig: {
     Private: {
       description: 'This amenity is available on a per-unit basis',

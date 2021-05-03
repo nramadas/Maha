@@ -42,5 +42,7 @@ export function createColors() {
     primaryHovered: mix(0.08, Color.G000, primary),
     primaryPressed: mix(0.2, Color.G000, primary),
     primary,
+    warning: '#FFEB3B',
+    success: '#4CAF50',
   };
 }

@@ -7,7 +7,8 @@ import {
   DeleteDateColumn,
   Unique,
   ManyToOne,
-  OneToMany,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 
 import { InviteType } from '../../models/InviteType';
@@ -34,13 +35,17 @@ export class Invite {
   type!: InviteType;
 
   @Column({ nullable: true })
-  organizationId!: string;
+  organizationId?: string;
 
   @ManyToOne('Organization', 'users', { nullable: true })
-  organization!: Organization;
+  organization?: Organization | null;
 
-  @OneToMany('Role', 'users')
+  @ManyToMany('Role', 'invites')
+  @JoinTable()
   roles!: Role[];
+
+  @Column({ type: 'jsonb' })
+  data!: object;
 
   @CreateDateColumn()
   created!: Date;
