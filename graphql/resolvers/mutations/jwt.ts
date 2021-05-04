@@ -13,7 +13,7 @@ import { extractAuthId } from '@/lib/authn/token';
 import { ErrorType } from '@/lib/errors/type';
 
 @Resolver(of => JWT)
-export class JWTResolver {
+export class JWTMutationResolver {
   constructor(
     @InjectRepository(UserEntity)
     private readonly users: Repository<UserEntity>,

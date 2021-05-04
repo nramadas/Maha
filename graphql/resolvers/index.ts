@@ -1,7 +1,11 @@
 export { InviteResolver } from './invite';
-export { JWTResolver } from './jwt';
+export { JWTMutationResolver } from './mutations/jwt';
+export { OrganizationMutationResolver } from './mutations/organization';
 export { OrganizationResolver } from './organization';
 export { PlacesResolver } from './places';
+export { QueryResolver } from './query';
+export { RoleMutationResolver } from './mutations/role';
 export { RoleResolver } from './role';
-export { SideEffectResolver } from './sideEffect';
+export { SideEffectMutationResolver } from './mutations/sideEffect';
+export { UserMutationResolver } from './mutations/user';
 export { UserResolver } from './user';

@@ -39,7 +39,7 @@ async function doAuthentication(email: string) {
 }
 
 @Resolver(of => SideEffect)
-export class SideEffectResolver {
+export class SideEffectMutationResolver {
   constructor(
     @InjectRepository(UserEntity)
     private readonly _users: Repository<UserEntity>,
