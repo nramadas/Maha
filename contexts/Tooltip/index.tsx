@@ -8,22 +8,16 @@ interface Props {
    * Standard React children
    */
   children?: React.ReactNode;
-  /**
-   * Function that returns the container the Tooltip should be rendered into.
-   */
-  getContainer: () => HTMLElement | null;
 }
 
 interface TooltipDetails {
   current: symbol | undefined;
-  getContainer: Props['getContainer'];
   target: HTMLElement | undefined;
   set(data: Pick<TooltipDetails, 'current' | 'target'>): void;
 }
 
 export const TooltipContext = createContext<TooltipDetails>({
   current: undefined,
-  getContainer: () => null,
   target: undefined,
   set: () => {},
 });
@@ -61,7 +55,6 @@ export function TooltipProvider(props: Props) {
     <TooltipContext.Provider
       value={{
         current: current.current,
-        getContainer: props.getContainer,
         target: current.target,
         set: data => setCurrent(data),
       }}

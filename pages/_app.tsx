@@ -8,6 +8,7 @@ import '@/styles/normalize.css';
 import { JWTRefresh } from '@/components/JWTRefresh';
 import { ConfirmationProvider } from '@/contexts/Confirmation';
 import { DialogProvider } from '@/contexts/Dialog';
+import { DomContainerProvider } from '@/contexts/DomContainer';
 import { NoopFormProvider } from '@/contexts/Form';
 import { JWTProvider } from '@/contexts/JWT';
 import { LanguagePackProvider } from '@/contexts/LanguagePack';
@@ -52,11 +53,13 @@ export default establishAuthentication(
                 }
               >
                 <DialogProvider getContainer={getBody}>
-                  <TooltipProvider getContainer={getBody}>
+                  <TooltipProvider>
                     <NotificationsProvider getContainer={getBody}>
                       <ConfirmationProvider>
                         <NoopFormProvider>
-                          <Component {...pageProps} />
+                          <DomContainerProvider body>
+                            <Component {...pageProps} />
+                          </DomContainerProvider>
                           <div id="extra-container" />
                         </NoopFormProvider>
                       </ConfirmationProvider>

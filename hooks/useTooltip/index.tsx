@@ -2,6 +2,7 @@ import React from 'react';
 import { createPortal } from 'react-dom';
 
 import { TooltipContext } from '@/contexts/Tooltip';
+import { useDomContainer } from '@/hooks/useDomContainer';
 
 import styles from './index.module.scss';
 
@@ -137,7 +138,7 @@ function Target(props: InnerProps) {
 
 function Tooltip(props: InnerProps) {
   const { current, target } = React.useContext(TooltipContext);
-  const { getContainer } = React.useContext(TooltipContext);
+  const getContainer = useDomContainer();
   const { id, config, children: child } = props;
   const container = (config.getContainer || getContainer)();
 
@@ -147,6 +148,7 @@ function Tooltip(props: InnerProps) {
         className={styles.tooltip}
         ref={tooltip => {
           if (tooltip) {
+            const containerBox = container.getBoundingClientRect();
             const targetBox = target.getBoundingClientRect();
             const tooltipBox = tooltip.getBoundingClientRect();
 
@@ -158,19 +160,21 @@ function Tooltip(props: InnerProps) {
                 left =
                   left +
                   targetBox.left -
+                  containerBox.left -
                   (tooltipBox.width - targetBox.width) / 2;
                 break;
               }
               case 'left': {
-                left = left + targetBox.left;
+                left = left + targetBox.left - containerBox.left;
                 break;
               }
               case 'right': {
-                left = left + targetBox.right - tooltipBox.width;
+                left =
+                  left + targetBox.right - tooltipBox.width - containerBox.left;
                 break;
               }
               case 'full': {
-                left = left + targetBox.left;
+                left = left + targetBox.left - containerBox.left;
                 tooltip.style.width = `${targetBox.width}px`;
                 break;
               }
@@ -182,11 +186,16 @@ function Tooltip(props: InnerProps) {
                   top +
                   targetBox.top -
                   tooltipBox.height -
+                  containerBox.top -
                   config.positionOffset;
                 break;
               }
               case 'below': {
-                top = top + targetBox.bottom + config.positionOffset;
+                top =
+                  top +
+                  targetBox.bottom +
+                  config.positionOffset -
+                  containerBox.top;
                 break;
               }
             }

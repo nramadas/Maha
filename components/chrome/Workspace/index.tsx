@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Account } from '@/components/Account';
+import { DomContainerProvider } from '@/contexts/DomContainer';
 import { Breadcrumb } from '@/lib/breadcrumbsFromPages';
 import { Organization } from '@/models/Organization';
 import { OrganizationPage } from '@/models/OrganizationPage';
@@ -36,7 +37,9 @@ export function Workspace(props: Props) {
           pages={props.pages}
         />
       </nav>
-      <article className={styles.content}>{props.children}</article>
+      <article className={styles.content}>
+        <DomContainerProvider>{props.children}</DomContainerProvider>
+      </article>
     </div>
   );
 }
