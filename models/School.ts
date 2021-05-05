@@ -1,8 +1,9 @@
 import { NominalID } from '@/lib/typeHelpers/nominal';
-import { Place } from '@/models/Place';
+import { Location } from '@/models/Location';
+import { SchoolType } from '@/models/SchoolType';
 
 export interface Data {
-  location: Place;
+  location: Location;
 }
 
 export const DEFAULT_DATA: Data = {
@@ -13,5 +14,7 @@ export const DEFAULT_DATA: Data = {
 
 export interface School extends Data {
   id: NominalID<'school id'>;
+  googleId?: NominalID<'school google id'>;
   name: string;
+  type?: SchoolType;
 }

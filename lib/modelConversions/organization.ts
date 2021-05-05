@@ -1,6 +1,5 @@
 import type { Organization as OrganizationDBModel } from '@/db/entities/Organization';
 import {
-  Data,
   Organization as OrganizationModel,
   DEFAULT_DATA,
 } from '@/models/Organization';
@@ -10,7 +9,7 @@ export function convertFromDBModel(
 ): OrganizationModel {
   const data = {
     ...DEFAULT_DATA,
-    ...(dbModel.data as Data),
+    ...dbModel.data,
   };
 
   return {

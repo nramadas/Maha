@@ -6,6 +6,9 @@ registerEnumType(OrganizationPageType, {
   name: 'OrganizationPageType',
   description: "For the organization's workspace, all the potential page types",
   valuesConfig: {
+    AddProperty: {
+      description: 'Add a new property',
+    },
     Insights: {
       description: 'Data graphs and other insights',
     },

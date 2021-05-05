@@ -4,6 +4,7 @@ import React from 'react';
 
 import { Empty } from '@/components/controls/links/Empty';
 import { Logo } from '@/components/Logo';
+import { Route } from '@/lib/route';
 import { Organization } from '@/models/Organization';
 
 import styles from './index.module.scss';
@@ -20,7 +21,7 @@ export function Title(props: Props) {
   return (
     <div className={cx(styles.container, className)}>
       <Logo className={styles.logo} />
-      <Link href="/biz/">
+      <Link href={Route.BizLandingPage}>
         <Empty className={styles.button}>{name}</Empty>
       </Link>
     </div>

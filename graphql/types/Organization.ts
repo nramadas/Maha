@@ -1,8 +1,8 @@
 import { Authorized, Field, ObjectType, ID } from 'type-graphql';
 
+import { Permission } from '@/graphql/types/Permission';
+import { Property } from '@/graphql/types/Property';
 import { Organization as OrganizationModel } from '@/models/Organization';
-import { Permission } from '@/models/Permission';
-import { Property as PropertyModel } from '@/models/Property';
 import { User as UserModel } from '@/models/User';
 
 @ObjectType({ description: 'A property developer' })
@@ -28,5 +28,5 @@ export class Organization implements OrganizationModel {
     description:
       'A list of property ids that are associated with this organization',
   })
-  propertyIds!: PropertyModel['id'][];
+  propertyIds!: Property['id'][];
 }

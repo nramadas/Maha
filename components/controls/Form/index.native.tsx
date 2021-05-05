@@ -1,36 +1,44 @@
 import React, { useCallback, useEffect } from 'react';
 import { View } from 'react-native';
 
-import { FormProvider } from '@/contexts/Form';
+import { FormProvider, FormValues } from '@/contexts/Form';
 import { useForm } from '@/hooks/useForm';
 
-interface FormValues {
-  [name: string]: string | string[] | boolean;
-}
-
-interface Props {
+interface Props<V> {
   children: React.ReactNode;
-  onSubmit(values: FormValues): void;
+  onChange?(values: V): void;
+  onSubmit?(values: V): void;
 }
 
-function FormInner(props: Props) {
-  const { onSubmit } = props;
+function FormInner<V extends FormValues>(props: Props<V>) {
+  const { onChange, onSubmit } = props;
   const form = useForm();
+
+  const change = useCallback(
+    formValues => {
+      onChange?.(formValues);
+    },
+    [form, onChange],
+  );
 
   const submit = useCallback(() => {
     const values = form.getFormValues();
-    onSubmit(values);
+    onSubmit?.(values as V);
   }, [form, onSubmit]);
 
   useEffect(() => {
     form.onFormSubmit(submit);
-    return () => form.removeFormSubmit(submit);
-  }, [form, submit]);
+    form.onFormChange(change);
+    return () => {
+      form.removeFormSubmit(submit);
+      form.removeFormChange(change);
+    };
+  }, [form, change, submit]);
 
   return <View>{props.children}</View>;
 }
 
-export function Form(props: Props) {
+export function Form<V extends FormValues>(props: Props<V>) {
   const { children, onSubmit } = props;
 
   return (

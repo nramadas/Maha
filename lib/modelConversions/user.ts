@@ -1,10 +1,10 @@
 import type { User as UserDBModel } from '@/db/entities/User';
-import { Data, User as UserModel, DEFAULT_DATA } from '@/models/User';
+import { User as UserModel, DEFAULT_DATA } from '@/models/User';
 
 export function convertFromDBModel(dbModel: UserDBModel): UserModel {
   const data = {
     ...DEFAULT_DATA,
-    ...(dbModel.data as Data),
+    ...dbModel.data,
   };
 
   return {

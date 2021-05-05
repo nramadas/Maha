@@ -8,16 +8,14 @@ import { Organization as OrganizationEntity } from '@/db/entities/Organization';
 import { Role as RoleEntity } from '@/db/entities/Role';
 import { User as UserEntity } from '@/db/entities/User';
 import { Me, MyOrganization } from '@/graphql/decorators';
-import { CreateOrganizationInput } from '@/graphql/types/CreateOrganizationInput';
 import { Organization } from '@/graphql/types/Organization';
-import { Permission as PermissionType } from '@/graphql/types/Permission';
+import { Permission } from '@/graphql/types/Permission';
 import { User } from '@/graphql/types/User';
 import { PG_UNIQUE_VIOLATION } from '@/lib/errors/pg';
 import { ErrorType } from '@/lib/errors/type';
 import { convertFromDBModel as convertFromOrganizationDBModel } from '@/lib/modelConversions/organization';
 import { CommonRoleType } from '@/models/CommonRoleType';
 import { InviteType as InviteTypeModel } from '@/models/InviteType';
-import { Permission } from '@/models/Permission';
 
 @Resolver(of => Organization)
 export class OrganizationMutationResolver {
@@ -35,10 +33,7 @@ export class OrganizationMutationResolver {
   @Mutation(returns => Organization, {
     description: 'Create a new organization',
   })
-  async createOrganization(
-    @Me() user: User | null,
-    @Arg('details') details: CreateOrganizationInput,
-  ) {
+  async createOrganization(@Me() user: User | null, @Arg('name') name: string) {
     if (!user) {
       throw new AuthenticationError(ErrorType.Unauthorized);
     }
@@ -64,7 +59,6 @@ export class OrganizationMutationResolver {
     }
 
     try {
-      const name = details.name;
       const org = this._organizations.create({
         name,
         data: {},
@@ -128,7 +122,7 @@ export class OrganizationMutationResolver {
     @MyOrganization() org: Organization,
     @Arg('name') name: string,
     @Arg('description', { nullable: true }) description?: string,
-    @Arg('permissions', type => [PermissionType], { nullable: true })
+    @Arg('permissions', type => [Permission], { nullable: true })
     permissions?: Permission[],
   ) {
     const dbRoles = await this._roles.find({

@@ -5,6 +5,8 @@ export function toName(
   pageType: OrganizationPageType,
 ): ReturnType<typeof i18n.translate> {
   switch (pageType) {
+    case OrganizationPageType.AddProperty:
+      return i18n.translate`add`;
     case OrganizationPageType.Insights:
       return i18n.translate`insights`;
     case OrganizationPageType.Members:

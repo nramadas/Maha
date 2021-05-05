@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import { useEventCallback } from 'rxjs-hooks';
-import { debounceTime, mergeMap } from 'rxjs/operators';
+import { debounceTime, map, mergeMap } from 'rxjs/operators';
 
 import { Input } from '@/components/controls/Input/index.native';
+import { useTextToString } from '@/hooks/useTextToString';
 import { Text } from '@/models/Text';
 
 interface Props extends React.ComponentProps<typeof Input> {
@@ -20,15 +21,19 @@ interface Props extends React.ComponentProps<typeof Input> {
  */
 export function InputWithValidation(props: Props) {
   const { label, name, onValidate, ...rest } = props;
+  const textToString = useTextToString();
 
-  const [validationCallback, error] = useEventCallback<string, Text>(
+  const [validationCallback, error] = useEventCallback<string, string>(
     event =>
       event.pipe(
         debounceTime(150),
         mergeMap(event => {
           const result = onValidate ? onValidate(event) : '';
-          return result instanceof Promise ? result : Promise.resolve(result);
+          return result instanceof Promise
+            ? result.then(text => ({ text: textToString(text) }))
+            : Promise.resolve({ text: textToString(result) });
         }),
+        map(({ text }) => text),
       ),
     '',
   );

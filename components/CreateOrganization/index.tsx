@@ -8,7 +8,7 @@ import { Form } from './Form';
 
 const createOrganization = gql`
   mutation($name: String!) {
-    createOrganization(details: { name: $name }) {
+    createOrganization(name: $name) {
       id
       name
     }

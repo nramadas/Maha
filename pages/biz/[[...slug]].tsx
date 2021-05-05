@@ -4,6 +4,7 @@ import { useQuery } from 'urql';
 
 import { Members } from '@/components/biz/pages/Members';
 import { Roles } from '@/components/biz/pages/Roles';
+import { CreateProperty } from '@/components/biz/widgets/CreateProperty';
 import { Workspace } from '@/components/chrome/Workspace';
 import { Breadcrumb, breadcrumbsFromPages } from '@/lib/breadcrumbsFromPages';
 import { OrganizationPageType } from '@/models/OrganizationPageType';
@@ -37,6 +38,8 @@ function pageComponent(breadcrumbs: Breadcrumb[]) {
       return Members;
     case OrganizationPageType.Roles:
       return Roles;
+    case OrganizationPageType.AddProperty:
+      return CreateProperty;
     default:
       return null;
   }

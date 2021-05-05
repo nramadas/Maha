@@ -5,12 +5,12 @@ import { InjectRepository } from 'typeorm-typedi-extensions';
 
 import { Role as RoleEntity } from '@/db/entities/Role';
 import { Organization } from '@/graphql/types/Organization';
+import { Permission } from '@/graphql/types/Permission';
 import { Role } from '@/graphql/types/Role';
 import { User } from '@/graphql/types/User';
 import { ErrorType } from '@/lib/errors/type';
 import { convertFromDBModel as convertFromOrganizationDBModel } from '@/lib/modelConversions/organization';
 import { convertFromDBModel as convertFromUserDBModel } from '@/lib/modelConversions/user';
-import { Permission } from '@/models/Permission';
 
 @Resolver(of => Role)
 export class RoleResolver {

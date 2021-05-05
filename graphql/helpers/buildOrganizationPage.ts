@@ -1,3 +1,4 @@
+import { BizRoute } from '@/lib/route';
 import { OrganizationPage } from '@/models/OrganizationPage';
 import { OrganizationPageType } from '@/models/OrganizationPageType';
 import { Permission } from '@/models/Permission';
@@ -9,7 +10,7 @@ export function buildOrganizationPage(permissions: Permission[]) {
   // Overview
   pages.push({
     type: OrganizationPageType.Overview,
-    url: '/',
+    url: BizRoute.Overview,
   });
 
   if (
@@ -18,8 +19,17 @@ export function buildOrganizationPage(permissions: Permission[]) {
   ) {
     const propertyPage: OrganizationPage = {
       type: OrganizationPageType.Properties,
-      url: '/properites',
+      url: BizRoute.Properties,
     };
+
+    if (permSet.has(Permission.ManageProperties)) {
+      propertyPage.children = [
+        {
+          type: OrganizationPageType.AddProperty,
+          url: BizRoute.AddProperty,
+        },
+      ];
+    }
 
     pages.push(propertyPage);
   }
@@ -31,14 +41,14 @@ export function buildOrganizationPage(permissions: Permission[]) {
   ) {
     const memberPage: OrganizationPage = {
       type: OrganizationPageType.Members,
-      url: '/members',
+      url: BizRoute.Members,
     };
 
     if (permSet.has(Permission.ModifyRoles)) {
       memberPage.children = [
         {
           type: OrganizationPageType.Roles,
-          url: '/members/roles',
+          url: BizRoute.Roles,
         },
       ];
     }
@@ -53,23 +63,23 @@ export function buildOrganizationPage(permissions: Permission[]) {
   ) {
     const salesPage: OrganizationPage = {
       type: OrganizationPageType.Sales,
-      url: '/sales',
+      url: BizRoute.Sales,
       children: [
         {
           type: OrganizationPageType.SalesLeads,
-          url: '/sales/leads',
+          url: BizRoute.SalesLeads,
         },
         {
           type: OrganizationPageType.SalesVisits,
-          url: '/sales/visits',
+          url: BizRoute.SalesVisits,
         },
         {
           type: OrganizationPageType.SalesReservations,
-          url: '/sales/reservations',
+          url: BizRoute.SalesReservations,
         },
         {
           type: OrganizationPageType.SalesClosures,
-          url: '/sales/closures',
+          url: BizRoute.SalesClosures,
         },
       ],
     };
@@ -81,7 +91,7 @@ export function buildOrganizationPage(permissions: Permission[]) {
   if (permSet.has(Permission.ViewInsights)) {
     const insightsPage: OrganizationPage = {
       type: OrganizationPageType.Insights,
-      url: '/insights',
+      url: BizRoute.Insights,
     };
 
     pages.push(insightsPage);

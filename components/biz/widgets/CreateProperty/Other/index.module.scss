@@ -1,0 +1,15 @@
+.construction {
+  margin-bottom: 8px;
+}
+
+.label {
+  padding-left: 8px;
+}
+
+.selectContainer {
+  align-items: center;
+  display: grid;
+  grid-gap: 8px;
+  grid-template-columns: 200px max-content;
+  margin-bottom: 12px;
+}

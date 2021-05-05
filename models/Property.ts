@@ -1,93 +1,77 @@
 import { NominalID } from '@/lib/typeHelpers/nominal';
 import { AmenityAccess } from '@/models/AmenityAccess';
-import { Language } from '@/models/Language';
-import { Media } from '@/models/Media';
+import { LocalizedStrings } from '@/models/LocalizedStrings';
+import { Location } from '@/models/Location';
 import type { OrganizationId } from '@/models/Organization';
-import { Place } from '@/models/Place';
 import { PropertyCondition } from '@/models/PropertyCondition';
 import { PropertyType } from '@/models/PropertyType';
-import { School } from '@/models/School';
 import { UtilityConfiguration } from '@/models/UtilityConfiguration';
 import { UtilityGasType } from '@/models/UtilityGasType';
 import { UtilityWaterFilter } from '@/models/UtilityWaterFilter';
 
 export interface Data {
-  price: number;
-  sqft: number;
-  numBedrooms: number;
-  numBathrooms: number;
-  numBathroomsHalf: number;
-  location: Place;
-  taxes: number;
-  fees: number;
-  type: PropertyType;
-  yearBuilt: number;
-  parkingCoveredSpaces: number;
-  parkingOpenSpaces: number;
-  parkingGarage: boolean;
-  schoolsPrePrimaryIds: School['id'][];
-  schoolsPrimaryIds: School['id'][];
-  schoolsSecondaryIds: School['id'][];
-  schoolsMatriculationIds: School['id'][];
-  schoolsSeniorSecondaryIds: School['id'][];
-  constructionMaterials: Partial<Record<Language, string>>;
-  propertyCondition: PropertyCondition;
-  securityFeatures: Partial<Record<Language, string>>;
-  utilitiesAirConditioning: UtilityConfiguration;
-  utilitiesHeating: UtilityConfiguration;
-  utilitiesGasType: UtilityGasType;
-  utilitiesWaterFilter: UtilityWaterFilter;
-  amenitiesPool: AmenityAccess;
-  amenitiesGym: boolean;
-  amenitiesSecurity: boolean;
   amenitiesGrill: AmenityAccess;
+  amenitiesGym: boolean;
+  amenitiesPool: AmenityAccess;
+  amenitiesSecurity: boolean;
+  appliancesDishwasher: boolean;
   appliancesDryer: AmenityAccess;
   appliancesWasher: AmenityAccess;
-  appliancesDishwasher: boolean;
-  mediaIds: Media['id'][];
+  built?: Date;
+  constructionMaterials?: LocalizedStrings;
+  fees: number;
+  location: Location;
+  name: string;
+  numBathrooms: number;
+  numBathroomsHalf: number;
+  numBedrooms: number;
+  parkingCoveredSpaces: number;
+  parkingGarage: boolean;
+  parkingOpenSpaces: number;
+  price: number;
+  propertyCondition: PropertyCondition;
+  securityFeatures?: LocalizedStrings;
+  sqft: number;
+  taxes: number;
+  type: PropertyType;
+  utilitiesAirConditioning: UtilityConfiguration;
+  utilitiesGasType: UtilityGasType;
+  utilitiesHeating: UtilityConfiguration;
+  utilitiesWaterFilter: UtilityWaterFilter;
 }
 
 export const DEFAULT_DATA: Data = {
-  price: 0,
-  sqft: 0,
-  numBedrooms: 0,
-  numBathrooms: 0,
-  numBathroomsHalf: 0,
-  location: {
-    address: '',
-  },
-  taxes: 0,
-  fees: 0,
-  type: PropertyType.Flat,
-  yearBuilt: 0,
-  parkingCoveredSpaces: 0,
-  parkingOpenSpaces: 0,
-  parkingGarage: false,
-  schoolsPrePrimaryIds: [],
-  schoolsPrimaryIds: [],
-  schoolsSecondaryIds: [],
-  schoolsMatriculationIds: [],
-  schoolsSeniorSecondaryIds: [],
-  constructionMaterials: {},
-  propertyCondition: PropertyCondition.New,
-  securityFeatures: {},
-  utilitiesAirConditioning: UtilityConfiguration.PerRoom,
-  utilitiesHeating: UtilityConfiguration.PerRoom,
-  utilitiesGasType: UtilityGasType.Canister,
-  utilitiesWaterFilter: UtilityWaterFilter.NoFilter,
-  amenitiesPool: AmenityAccess.None,
-  amenitiesGym: false,
-  amenitiesSecurity: false,
   amenitiesGrill: AmenityAccess.None,
+  amenitiesGym: false,
+  amenitiesPool: AmenityAccess.None,
+  amenitiesSecurity: false,
+  appliancesDishwasher: false,
   appliancesDryer: AmenityAccess.None,
   appliancesWasher: AmenityAccess.None,
-  appliancesDishwasher: false,
-  mediaIds: [],
+  fees: 0,
+  location: { address: '' },
+  name: '',
+  numBathrooms: 0,
+  numBathroomsHalf: 0,
+  numBedrooms: 0,
+  parkingCoveredSpaces: 0,
+  parkingGarage: false,
+  parkingOpenSpaces: 0,
+  price: 0,
+  propertyCondition: PropertyCondition.New,
+  sqft: 0,
+  taxes: 0,
+  type: PropertyType.Flat,
+  utilitiesAirConditioning: UtilityConfiguration.PerRoom,
+  utilitiesGasType: UtilityGasType.Canister,
+  utilitiesHeating: UtilityConfiguration.PerRoom,
+  utilitiesWaterFilter: UtilityWaterFilter.NoFilter,
 };
 
 export interface Property extends Data {
   id: NominalID<'property id'>;
-  organization: OrganizationId;
+  created: Date;
+  organizationId: OrganizationId;
 }
 
 export type PropertyId = Property['id'];

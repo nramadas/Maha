@@ -3,6 +3,8 @@ import { i18n } from '@/lib/translate';
 
 export function getMessage(type: ErrorType): ReturnType<typeof i18n.translate> {
   switch (type) {
+    case ErrorType.AlreadyAssigned:
+      return i18n.translate`That's already been assigned.`;
     case ErrorType.AlreadyTaken:
       return i18n.translate`That's already taken. Why not try something else?`;
     case ErrorType.DoesNotExist:

@@ -12,6 +12,9 @@ registerEnumType(UtilityConfiguration, {
     PerRoom: {
       description: 'This utility exists on a per-room basis',
     },
+    None: {
+      description: 'This utility does not exist',
+    },
   },
 });
 

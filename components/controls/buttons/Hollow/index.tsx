@@ -9,7 +9,7 @@ interface Props {
   disabled?: boolean;
   style?: React.ButtonHTMLAttributes<HTMLButtonElement>['style'];
   type?: React.ButtonHTMLAttributes<HTMLButtonElement>['type'];
-  onClick?(): void;
+  onClick?(e: any): void;
 }
 /**
  * Secondary button component

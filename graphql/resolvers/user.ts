@@ -3,30 +3,46 @@ import { Ctx, FieldResolver, Resolver, Root } from 'type-graphql';
 import { Repository } from 'typeorm';
 import { InjectRepository } from 'typeorm-typedi-extensions';
 
+import { Media as MediaEntity } from '@/db/entities/Media';
 import { Role as RoleEntity } from '@/db/entities/Role';
 import { User as UserEntity } from '@/db/entities/User';
 import { Context } from '@/graphql/context';
+import { Media } from '@/graphql/types/Media';
+import { MediaParentType } from '@/graphql/types/MediaParentType';
 import { Organization } from '@/graphql/types/Organization';
-import { Permission as PermissionType } from '@/graphql/types/Permission';
+import { Permission } from '@/graphql/types/Permission';
 import { Role } from '@/graphql/types/Role';
 import { User } from '@/graphql/types/User';
 import { ErrorType } from '@/lib/errors/type';
+import { convertFromDBModel as convertFromMediaDBModel } from '@/lib/modelConversions/media';
 import { convertFromDBModel as convertFromOrganizationDBModel } from '@/lib/modelConversions/organization';
 import { convertFromDBModel as convertFromRoleDBModel } from '@/lib/modelConversions/role';
 import { fromRoles } from '@/lib/permissions/fromRoles';
 import { hasPermission } from '@/lib/permissions/hasPermission';
-import { Permission } from '@/models/Permission';
 
 @Resolver(of => User)
 export class UserResolver {
   constructor(
+    @InjectRepository(MediaEntity)
+    private readonly _media: Repository<MediaEntity>,
     @InjectRepository(RoleEntity)
     private readonly _roles: Repository<RoleEntity>,
     @InjectRepository(UserEntity)
     private readonly _users: Repository<UserEntity>,
   ) {}
 
-  @FieldResolver(type => [PermissionType], {
+  @FieldResolver(type => [Media], {
+    description: 'All the media for this property',
+  })
+  async media(@Root() root: User) {
+    const dbMedia = await this._media.find({
+      where: { parentId: root.id, parentType: MediaParentType.User },
+    });
+
+    return dbMedia.map(convertFromMediaDBModel);
+  }
+
+  @FieldResolver(type => [Permission], {
     description: 'A list of permissions this user has',
   })
   async permissions(@Ctx() ctx: Context, @Root() root: User) {

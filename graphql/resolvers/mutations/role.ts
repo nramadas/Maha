@@ -4,11 +4,10 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from 'typeorm-typedi-extensions';
 
 import { Role as RoleEntity } from '@/db/entities/Role';
-import { Permission as PermissionType } from '@/graphql/types/Permission';
+import { Permission } from '@/graphql/types/Permission';
 import { Role } from '@/graphql/types/Role';
 import { ErrorType } from '@/lib/errors/type';
 import { convertFromDBModel as convertFromRoleDBModel } from '@/lib/modelConversions/role';
-import { Permission } from '@/models/Permission';
 
 @Resolver(of => Role)
 export class RoleMutationResolver {
@@ -23,7 +22,7 @@ export class RoleMutationResolver {
   })
   async setRolePermissions(
     @Arg('roleId', type => ID) roleId: string,
-    @Arg('permissions', type => [PermissionType]) permissions: Permission[],
+    @Arg('permissions', type => [Permission]) permissions: Permission[],
   ) {
     const dbRole = await this._roles.findOne({ where: { id: roleId } });
 

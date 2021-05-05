@@ -1,9 +1,8 @@
 import { Field, ObjectType, ID } from 'type-graphql';
 
 import { InviteType } from '@/graphql/types/InviteType';
+import { Organization } from '@/graphql/types/Organization';
 import { Invite as InviteModel } from '@/models/Invite';
-import { InviteType as InviteTypeModel } from '@/models/InviteType';
-import { Organization } from '@/models/Organization';
 
 @ObjectType({ description: 'An invite' })
 export class Invite implements InviteModel {
@@ -26,5 +25,5 @@ export class Invite implements InviteModel {
   organizationId?: Organization['id'];
 
   @Field(type => InviteType, { description: 'What kind of invite it is' })
-  type!: InviteTypeModel;
+  type!: InviteType;
 }

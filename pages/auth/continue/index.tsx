@@ -7,6 +7,7 @@ import { Error } from '@/components/CompleteAuthentication/Error';
 import { useGetFromStorage } from '@/hooks/useGetFromStorage';
 import { emailActionToUrl } from '@/lib/emailActionToUrl';
 import { ErrorType } from '@/lib/errors/type';
+import { Route } from '@/lib/route';
 import { EmailAction } from '@/models/EmailAction';
 
 interface Props {
@@ -18,7 +19,7 @@ interface Props {
 
 export default function Continue(props: Props) {
   const router = useRouter();
-  const redirectUrl = useGetFromStorage<string>('redirectUrl') || '/';
+  const redirectUrl = useGetFromStorage<string>('redirectUrl') || Route.Home;
   const gotoUrl = (props.action && emailActionToUrl(props)) || redirectUrl;
 
   if (!(props.email && props.token)) {

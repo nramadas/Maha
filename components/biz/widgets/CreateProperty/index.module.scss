@@ -1,0 +1,22 @@
+.container {
+  max-width: 640px;
+  padding-bottom: 180px;
+
+  p {
+    padding-left: 1px;
+    margin-bottom: 8px;
+    margin-top: 36px;
+  }
+}
+
+.footer {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 36px;
+}
+
+.header {
+  margin-bottom: 16px;
+}

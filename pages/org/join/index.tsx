@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { JoinOrganization } from '@/components/JoinOrganization';
+import { Route } from '@/lib/route';
 
 import styles from './index.module.scss';
 
@@ -14,7 +15,7 @@ export default function JoinOrganizationPage(props: Props) {
   const router = useRouter();
 
   if (!props.orgName) {
-    router.push('/');
+    router.push(Route.Home);
     return <div />;
   }
 
@@ -24,7 +25,7 @@ export default function JoinOrganizationPage(props: Props) {
         <JoinOrganization
           orgName={props.orgName}
           onComplete={() => {
-            router.push('/biz');
+            router.push(Route.BizLandingPage);
           }}
         />
       </div>

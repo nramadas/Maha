@@ -9,6 +9,8 @@ import {
   OneToMany,
 } from 'typeorm';
 
+import { Data } from '../../models/Organization';
+import { Property } from '../entities/Property';
 import { Role } from '../entities/Role';
 import { User } from '../entities/User';
 
@@ -22,13 +24,16 @@ export class Organization {
   name!: string;
 
   @Column({ type: 'jsonb' })
-  data!: object;
+  data!: Partial<Data>;
 
   @OneToMany('User', 'organization')
   users!: User[];
 
   @OneToMany('Role', 'organization')
   roles!: Role[];
+
+  @OneToMany('Property', 'organization')
+  properties!: Property[];
 
   @CreateDateColumn()
   created!: Date;

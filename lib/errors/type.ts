@@ -1,4 +1,5 @@
 export enum ErrorType {
+  AlreadyAssigned = 'ALREADY_ASSIGNED',
   AlreadyTaken = 'ALREADY_TAKEN',
   DoesNotExist = 'DOES_NOT_EXIST',
   FailedGoogleLogin = 'FAILED_GOOGLE_LOGIN',

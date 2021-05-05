@@ -1,10 +1,10 @@
 import type { Invite as InviteDBModel } from '@/db/entities/Invite';
-import { Data, Invite as InviteModel, DEFAULT_DATA } from '@/models/Invite';
+import { Invite as InviteModel, DEFAULT_DATA } from '@/models/Invite';
 
 export function convertFromDBModel(dbModel: InviteDBModel): InviteModel {
   const data = {
     ...DEFAULT_DATA,
-    ...(dbModel.data as Data),
+    ...dbModel.data,
   };
 
   return {

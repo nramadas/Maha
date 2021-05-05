@@ -12,7 +12,9 @@ export interface FormDetails {
   getFormValues(): FormValues;
   getValue(name: string): any;
   setValue(name: string, value: any): void;
+  onFormChange(fn: (values: FormValues) => void): void;
   onFormSubmit(fn: () => void): void;
+  removeFormChange(fn: (values: FormValues) => void): void;
   removeFormSubmit(fn: () => void): void;
   triggerFormSubmit(): void;
 }
@@ -21,39 +23,64 @@ export const FormContext = createContext<FormDetails>({
   getFormValues: () => ({}),
   getValue: () => {},
   setValue: () => {},
+  onFormChange: () => {},
   onFormSubmit: () => {},
+  removeFormChange: () => {},
   removeFormSubmit: () => {},
   triggerFormSubmit: () => {},
 });
 
 export function FormProvider(props: Props) {
   const [formValues, setFormValues] = useState<FormValues>({});
-  const callbackContainer = useRef<Set<() => void>>(new Set([]));
+  const submitCallbackContainer = useRef<Set<() => void>>(new Set([]));
+  const changeCallbackContainer = useRef<Set<(values: FormValues) => void>>(
+    new Set([]),
+  );
+
   const onFormSubmit = useCallback(
     (fn: () => void) => {
-      callbackContainer.current.add(fn);
+      submitCallbackContainer.current.add(fn);
     },
-    [callbackContainer],
+    [submitCallbackContainer],
+  );
+
+  const onFormChange = useCallback(
+    (fn: (values: FormValues) => void) => {
+      changeCallbackContainer.current.add(fn);
+    },
+    [changeCallbackContainer],
   );
 
   const removeFormSubmit = useCallback(
     (fn: () => void) => {
-      callbackContainer.current.delete(fn);
+      submitCallbackContainer.current.delete(fn);
     },
-    [callbackContainer],
+    [submitCallbackContainer],
+  );
+
+  const removeFormChange = useCallback(
+    (fn: (values: FormValues) => void) => {
+      changeCallbackContainer.current.delete(fn);
+    },
+    [changeCallbackContainer],
   );
 
   return (
     <FormContext.Provider
       value={{
+        onFormChange,
         onFormSubmit,
+        removeFormChange,
         removeFormSubmit,
         getFormValues: () => formValues,
         getValue: name => formValues[name],
-        setValue: (name, value) =>
-          setFormValues(state => ({ ...state, [name]: value })),
+        setValue: (name, value) => {
+          const newFormValues = { ...formValues, [name]: value };
+          changeCallbackContainer.current.forEach(fn => fn(newFormValues));
+          setFormValues(newFormValues);
+        },
         triggerFormSubmit: () => {
-          callbackContainer.current.forEach(fn => fn());
+          submitCallbackContainer.current.forEach(fn => fn());
         },
       }}
     >

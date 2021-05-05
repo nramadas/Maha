@@ -5,6 +5,7 @@ import { ssrExchange } from 'urql';
 
 import { refreshSession } from '@/lib/authn/api';
 import { parse } from '@/lib/cookies';
+import { Route } from '@/lib/route';
 
 export function establishAuthentication(App: typeof BaseApp) {
   App.getInitialProps = async context => {
@@ -14,7 +15,7 @@ export function establishAuthentication(App: typeof BaseApp) {
     let aut: string | undefined = cookies.authn;
     let jwt: string | undefined = cookies.token;
 
-    if (ctx.pathname === '/auth/continue') {
+    if (ctx.pathname === Route.ContinueAuthentication) {
       aut = undefined;
       jwt = undefined;
       context.ctx.res?.setHeader('set-cookie', 'token=; SameSite=Lax; path=/');

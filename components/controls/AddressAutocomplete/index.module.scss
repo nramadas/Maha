@@ -1,0 +1,36 @@
+$latlngsize: 124px;
+
+.container {
+  position: relative;
+}
+
+.input {
+  transition: margin-right 0.15s;
+  z-index: 2;
+}
+
+.latLngVisible {
+  margin-right: 2 * ($latlngsize + 4);
+}
+
+.lat,
+.lng {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  transition: opacity 0.15s;
+  width: $latlngsize;
+  z-index: 1;
+}
+
+.lng {
+  right: 0;
+}
+
+.lat {
+  right: $latlngsize + 4px;
+}
+
+.vislatlng {
+  opacity: 1;
+}

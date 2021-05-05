@@ -1,4 +1,5 @@
 export enum OrganizationPageType {
+  AddProperty = 'AddProperty',
   Insights = 'Insights',
   Members = 'Members',
   Overview = 'Overview',

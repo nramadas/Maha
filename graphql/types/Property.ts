@@ -1,36 +1,26 @@
-import { NominalID } from 'lib/typeHelpers/nominal';
 import { Field, ObjectType, ID } from 'type-graphql';
 
 import { AmenityAccess } from '@/graphql/types/AmenityAccess';
-import { Place } from '@/graphql/types/Place';
+import { LocalizedStrings } from '@/graphql/types/LocalizedStrings';
+import { Location } from '@/graphql/types/Location';
+import { Organization } from '@/graphql/types/Organization';
 import { PropertyCondition } from '@/graphql/types/PropertyCondition';
 import { PropertyType } from '@/graphql/types/PropertyType';
 import { UtilityConfiguration } from '@/graphql/types/UtilityConfiguration';
 import { UtilityGasType } from '@/graphql/types/UtilityGasType';
 import { UtilityWaterFilter } from '@/graphql/types/UtilityWaterFilter';
-import { AmenityAccess as AmenityAccessModel } from '@/models/AmenityAccess';
-import { Language as LanguageModel } from '@/models/Language';
-import { Media as MediaModel } from '@/models/Media';
-import { Organization as OrganizationModel } from '@/models/Organization';
-import { Place as PlaceModel } from '@/models/Place';
 import { Property as PropertyModel } from '@/models/Property';
-import { PropertyCondition as PropertyConditionModel } from '@/models/PropertyCondition';
-import { PropertyType as PropertyTypeModel } from '@/models/PropertyType';
-import { School as SchoolModel } from '@/models/School';
-import { UtilityConfiguration as UtilityConfigurationModel } from '@/models/UtilityConfiguration';
-import { UtilityGasType as UtilityGasTypeModel } from '@/models/UtilityGasType';
-import { UtilityWaterFilter as UtilityWaterFilterModel } from '@/models/UtilityWaterFilter';
 
 @ObjectType({ description: 'A property' })
 export class Property implements PropertyModel {
-  @Field(type => AmenityAccess, { description: 'Is there access to a grill?' })
-  amenitiesGrill!: AmenityAccessModel;
+  @Field({ description: 'Is there access to a grill?' })
+  amenitiesGrill!: AmenityAccess;
 
   @Field({ description: 'Is there gym access?' })
   amenitiesGym!: boolean;
 
-  @Field(type => AmenityAccess, { description: 'Is there access to a pool?' })
-  amenitiesPool!: AmenityAccessModel;
+  @Field({ description: 'Is there access to a pool?' })
+  amenitiesPool!: AmenityAccess;
 
   @Field({ description: 'Is there security on site?' })
   amenitiesSecurity!: boolean;
@@ -38,32 +28,45 @@ export class Property implements PropertyModel {
   @Field({ description: 'Is there an in-unit dishwasher?' })
   appliancesDishwasher!: boolean;
 
-  @Field(type => AmenityAccess, {
+  @Field({
     description: 'Is there access to a clothes dryer?',
   })
-  appliancesDryer!: AmenityAccessModel;
+  appliancesDryer!: AmenityAccess;
 
-  @Field(type => AmenityAccess, {
+  @Field({
     description: 'Is there access to a clothes washer?',
   })
-  appliancesWasher!: AmenityAccessModel;
+  appliancesWasher!: AmenityAccess;
+
+  @Field({
+    description:
+      'The date the property was built. Can be a date in the future if still under construction',
+    nullable: true,
+  })
+  built?: Date;
 
   @Field({
     description: 'Materials used to build the property, organized by language',
+    nullable: true,
   })
-  constructionMaterials!: Partial<Record<LanguageModel, string>>;
+  constructionMaterials?: LocalizedStrings;
+
+  @Field({
+    description: 'When this property was established in the database',
+  })
+  created!: Date;
 
   @Field({ description: 'Monthly fees' })
   fees!: number;
 
   @Field(type => ID, { description: "The property's id" })
-  id!: NominalID<'property id'>;
+  id!: PropertyModel['id'];
 
-  @Field(type => Place, { description: 'Where the property is located' })
-  location!: PlaceModel;
+  @Field({ description: 'Where the property is located' })
+  location!: Location;
 
-  @Field(type => [ID], { description: 'List of associated media ids' })
-  mediaIds!: MediaModel['id'][];
+  @Field({ description: "The property's name, if any" })
+  name!: string;
 
   @Field({ description: 'How many bathrooms are in the property' })
   numBathrooms!: number;
@@ -75,7 +78,7 @@ export class Property implements PropertyModel {
   numBedrooms!: number;
 
   @Field(type => ID, { description: 'Which organization own this property' })
-  organization!: OrganizationModel['id'];
+  organizationId!: Organization['id'];
 
   @Field({
     description:
@@ -95,33 +98,17 @@ export class Property implements PropertyModel {
   @Field({ description: 'How much the property costs' })
   price!: number;
 
-  @Field(type => PropertyCondition, {
+  @Field({
     description: 'Whether the property is new or used',
   })
-  propertyCondition!: PropertyConditionModel;
-
-  @Field(type => [ID], { description: 'Ids of matriculation schools nearby' })
-  schoolsMatriculationIds!: SchoolModel['id'][];
-
-  @Field(type => [ID], { description: 'Ids of pre-primary schools nearby' })
-  schoolsPrePrimaryIds!: SchoolModel['id'][];
-
-  @Field(type => [ID], { description: 'Ids of primary schools nearby' })
-  schoolsPrimaryIds!: SchoolModel['id'][];
-
-  @Field(type => [ID], { description: 'Ids of secondary schools nearby' })
-  schoolsSecondaryIds!: SchoolModel['id'][];
-
-  @Field(type => [ID], {
-    description: 'Ids of senior secondary schools nearby',
-  })
-  schoolsSeniorSecondaryIds!: SchoolModel['id'][];
+  propertyCondition!: PropertyCondition;
 
   @Field({
     description:
       'Security features available on premises, organized by language',
+    nullable: true,
   })
-  securityFeatures!: Partial<Record<LanguageModel, string>>;
+  securityFeatures?: LocalizedStrings;
 
   @Field({ description: 'The size of the property' })
   sqft!: number;
@@ -129,29 +116,26 @@ export class Property implements PropertyModel {
   @Field({ description: 'Approximate yearly tax rate' })
   taxes!: number;
 
-  @Field(type => PropertyType, { description: 'What type of property it is' })
-  type!: PropertyTypeModel;
+  @Field({ description: 'What type of property it is' })
+  type!: PropertyType;
 
-  @Field(type => UtilityConfiguration, {
+  @Field({
     description: 'Is the air conditioning central or built into each room?',
   })
-  utilitiesAirConditioning!: UtilityConfigurationModel;
+  utilitiesAirConditioning!: UtilityConfiguration;
 
-  @Field(type => UtilityGasType, {
+  @Field({
     description: 'Is the cooking gas integrated or devlivered via canisters?',
   })
-  utilitiesGasType!: UtilityGasTypeModel;
+  utilitiesGasType!: UtilityGasType;
 
-  @Field(type => UtilityConfiguration, {
+  @Field({
     description: 'Is the heating central or built into each room?',
   })
-  utilitiesHeating!: UtilityConfigurationModel;
+  utilitiesHeating!: UtilityConfiguration;
 
-  @Field(type => UtilityWaterFilter, {
+  @Field({
     description: 'How the water filtertration is configured',
   })
-  utilitiesWaterFilter!: UtilityWaterFilterModel;
-
-  @Field({ description: 'What year the property was built' })
-  yearBuilt!: number;
+  utilitiesWaterFilter!: UtilityWaterFilter;
 }

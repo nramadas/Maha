@@ -8,6 +8,9 @@ import { Role as RoleEntity } from '@/db/entities/Role';
 import { User as UserEntity } from '@/db/entities/User';
 import { Context } from '@/graphql/context';
 import { MyOrganization } from '@/graphql/decorators';
+import { InviteType } from '@/graphql/types/InviteType';
+import { Organization } from '@/graphql/types/Organization';
+import { Permission } from '@/graphql/types/Permission';
 import { SideEffect } from '@/graphql/types/SideEffect';
 import {
   initiatePasswordlessLogin,
@@ -16,9 +19,6 @@ import {
 } from '@/lib/authn/api';
 import { ErrorType } from '@/lib/errors/type';
 import { userIsAdmin } from '@/lib/permissions/userIsAdmin';
-import { InviteType } from '@/models/InviteType';
-import type { Organization } from '@/models/Organization';
-import { Permission } from '@/models/Permission';
 
 async function doAuthentication(email: string) {
   const existingUser = await userExists(email);

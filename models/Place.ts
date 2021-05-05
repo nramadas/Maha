@@ -1,3 +1,6 @@
+import { Location } from '@/models/Location';
+
 export interface Place {
-  address: string;
+  location: Location;
+  name: string;
 }

@@ -4,15 +4,13 @@ import styled, { css } from 'styled-components/native';
 
 import { Body2 } from '@/components/typography/Body2/index.native';
 import { useForm } from '@/hooks/useForm';
+import { useTextToString } from '@/hooks/useTextToString';
 import { quick as quickAnimation } from '@/lib/animations/native';
-
-interface Value {
-  text: string;
-}
+import { Text } from '@/models/Text';
 
 interface Props<V> {
   disabled?: boolean;
-  label?: string;
+  label?: Text;
   name: string;
   value: V;
   onSelect?(value: V): void;
@@ -87,9 +85,11 @@ const Press = styled.View<{ pressed?: boolean }>`
 /**
  * Custom radio button
  */
-export function Radio<V extends Value>(props: Props<V>) {
+export function Radio<V>(props: Props<V>) {
   const { disabled, label, name, value, onSelect } = props;
   const form = useForm();
+  const textToString = useTextToString();
+
   quickAnimation();
 
   const currentlySelected = form.getValue(name);
@@ -109,7 +109,7 @@ export function Radio<V extends Value>(props: Props<V>) {
           {selected && <Dot disabled={disabled} />}
           {label && (
             <Label>
-              <Body2>{label}</Body2>
+              <Body2>{textToString(label)}</Body2>
             </Label>
           )}
         </>

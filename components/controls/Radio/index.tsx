@@ -2,12 +2,10 @@ import React from 'react';
 
 import { Caption } from '@/components/typography/Caption';
 import { useForm } from '@/hooks/useForm';
+import { useTextToString } from '@/hooks/useTextToString';
+import { Text } from '@/models/Text';
 
 import styles from './index.module.scss';
-
-interface Value {
-  text: string;
-}
 
 interface Props<V> {
   /**
@@ -17,7 +15,7 @@ interface Props<V> {
   /**
    * Optional label that is displayed next to the radio
    */
-  label?: string;
+  label?: Text;
   /**
    * Reference name for radio value
    */
@@ -35,9 +33,10 @@ interface Props<V> {
 /**
  * Custom radio button
  */
-export function Radio<V extends Value>(props: Props<V>) {
+export function Radio<V>(props: Props<V>) {
   const { disabled, label, name, value, onSelect } = props;
   const form = useForm();
+  const textToString = useTextToString();
 
   return (
     <label className={styles.container}>
@@ -46,7 +45,6 @@ export function Radio<V extends Value>(props: Props<V>) {
         disabled={disabled}
         name={name}
         type="radio"
-        value={value.text}
         onInput={e => {
           if (e.currentTarget.checked) {
             form.setValue(name, value);
@@ -57,9 +55,11 @@ export function Radio<V extends Value>(props: Props<V>) {
       <div className={styles.hover} />
       <div className={styles.circle} />
       <div className={styles.dot} />
-      <div className={styles.label}>
-        <Caption>{label}</Caption>
-      </div>
+      {label && (
+        <div className={styles.label}>
+          <Caption>{textToString(label)}</Caption>
+        </div>
+      )}
     </label>
   );
 }

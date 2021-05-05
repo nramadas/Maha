@@ -12,6 +12,9 @@ registerEnumType(UtilityGasType, {
     Canister: {
       description: 'Gas is provided via canisters',
     },
+    None: {
+      description: 'This utility does not exist',
+    },
   },
 });
 

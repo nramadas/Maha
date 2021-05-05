@@ -15,11 +15,7 @@ import { Header } from './Header';
 import styles from './index.module.scss';
 
 interface Props<R extends boolean>
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onSelect'> {
-  /**
-   * Placeholder text to show inside the input
-   */
-  label: string;
+  extends Omit<React.ComponentProps<typeof Input>, 'onSelect'> {
   /**
    * The latest date the calendar will allow the user to select. If not
    * provided, it defaults to 50 years after the current date.
@@ -30,10 +26,6 @@ interface Props<R extends boolean>
    * provided, defaults to the current date.
    */
   minDate?: Date;
-  /**
-   * Reference name for datepicker value
-   */
-  name: string;
   /**
    * If true, the Datepicker will allow for a date range to be selected
    */
@@ -54,6 +46,7 @@ export function Datepicker<R extends boolean>(props: Props<R>) {
   const { minDate, maxDate, name, range, onSelect, ...rest } = props;
 
   const form = useForm();
+
   const selectDates = useCallback<Select<R>>(
     // @ts-ignore
     dates => {

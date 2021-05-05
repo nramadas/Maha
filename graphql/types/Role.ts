@@ -1,8 +1,7 @@
 import { Field, ObjectType, ID } from 'type-graphql';
 
+import { Organization } from '@/graphql/types/Organization';
 import { Permission } from '@/graphql/types/Permission';
-import { Organization } from '@/models/Organization';
-import { Permission as PermissionModel } from '@/models/Permission';
 import { Role as RoleModel } from '@/models/Role';
 
 @ObjectType({ description: 'The role of the user in an organization' })
@@ -16,7 +15,7 @@ export class Role implements RoleModel {
   @Field(type => [Permission], {
     description: 'Resources the role is able to access',
   })
-  permissions!: PermissionModel[];
+  permissions!: Permission[];
 
   @Field(type => ID, { description: 'Role ID' })
   id!: RoleModel['id'];

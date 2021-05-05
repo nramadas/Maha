@@ -8,22 +8,32 @@ import { Input } from '@/components/controls/Input';
 import { Body2 } from '@/components/typography/Body2';
 import { NoopFormProvider } from '@/contexts/Form';
 import { useForm } from '@/hooks/useForm';
+import { useTextToString } from '@/hooks/useTextToString';
 import { useTooltip } from '@/hooks/useTooltip';
+import { i18n } from '@/lib/translate';
+import { Text } from '@/models/Text';
 
 import styles from './index.module.scss';
 
 function makeItems<O>(items: O[], text: string) {
   return {
     items,
-    error: text && !items.length ? `No results matching '${text}'` : undefined,
+    error:
+      !items.length && text
+        ? i18n.translate`No results matching '${{
+            name: 'matchText',
+            value: text,
+          }}'`
+        : undefined,
   };
 }
 
 interface Option {
-  text: string;
+  text: Text;
 }
 
 interface Props<O> {
+  __doNotWriteToForm?: boolean;
   /**
    * Add additional styles
    */
@@ -35,7 +45,7 @@ interface Props<O> {
   /**
    * Placeholder text to show inside the input
    */
-  label: string;
+  label: Text;
   /**
    * Reference name for autocomplete value
    */
@@ -55,6 +65,7 @@ interface Props<O> {
 export function Autocomplete<O extends Option>(props: Props<O>) {
   const { className, icon, label, name, getItems, onSelect } = props;
   const form = useForm();
+  const textToString = useTextToString();
 
   const [Target, Tooltip] = useTooltip({
     alignment: 'full',
@@ -65,7 +76,7 @@ export function Autocomplete<O extends Option>(props: Props<O>) {
   const [highlightedItem, setHighlightedItem] = useState<O | undefined>(
     undefined,
   );
-  const [error, setError] = useState<string | undefined>(undefined);
+  const [error, setError] = useState<Text | undefined>(undefined);
 
   const [itemsCallback, items] = useEventCallback<string, O[]>(
     event =>
@@ -90,12 +101,14 @@ export function Autocomplete<O extends Option>(props: Props<O>) {
 
   const selectItem = useCallback(
     (item: O) => {
-      itemsCallback(item.text);
+      itemsCallback(textToString(item.text));
       onSelect?.(item);
-      form.setValue(name, item);
+      if (!props.__doNotWriteToForm) {
+        form.setValue(name, item);
+      }
 
       if (input.current) {
-        input.current.value = item.text;
+        input.current.value = textToString(item.text);
       }
     },
     [itemsCallback, onSelect],
@@ -123,7 +136,7 @@ export function Autocomplete<O extends Option>(props: Props<O>) {
                 selectItem(highlightedItem);
               }
 
-              if (!e.currentTarget.value) {
+              if (!e.currentTarget.value && !props.__doNotWriteToForm) {
                 form.setValue(name, null);
               }
             }}
@@ -172,16 +185,16 @@ export function Autocomplete<O extends Option>(props: Props<O>) {
             className={styles.results}
             onMouseLeave={() => setHighlightedItem(undefined)}
           >
-            {items.map(item => (
+            {items.map((item, i) => (
               <div
                 className={cx(styles.result, {
                   [styles.focusedResult]: item === highlightedItem,
                 })}
-                key={item.text}
+                key={textToString(item.text) + i}
                 onMouseDown={() => selectItem(item)}
                 onMouseEnter={() => setHighlightedItem(item)}
               >
-                <Body2>{item.text}</Body2>
+                <Body2>{textToString(item.text)}</Body2>
               </div>
             ))}
           </div>

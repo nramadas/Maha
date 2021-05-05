@@ -2,8 +2,6 @@ import { Field, ObjectType, ID } from 'type-graphql';
 
 import { Gender } from '@/graphql/types/Gender';
 import { Language } from '@/graphql/types/Language';
-import { Gender as GenderModel } from '@/models/Gender';
-import { Language as LanguageModel } from '@/models/Language';
 import { User as UserModel } from '@/models/User';
 
 @ObjectType({ description: 'A user' })
@@ -24,7 +22,7 @@ export class User implements UserModel {
   lastName!: string;
 
   @Field(type => Gender, { description: "The user's gender", nullable: true })
-  gender!: GenderModel;
+  gender!: Gender;
 
   @Field(type => ID, {
     description: 'The ID of the organization the user belongs to',
@@ -36,7 +34,7 @@ export class User implements UserModel {
     description: 'What language the user prefers to interact in',
     nullable: true,
   })
-  preferredLanguage!: LanguageModel;
+  preferredLanguage!: Language;
 
   @Field({ description: "The user's phone number", nullable: true })
   phoneNumber!: string;

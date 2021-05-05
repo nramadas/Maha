@@ -9,6 +9,7 @@ import { Open } from '@/components/icons/Open';
 import { Person } from '@/components/icons/Person';
 import { Body1 } from '@/components/typography/Body1';
 import { useTooltip } from '@/hooks/useTooltip';
+import { Route } from '@/lib/route';
 import { i18n } from '@/lib/translate';
 
 import styles from './index.module.scss';
@@ -57,7 +58,7 @@ export function Account(props: Props) {
       </Target>
       <Tooltip>
         <div className={styles.menu}>
-          <Link href="/account/settings">
+          <Link href={Route.AccountSettings}>
             <a className={styles.menuItem}>
               <Gear className={styles.icon} />
               <Body1>
@@ -65,7 +66,7 @@ export function Account(props: Props) {
               </Body1>
             </a>
           </Link>
-          <Link href="/logout">
+          <Link href={Route.Logout}>
             <a className={styles.menuItem}>
               <Open className={styles.icon} />
               <Body1>

@@ -10,6 +10,7 @@ import {
   JoinTable,
 } from 'typeorm';
 
+import { Data } from '../../models/Role';
 import { Invite } from '../entities/Invite';
 import { Organization } from '../entities/Organization';
 import { User } from '../entities/User';
@@ -36,7 +37,7 @@ export class Role {
   users!: User[];
 
   @Column({ type: 'jsonb' })
-  data!: object;
+  data!: Partial<Data>;
 
   @CreateDateColumn()
   created!: Date;

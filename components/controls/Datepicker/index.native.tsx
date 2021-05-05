@@ -8,13 +8,15 @@ import { Calendar as _CalendarIcon } from '@/components/icons/Calendar/index.nat
 import { useDateFormatter } from '@/hooks/useDateFormatter';
 import { useRangeSelection, Select } from '@/hooks/useDateSelection';
 import { useForm } from '@/hooks/useForm';
+import { useTextToString } from '@/hooks/useTextToString';
 import { today } from '@/lib/date';
+import { Text } from '@/models/Text';
 
 import { markDays, value as computeValue } from './_common';
 import { ModalHeader } from './ModalHeader/index.native';
 
 interface Props<R extends boolean> {
-  label: string;
+  label: Text;
   maxDate?: Date;
   minDate?: Date;
   name: string;
@@ -53,6 +55,8 @@ export function Datepicker<R extends boolean>(props: Props<R>) {
   const { label, minDate, maxDate, name, range, onSelect } = props;
 
   const form = useForm();
+  const textToString = useTextToString();
+
   const selectDates = useCallback<Select<R>>(
     // @ts-ignore
     dates => {
@@ -68,7 +72,11 @@ export function Datepicker<R extends boolean>(props: Props<R>) {
 
   return (
     <Container>
-      <Input label={label} value={computeValue(start, end, format)} />
+      <Input
+        name={name}
+        label={label}
+        value={computeValue(start, end, format)}
+      />
       <CalendarIcon height={32} width={32} fill={theme.primary} />
       <TapArea onPress={() => setIsOpen(true)} />
       <Modal
@@ -81,7 +89,7 @@ export function Datepicker<R extends boolean>(props: Props<R>) {
           <SafeAreaView>
             <ModalHeader
               done={(!range && !!start) || (range && !!start && !!end)}
-              title={label}
+              title={textToString(label)}
               onClose={() => setIsOpen(false)}
             />
             <CalendarList

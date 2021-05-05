@@ -1,23 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pressable, View } from 'react-native';
 import styled, { css, useTheme } from 'styled-components/native';
 
 import { ChevronDown } from '@/components/icons/ChevronDown/index.native';
 import { Body1 } from '@/components/typography';
 import { useForm } from '@/hooks/useForm';
+import { useTextToString } from '@/hooks/useTextToString';
+import { Text } from '@/models/Text';
 
 import { sortOptions } from './sortOptions';
 
 interface Option {
-  text: string;
+  text: Text;
 }
 
 interface Props<O> {
-  children: (option: O) => JSX.Element;
+  children: (option: O & { text: string }) => JSX.Element;
   defaultSelected?: O;
   name: string;
   options: O[];
-  placeholder?: string;
+  placeholder?: Text;
   onChange?(option: O): void;
 }
 
@@ -71,13 +73,22 @@ const Placeholder = styled(Body1)`
 
 export function Select<O extends Option>(props: Props<O>) {
   const form = useForm();
+  const textToString = useTextToString();
   const [selected, setSelected] = useState<O | null>(
     props.defaultSelected || (props.placeholder ? null : props.options[0]),
   );
   const [isOpen, setIsOpen] = useState(false);
   const theme = useTheme();
-  const sortedOptions = sortOptions(props.options, selected);
+
+  useEffect(() => {
+    form.setValue(props.name, selected);
+  }, [selected]);
+
+  const sortedOptions = sortOptions(props.options, textToString, selected);
   const showPlaceholder = !selected && props.placeholder;
+
+  const render = (option: O) =>
+    props.children({ ...option, text: textToString(option.text) });
 
   return (
     <Container open={isOpen}>
@@ -86,11 +97,11 @@ export function Select<O extends Option>(props: Props<O>) {
           <SelectOption pressed={pressed}>
             <View>
               {selected ? (
-                props.children(selected)
+                render(selected)
               ) : props.placeholder ? (
-                <Placeholder>{props.placeholder}</Placeholder>
+                <Placeholder>{textToString(props.placeholder)}</Placeholder>
               ) : (
-                props.children(sortedOptions[0])
+                render(sortedOptions[0])
               )}
             </View>
             <Icon fill={theme.primary} height={32} isOpen={isOpen} width={32} />
@@ -101,17 +112,16 @@ export function Select<O extends Option>(props: Props<O>) {
         (showPlaceholder ? sortedOptions.slice() : sortedOptions.slice(1)).map(
           o => (
             <Pressable
-              key={o.text}
+              key={textToString(o.text)}
               onPress={() => {
                 setSelected(o);
-                form.setValue(props.name, o);
                 props.onChange?.(o);
                 setIsOpen(false);
               }}
             >
               {({ pressed }) => (
                 <SelectOption notFirst pressed={pressed}>
-                  {props.children(o)}
+                  {render(o)}
                 </SelectOption>
               )}
             </Pressable>

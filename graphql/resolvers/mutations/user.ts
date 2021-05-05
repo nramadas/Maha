@@ -5,10 +5,10 @@ import { InjectRepository } from 'typeorm-typedi-extensions';
 
 import { Role as RoleEntity } from '@/db/entities/Role';
 import { User as UserEntity } from '@/db/entities/User';
+import { Permission } from '@/graphql/types/Permission';
 import { User } from '@/graphql/types/User';
 import { ErrorType } from '@/lib/errors/type';
 import { convertFromDBModel as convertFromUserDBModel } from '@/lib/modelConversions/user';
-import { Permission } from '@/models/Permission';
 
 @Resolver(of => User)
 export class UserMutationResolver {

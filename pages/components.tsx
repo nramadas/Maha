@@ -1,4 +1,3 @@
-import { Param } from 'lib/translate/element';
 import React from 'react';
 
 import { Autocomplete } from '@/components/controls/Autocomplete';
@@ -22,7 +21,7 @@ import { ChevronRight } from '@/components/icons/ChevronRight';
 import { ChevronUp } from '@/components/icons/ChevronUp';
 import { Close } from '@/components/icons/Close';
 import { Google } from '@/components/icons/Google';
-import { Home } from '@/components/icons/Home';
+import { House } from '@/components/icons/House';
 
 import * as T from '@/components/typography';
 
@@ -268,8 +267,8 @@ export default function Components() {
         <Close style={iconStyle} />
         <div>Google</div>
         <Google style={iconStyle} />
-        <div>Home</div>
-        <Home style={iconStyle} />
+        <div>House</div>
+        <House style={iconStyle} />
       </div>
 
       <h1>Typography</h1>

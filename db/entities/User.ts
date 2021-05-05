@@ -10,6 +10,7 @@ import {
   ManyToMany,
 } from 'typeorm';
 
+import { Data } from '../../models/User';
 import { Organization } from '../entities/Organization';
 import { Role } from '../entities/Role';
 
@@ -41,7 +42,7 @@ export class User {
   roles!: Role[];
 
   @Column({ type: 'jsonb' })
-  data!: object;
+  data!: Partial<Data>;
 
   @CreateDateColumn()
   created!: Date;

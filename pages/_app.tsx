@@ -15,6 +15,7 @@ import { LanguagePackProvider } from '@/contexts/LanguagePack';
 import { NotificationsProvider } from '@/contexts/Notifications';
 import { TooltipProvider } from '@/contexts/Tooltip';
 import { URQLProvider } from '@/contexts/URQL';
+import { Route } from '@/lib/route';
 import { establishAuthentication } from '@/lib/ssr';
 import { DEFAULT as DEFAULT_LANGUAGE_PACK } from '@/models/LanguagePack';
 
@@ -38,8 +39,8 @@ export default establishAuthentication(
           <JWTProvider
             initialJwt={jwt}
             initialAut={aut}
-            preserveJwt={jwt => Cookies.set('token', jwt, { path: '/' })}
-            preserveAut={aut => Cookies.set('authn', aut, { path: '/' })}
+            preserveJwt={jwt => Cookies.set('token', jwt, { path: Route.Home })}
+            preserveAut={aut => Cookies.set('authn', aut, { path: Route.Home })}
           >
             <URQLProvider
               ssrExchange={pageProps.ssrExchange}

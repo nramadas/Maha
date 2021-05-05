@@ -1,3 +1,4 @@
+import { Route } from '@/lib/route';
 import { EmailAction } from '@/models/EmailAction';
 
 interface Options {
@@ -10,8 +11,10 @@ interface Options {
 export function emailActionToUrl(options: Options) {
   switch (options.action) {
     case EmailAction.CreateOrganization:
-      return '/org/create';
+      return Route.CreateBiz;
     case EmailAction.JoinOrganization:
-      return options.orgName ? `/org/join?orgName=${options.orgName}` : '/';
+      return options.orgName
+        ? `${Route.JoinBiz}?orgName=${options.orgName}`
+        : Route.Home;
   }
 }
