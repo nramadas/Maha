@@ -30,6 +30,7 @@ export interface Data {
   parkingOpenSpaces: number;
   price: number;
   propertyCondition: PropertyCondition;
+  quantity?: number;
   securityFeatures?: LocalizedStrings;
   sqft: number;
   taxes: number;

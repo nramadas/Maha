@@ -3,6 +3,8 @@ import React from 'react';
 import { useQuery } from 'urql';
 
 import { Members } from '@/components/biz/pages/Members';
+import { Overview } from '@/components/biz/pages/Overview';
+import { Properties } from '@/components/biz/pages/Properties';
 import { Roles } from '@/components/biz/pages/Roles';
 import { CreateProperty } from '@/components/biz/widgets/CreateProperty';
 import { Workspace } from '@/components/chrome/Workspace';
@@ -40,6 +42,10 @@ function pageComponent(breadcrumbs: Breadcrumb[]) {
       return Roles;
     case OrganizationPageType.AddProperty:
       return CreateProperty;
+    case OrganizationPageType.Properties:
+      return Properties;
+    case OrganizationPageType.Overview:
+      return Overview;
     default:
       return null;
   }

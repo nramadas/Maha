@@ -7,6 +7,8 @@ import styled, { css } from 'styled-components/native';
 import { Input } from '@/components/controls/Input/index.native';
 import { Body1 } from '@/components/typography/Body1/index.native';
 import { useForm } from '@/hooks/useForm';
+import { useTextToString } from '@/hooks/useTextToString';
+import { Text } from '@/models/Text';
 
 function makeItems<O>(items: O[], text: string) {
   return {
@@ -38,6 +40,11 @@ interface Option {
 }
 
 interface Props<O> {
+  __doNotWriteToForm?: boolean;
+  /**
+   * Initialize the autocomplete with this value
+   */
+  defaultValue?: O;
   /**
    * Display an icon on the right hand side of the input field
    */
@@ -45,7 +52,7 @@ interface Props<O> {
   /**
    * Placeholder text to show inside the input
    */
-  label: string;
+  label: Text;
   /**
    * Reference name for autocomplete value
    */
@@ -63,11 +70,20 @@ interface Props<O> {
 }
 
 export function Autocomplete<O extends Option>(props: Props<O>) {
-  const { getItems, name, onSelect, ...rest } = props;
+  const { getItems, label, name, onSelect } = props;
   const [error, setError] = useState<string | undefined>(undefined);
   const [focused, setFocused] = useState(false);
-  const [localValue, setLocalValue] = useState('');
   const form = useForm();
+  const textToString = useTextToString();
+  const defaultValues = useRef(form.getFormValues());
+  const defaultValue =
+    props.defaultValue || !props.__doNotWriteToForm
+      ? defaultValues.current[name]
+      : undefined;
+
+  const [localValue, setLocalValue] = useState(
+    defaultValue ? textToString(defaultValue) : '',
+  );
 
   const [itemsCallback, items] = useEventCallback<string, O[]>(
     event =>
@@ -94,7 +110,9 @@ export function Autocomplete<O extends Option>(props: Props<O>) {
     (item: O) => {
       itemsCallback(item.text);
       setLocalValue(item.text);
-      form.setValue(name, item);
+      if (!props.__doNotWriteToForm) {
+        form.setValue(name, item);
+      }
       onSelect?.(item);
     },
     [itemsCallback, setLocalValue, onSelect],
@@ -116,15 +134,15 @@ export function Autocomplete<O extends Option>(props: Props<O>) {
   );
 
   React.useEffect(() => {
-    itemsCallback('');
+    itemsCallback(defaultValue ? textToString(defaultValue) : '');
   }, [itemsCallback]);
 
   return (
     <>
       <Input
-        {...rest}
         __doNotWriteToForm
         error={error}
+        label={label}
         name={name}
         ref={input}
         value={localValue}

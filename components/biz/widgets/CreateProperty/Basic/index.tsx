@@ -3,10 +3,11 @@ import React from 'react';
 import { AddressAutocomplete } from '@/components/controls/AddressAutocomplete';
 import { Datepicker } from '@/components/controls/Datepicker';
 import { InputWithValidation } from '@/components/controls/InputWithValidation';
-import { Number } from '@/components/controls/Number';
+import { Number as NumberField } from '@/components/controls/Number';
 import { Price } from '@/components/controls/Price';
 import { Select } from '@/components/controls/Select';
 import { House } from '@/components/icons/House';
+import { Number } from '@/components/icons/Number';
 import { Pencil } from '@/components/icons/Pencil';
 import { Body2 } from '@/components/typography/Body2';
 import { Overline } from '@/components/typography/Overline';
@@ -47,12 +48,21 @@ export function Basic() {
         <Price name="fees" label={i18n.translate`monthly fees`} />
       </div>
 
-      <div className={styles.twoCol}>
-        <Number icon={<House />} name="sqft" label={i18n.translate`sqft`} />
+      <div className={styles.threeCol}>
+        <NumberField
+          icon={<House />}
+          name="sqft"
+          label={i18n.translate`sqft`}
+        />
         <Datepicker
           minDate={patch(today(), { year: -10 })}
           name="built"
           label={i18n.translate`Date built`}
+        />
+        <NumberField
+          icon={<Number />}
+          name="quantity"
+          label={i18n.translate`quantity`}
         />
       </div>
 

@@ -141,6 +141,12 @@ export class CreateProperty {
   })
   propertyCondition?: PropertyCondition;
 
+  @Field({
+    description: 'How many of this property are available',
+    nullable: true,
+  })
+  quantity?: number;
+
   @Field(type => [ID], {
     description: 'Ids of schools nearby',
     nullable: true,

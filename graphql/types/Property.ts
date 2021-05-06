@@ -104,6 +104,12 @@ export class Property implements PropertyModel {
   propertyCondition!: PropertyCondition;
 
   @Field({
+    description: 'How many of this property are available',
+    nullable: true,
+  })
+  quantity?: number;
+
+  @Field({
     description:
       'Security features available on premises, organized by language',
     nullable: true,

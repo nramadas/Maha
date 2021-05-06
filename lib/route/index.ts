@@ -10,6 +10,7 @@ export enum Route {
 
 export enum BizRoute {
   AddProperty = '/properties/add',
+  EditProperty = '/properties/edit',
   Insights = '/insights',
   Members = '/members',
   Overview = '/',

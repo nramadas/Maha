@@ -58,6 +58,7 @@ function canonicalizeForm(formValues: any) {
       case 'numBedrooms':
       case 'parkingGarage':
       case 'price':
+      case 'quantity':
       case 'sqft':
       case 'taxes': {
         canonicalValues[key] = value;
@@ -127,6 +128,7 @@ export function CreateProperty(props: Props) {
             if (result.error) {
               displayError(i18n.translate`Could not create a new property`);
             } else {
+              props.onComplete?.();
               router.push(fullBizRoute(BizRoute.Properties));
             }
           },

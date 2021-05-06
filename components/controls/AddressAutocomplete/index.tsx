@@ -43,6 +43,8 @@ export function AddressAutocomplete(props: Props) {
   const [showLatLng, setShowLatLng] = useState(false);
   const latInput = useRef<HTMLInputElement | null>(null);
   const lngInput = useRef<HTMLInputElement | null>(null);
+  const defaultValues = useRef(form.getFormValues());
+  const defaultValue = defaultValues.current[props.name] || {};
 
   return (
     <div className={cx(props.className, styles.container)}>
@@ -51,6 +53,7 @@ export function AddressAutocomplete(props: Props) {
         className={cx(styles.lat, {
           [styles.vislatlng]: showLatLng,
         })}
+        defaultValue={defaultValue['lat']}
         icon={<Latitude />}
         name="lat"
         label={i18n.translate`lat`}
@@ -61,6 +64,7 @@ export function AddressAutocomplete(props: Props) {
         className={cx(styles.lng, {
           [styles.vislatlng]: showLatLng,
         })}
+        defaultValue={defaultValue['lng']}
         icon={<Longitude />}
         name="lng"
         label={i18n.translate`lng`}
@@ -71,6 +75,7 @@ export function AddressAutocomplete(props: Props) {
         className={cx(styles.input, {
           [styles.latLngVisible]: showLatLng,
         })}
+        defaultValue={defaultValue['address']}
         icon={<Location />}
         label={i18n.translate`address`}
         name="address"

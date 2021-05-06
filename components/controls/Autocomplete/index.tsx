@@ -39,6 +39,10 @@ interface Props<O> {
    */
   className?: string;
   /**
+   * Initialize the autocomplete with this value
+   */
+  defaultValue?: O;
+  /**
    * Display an icon on the right hand side of the input field
    */
   icon?: React.ReactElement;
@@ -66,6 +70,11 @@ export function Autocomplete<O extends Option>(props: Props<O>) {
   const { className, icon, label, name, getItems, onSelect } = props;
   const form = useForm();
   const textToString = useTextToString();
+  const defaultValues = useRef(form.getFormValues());
+  const defaultValue =
+    props.defaultValue || !props.__doNotWriteToForm
+      ? defaultValues.current[name]
+      : undefined;
 
   const [Target, Tooltip] = useTooltip({
     alignment: 'full',
@@ -115,7 +124,7 @@ export function Autocomplete<O extends Option>(props: Props<O>) {
   );
 
   React.useEffect(() => {
-    itemsCallback('');
+    itemsCallback(defaultValue ? textToString(defaultValue) : '');
   }, [itemsCallback]);
 
   return (
@@ -125,6 +134,9 @@ export function Autocomplete<O extends Option>(props: Props<O>) {
           <Input
             __doNotWriteToForm
             className={cx(className, { [styles.input]: !error })}
+            defaultValue={
+              defaultValue ? textToString(defaultValue.text) : undefined
+            }
             error={error}
             icon={icon}
             label={label}

@@ -1,5 +1,5 @@
 import { AuthenticationError, UserInputError } from 'apollo-server-micro';
-import { Arg, Authorized, Mutation, Resolver } from 'type-graphql';
+import { Arg, Authorized, ID, Mutation, Resolver } from 'type-graphql';
 import { Repository } from 'typeorm';
 import { InjectRepository } from 'typeorm-typedi-extensions';
 
@@ -80,6 +80,31 @@ export class PropertyMutationResolver {
         return this._media.save(media);
       }),
     );
+
+    return org;
+  }
+
+  @Authorized(Permission.ManageProperties)
+  @Mutation(returns => Organization, {
+    description: 'Removes a property',
+  })
+  async removeProperty(
+    @MyOrganization() org: Organization | null,
+    @Arg('id', type => ID) id: string,
+  ) {
+    if (!org) {
+      throw new AuthenticationError(ErrorType.Unauthorized);
+    }
+
+    const property = await this._properties.findOne({ where: { id } });
+
+    if (!property) {
+      throw new UserInputError(ErrorType.DoesNotExist, {
+        field: 'id',
+      });
+    }
+
+    await this._properties.delete(property.id);
 
     return org;
   }

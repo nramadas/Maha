@@ -1,4 +1,5 @@
-import React from 'react';
+import isEqual from 'lodash/isEqual';
+import React, { useRef } from 'react';
 
 import { Checkmark } from '@/components/icons/Checkmark';
 import { Caption } from '@/components/typography/Caption';
@@ -11,6 +12,7 @@ interface Value {
 }
 
 interface Props<V> {
+  __doNotWriteToForm?: boolean;
   /**
    * Whether or not the checkbox is disabled
    */
@@ -39,11 +41,16 @@ interface Props<V> {
 export function Checkbox<V extends Value>(props: Props<V>) {
   const { disabled, label, name, value, onSelect } = props;
   const form = useForm();
+  const defaultSelections = useRef(form.getValue(name) || []);
+  const defaultChecked = !!defaultSelections.current.find(s =>
+    isEqual(s, value),
+  );
 
   return (
     <label className={styles.container}>
       <input
         className={styles.input}
+        defaultChecked={defaultChecked}
         disabled={disabled}
         type="checkbox"
         onInput={e => {
@@ -55,7 +62,10 @@ export function Checkbox<V extends Value>(props: Props<V>) {
             currentlySelected.delete(value);
           }
 
-          form.setValue(name, Array.from(currentlySelected.values()));
+          if (!props.__doNotWriteToForm) {
+            form.setValue(name, Array.from(currentlySelected.values()));
+          }
+
           onSelect?.(value);
         }}
       />

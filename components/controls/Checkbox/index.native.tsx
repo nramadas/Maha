@@ -13,6 +13,7 @@ interface Value {
 
 interface ExtraProps {
   checked?: boolean;
+  disabled?: boolean;
   pressed?: boolean;
 }
 
@@ -27,7 +28,7 @@ const Container = styled.Pressable`
   position: relative;
 `;
 
-const Box = styled.View`
+const Box = styled.View<ExtraProps>`
   background-color: transparent;
   border-radius: 2px;
   border: 2px solid ${props => props.theme.primary};
@@ -37,6 +38,12 @@ const Box = styled.View`
   position: absolute;
   top: 50%;
   width: 28px;
+
+  ${props =>
+    props.disabled &&
+    css`
+      background-color: ${props.theme.disabled};
+    `}
 `;
 
 const Label = styled.View`
@@ -62,7 +69,16 @@ const Press = styled.View<ExtraProps>`
     `}
 `;
 
+const Text = styled(Body2)<ExtraProps>`
+  ${props =>
+    props.pressed &&
+    css`
+      color: ${props.theme.disabled};
+    `}
+`;
+
 interface Props<V> {
+  __doNotWriteToForm?: boolean;
   disabled?: boolean;
   label?: string;
   name: string;
@@ -82,11 +98,18 @@ export function Checkbox<V extends Value>(props: Props<V>) {
   return (
     <Container
       onPress={() => {
+        if (disabled) {
+          return;
+        }
+
         const newSelections = isSelected
           ? currentSelections.filter(s => !isEqual(s, value))
           : currentSelections.concat(value);
 
-        form.setValue(name, newSelections);
+        if (!props.__doNotWriteToForm) {
+          form.setValue(name, newSelections);
+        }
+
         onSelect?.(value);
       }}
     >
@@ -97,7 +120,7 @@ export function Checkbox<V extends Value>(props: Props<V>) {
             {isSelected && <Checkmark height={24} fill={theme.onPrimary} />}
           </Box>
           <Label>
-            <Body2>{label}</Body2>
+            <Text>{label}</Text>
           </Label>
         </>
       )}
