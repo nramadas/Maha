@@ -76,13 +76,13 @@ export function Cities(props: Props) {
         <header className={styles.header}>
           <H4>
             <i18n.Translate>
-              The best deals in your favourite cities
+              The best homes in your favourite cities
             </i18n.Translate>
           </H4>
           <div className={styles.tagline}>
             <Body1>
               <i18n.Translate>
-                Select from premium-built homes, sold directly by the property
+                Select from premium-built flats, sold directly by the property
                 developer.
               </i18n.Translate>
             </Body1>
