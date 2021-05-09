@@ -1,0 +1,29 @@
+.container {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.content {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  max-width: var(--width-content-max);
+  width: 100%;
+}
+
+.section {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+
+  > * {
+    margin-left: 8px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+}

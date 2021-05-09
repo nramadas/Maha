@@ -3,6 +3,7 @@ import { Field, ObjectType, ID } from 'type-graphql';
 import { AmenityAccess } from '@/graphql/types/AmenityAccess';
 import { LocalizedStrings } from '@/graphql/types/LocalizedStrings';
 import { Location } from '@/graphql/types/Location';
+import { Metropolitan } from '@/graphql/types/Metropolitan';
 import { Organization } from '@/graphql/types/Organization';
 import { PropertyCondition } from '@/graphql/types/PropertyCondition';
 import { PropertyType } from '@/graphql/types/PropertyType';
@@ -64,6 +65,12 @@ export class Property implements PropertyModel {
 
   @Field({ description: 'Where the property is located' })
   location!: Location;
+
+  @Field({
+    description: 'Which metropolitan area is the property in',
+    nullable: true,
+  })
+  metropolitan?: Metropolitan;
 
   @Field({ description: "The property's name, if any" })
   name!: string;

@@ -12,6 +12,7 @@ import styles from './index.module.scss';
 import { sortOptions } from './sortOptions';
 
 interface Option {
+  disabled?: boolean;
   text: Text;
 }
 
@@ -51,8 +52,10 @@ interface Props<O> {
 export function Select<O extends Option>(props: Props<O>) {
   const form = useForm();
   const textToString = useTextToString();
+  const preSort = sortOptions(props.options, textToString, null);
+
   const [selected, setSelected] = useState<O | null>(
-    props.defaultSelected || (props.placeholder ? null : props.options[0]),
+    props.defaultSelected || (props.placeholder ? null : preSort[0]),
   );
 
   useEffect(() => {
@@ -116,8 +119,10 @@ export function Select<O extends Option>(props: Props<O>) {
               className={cx(styles.option, styles.size)}
               key={textToString(option.text)}
               onClick={() => {
-                setSelected(option);
-                props.onChange?.(option);
+                if (!option.disabled) {
+                  setSelected(option);
+                  props.onChange?.(option);
+                }
               }}
             >
               {render(option)}

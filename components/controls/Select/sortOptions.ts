@@ -4,6 +4,7 @@ import { useTextToString } from '@/hooks/useTextToString';
 import { Text } from '@/models/Text';
 
 interface Option {
+  disabled?: boolean;
   text: Text;
 }
 
@@ -21,8 +22,14 @@ export function sortOptions<O extends Option>(
         ),
     )
     .sort((a, b) => {
-      return textToString(a.text)
-        .toLocaleLowerCase()
-        .localeCompare(textToString(b.text).toLocaleLowerCase());
+      if (a.disabled && !b.disabled) {
+        return 1;
+      } else if (!a.disabled && b.disabled) {
+        return -1;
+      } else {
+        return textToString(a.text)
+          .toLocaleLowerCase()
+          .localeCompare(textToString(b.text).toLocaleLowerCase());
+      }
     });
 }

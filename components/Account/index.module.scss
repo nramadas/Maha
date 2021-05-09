@@ -1,30 +1,57 @@
 .container {
   align-items: center;
-  background-color: var(--color-background);
+  background-color: transparent;
   border-radius: 2px;
   border: none;
   box-sizing: border-box;
-  color: var(--color-onBackground);
   cursor: pointer;
   display: flex;
   flex-direction: row;
   outline: none;
   padding: 6px 12px;
   transition:
-    background-color 0.15s,
-    color 0.15s;
+    background-color 0.15s;
 
-  &:focus {
-    background-color: var(--color-field);
+  &.dark {
+    color: var(--color-background);
+
+    &:focus {
+      background-color: rgba(0, 0, 0, 0.25);
+    }
+
+    &:hover,
+    &:hover &:focus {
+      background-color: rgba(0, 0, 0, 0.25);
+    }
+
+    &:active {
+      background-color: rgba(0, 0, 0, 0.25);
+    }
+
+    .personIcon {
+      background-color: rgba(0, 0, 0, 0.25);
+    }
   }
 
-  &:hover,
-  &:hover &:focus {
-    background-color: var(--color-field);
-  }
+  &.light {
+    color: var(--color-onBackground);
 
-  &:active {
-    background-color: var(--color-field);
+    &:focus {
+      background-color: var(--color-field);
+    }
+
+    &:hover,
+    &:hover &:focus {
+      background-color: var(--color-field);
+    }
+
+    &:active {
+      background-color: var(--color-field);
+    }
+
+    .personIcon {
+      background-color: rgba(0, 0, 0, 0.15);
+    }
   }
 }
 
@@ -70,7 +97,6 @@
 }
 
 .personIcon {
-  background-color: rgba(0, 0, 0, 0.15);
   border-radius: 30px;
   fill: var(--color-background);
   height: 30px;

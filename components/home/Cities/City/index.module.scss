@@ -1,0 +1,49 @@
+.container {
+  border-radius: 8px;
+  box-shadow: var(--elevation-1);
+  width: 300px;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.15s, box-shadow 0.15s;
+  padding-top: 75%;
+
+  &:hover {
+    box-shadow: var(--elevation-8);
+    transform: scale(1.1);
+  }
+}
+
+.children {
+  bottom: 20px;
+  left: 20px;
+  overflow: hidden;
+  position: absolute;
+  right: 20px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.disabled {
+  pointer-events: none;
+
+  .image {
+    opacity: 0.5;
+  }
+}
+
+.disabledBadge {
+  align-items: center;
+  background-color: var(--color-navBackground);
+  border-radius: 2px;
+  color: var(--color-background);
+  display: flex;
+  flex-direction: column;
+  height: 30px;
+  justify-content: center;
+  left: 50%;
+  margin-left: -60px;
+  margin-top: -15px;
+  position: absolute;
+  top: 50%;
+  width: 120px;
+}

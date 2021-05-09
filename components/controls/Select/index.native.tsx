@@ -11,6 +11,7 @@ import { Text } from '@/models/Text';
 import { sortOptions } from './sortOptions';
 
 interface Option {
+  disabled?: boolean;
   text: Text;
 }
 
@@ -74,8 +75,10 @@ const Placeholder = styled(Body1)`
 export function Select<O extends Option>(props: Props<O>) {
   const form = useForm();
   const textToString = useTextToString();
+  const preSort = sortOptions(props.options, textToString, null);
+
   const [selected, setSelected] = useState<O | null>(
-    props.defaultSelected || (props.placeholder ? null : props.options[0]),
+    props.defaultSelected || (props.placeholder ? null : preSort[0]),
   );
   const [isOpen, setIsOpen] = useState(false);
   const theme = useTheme();
@@ -114,9 +117,11 @@ export function Select<O extends Option>(props: Props<O>) {
             <Pressable
               key={textToString(o.text)}
               onPress={() => {
-                setSelected(o);
-                props.onChange?.(o);
-                setIsOpen(false);
+                if (!o.disabled) {
+                  setSelected(o);
+                  props.onChange?.(o);
+                  setIsOpen(false);
+                }
               }}
             >
               {({ pressed }) => (

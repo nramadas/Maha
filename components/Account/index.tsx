@@ -1,6 +1,7 @@
 import { gql } from '@urql/core';
 import cx from 'classnames';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { useQuery } from 'urql';
 
@@ -10,6 +11,7 @@ import { Person } from '@/components/icons/Person';
 import { Body1 } from '@/components/typography/Body1';
 import { useTooltip } from '@/hooks/useTooltip';
 import { Route } from '@/lib/route';
+import { storage } from '@/lib/storage';
 import { i18n } from '@/lib/translate';
 
 import styles from './index.module.scss';
@@ -27,10 +29,13 @@ const me = gql`
 
 interface Props {
   className?: string;
+  theme?: 'light' | 'dark';
 }
 
 export function Account(props: Props) {
-  const { className } = props;
+  const { className, theme } = props;
+
+  const router = useRouter();
 
   const [Target, Tooltip] = useTooltip({
     alignment: 'full',
@@ -42,8 +47,36 @@ export function Account(props: Props) {
 
   const [result] = useQuery({ query: me });
 
-  if (result.fetching || !result.data || result.error) {
+  const colors = theme || 'light';
+
+  if (result.fetching) {
     return null;
+  }
+
+  if (!result.data || result.error || !result.data.me) {
+    const currentPath =
+      typeof window === 'undefined' ? undefined : window.location.pathname;
+
+    return (
+      <a
+        className={cx(styles.container, className, {
+          [styles.light]: colors === 'light',
+          [styles.dark]: colors === 'dark',
+        })}
+        href={Route.Login}
+        onClick={e => {
+          e.preventDefault();
+          storage.set('redirectUrl', currentPath).then(() => {
+            router.push(Route.Login);
+          });
+        }}
+      >
+        <Person className={styles.personIcon} />
+        <Body1>
+          <i18n.Translate>Log in</i18n.Translate>
+        </Body1>
+      </a>
+    );
   }
 
   const name = result.data.me.firstName || result.data.me.email;
@@ -51,7 +84,12 @@ export function Account(props: Props) {
   return (
     <>
       <Target>
-        <button className={cx(styles.container, className)}>
+        <button
+          className={cx(styles.container, className, {
+            [styles.light]: colors === 'light',
+            [styles.dark]: colors === 'dark',
+          })}
+        >
           <Person className={styles.personIcon} />
           <Body1>{name}</Body1>
         </button>

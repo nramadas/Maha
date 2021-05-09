@@ -1,14 +1,15 @@
-.label {
-  margin-right: 4px;
-  margin-top: 2px;
-  padding-left: 8px;
-}
-
-.row {
+.grid {
   align-items: center;
   display: grid;
   grid-gap: 4px;
   grid-template-columns: 200px max-content;
+}
+
+
+.label {
+  margin-right: 4px;
+  margin-top: 2px;
+  padding-left: 8px;
 }
 
 .threeCol {

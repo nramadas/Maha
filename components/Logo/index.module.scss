@@ -1,23 +1,47 @@
-.container {
+.box {
   align-items: center;
   background-color: var(--color-primary);
   border-radius: 4px;
   color: var(--color-background);
   display: flex;
   flex-direction: row;
-  font-family: var(--font-title);
-  font-size: 30px;
-  font-weight: 700;
   height: 42px;
   justify-content: center;
   transition: background-color 0.15s;
   width: 42px;
+}
+
+.brand {
+  color: var(--color-primary);
+  margin-left: 8px;
+  transition: color 0.15s;
+}
+
+.container {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  font-family: var(--font-title);
+  font-size: 30px;
+  font-weight: 700;
 
   &:hover {
-    background-color: var(--color-primaryHovered);
+    .box {
+      background-color: var(--color-primaryHovered);
+    }
+
+    .brand {
+      color: var(--color-primaryHovered);
+    }
   }
 
   &:active {
-    background-color: var(--color-primaryPressed);
+    .box {
+      background-color: var(--color-primaryPressed);
+    }
+
+    .brand {
+      color: var(--color-primaryPressed);
+    }
   }
 }

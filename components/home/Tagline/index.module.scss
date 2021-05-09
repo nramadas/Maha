@@ -1,0 +1,34 @@
+.button {
+  height: 36px;
+}
+
+.cta {
+  align-items: center;
+  display: grid;
+  grid-gap: 12px;
+  grid-template-columns: 1fr max-content max-content;
+  padding: 8px 20px;
+  background-color: var(--color-background);
+  border-radius: 2px;
+  box-shadow: var(--elevation-3);
+  margin-top: 24px;
+}
+
+.disabled {
+  opacity: 0.4;
+}
+
+.na {
+  color: var(--color-onBackground);
+  margin-left: 8px;
+}
+
+.prompt {
+  color: var(--color-navBackground);
+  margin-top: 3px;
+}
+
+.title {
+  color: var(--color-background);
+  filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.5));
+}

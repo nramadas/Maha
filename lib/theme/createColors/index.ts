@@ -30,6 +30,7 @@ export function createColors() {
     fieldHovered: mix(0.05, Color.G000, Color.G950),
     metadata: mix(0.5, Color.G950, Color.G050),
     navBackground: '#263238',
+    navBackgroundTransparent: rgba('#263238', 0.8),
     navBorderDark: rgba(0, 0, 0, 0.1),
     navBorderLight: rgba(255, 255, 255, 0.07),
     onBackground: Color.G050,

@@ -1,0 +1,30 @@
+.container {
+  align-items: center;
+  background-color: var(--color-primary);
+  display: flex;
+  flex-direction: column;
+  height: 600px;
+  justify-content: center;
+  width: 100%;
+}
+
+.content {
+  max-width: 980px;
+  padding: 40px;
+  width: 100%;
+}
+
+.explanation {
+  color: rgba(0, 0, 0, 0.3);
+  line-height: 1.5;
+}
+
+.header {
+  color: var(--color-background);
+  margin-bottom: 8px;
+}
+
+.tagline {
+  color: var(--color-navBackground);
+  margin-bottom: 42px;
+}

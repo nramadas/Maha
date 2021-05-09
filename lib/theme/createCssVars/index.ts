@@ -16,8 +16,8 @@ export function createCssVars() {
     '--font-body':
       "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
     '--font-title': "'Oswald', sans-serif",
-    '--z-header': 11,
     '--z-dialog': 90,
+    '--z-header': 110,
     '--z-tooltip': 100,
     '--elevation-0': 'none',
     '--elevation-1':
@@ -40,5 +40,6 @@ export function createCssVars() {
       '0 16px 24px 2px rgba(0,0,0,0.14), 0 6px 30px 5px rgba(0,0,0,0.12), 0 8px 10px -5px rgba(0,0,0,0.20)',
     '--elevation-10':
       '0 24px 38px 3px rgba(0,0,0,0.14), 0 9px 46px 8px rgba(0,0,0,0.12), 0 11px 15px -7px rgba(0,0,0,0.20)',
+    '--width-content-max': '1400px',
   };
 }

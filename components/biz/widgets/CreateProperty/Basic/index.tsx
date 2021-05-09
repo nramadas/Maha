@@ -12,8 +12,10 @@ import { Pencil } from '@/components/icons/Pencil';
 import { Body2 } from '@/components/typography/Body2';
 import { Overline } from '@/components/typography/Overline';
 import { patch, today } from '@/lib/date';
+import { enumToText as metropolitanEnumToText } from '@/lib/enumToText/metropolitan';
 import { enumToText as propertyTypeToText } from '@/lib/enumToText/propertyType';
 import { i18n } from '@/lib/translate';
+import { Metropolitan } from '@/models/Metropolitan';
 import { PropertyType } from '@/models/PropertyType';
 
 import styles from './index.module.scss';
@@ -66,7 +68,7 @@ export function Basic() {
         />
       </div>
 
-      <div className={styles.row}>
+      <div className={styles.grid}>
         <div className={styles.label}>
           <Body2>
             <i18n.Translate>Property Type:</i18n.Translate>
@@ -76,6 +78,21 @@ export function Basic() {
           name="type"
           options={Object.values(PropertyType).map(type => ({
             text: propertyTypeToText(type),
+            value: type,
+          }))}
+          placeholder={i18n.translate`select`}
+        >
+          {option => <Body2>{option.text}</Body2>}
+        </Select>
+        <div className={styles.label}>
+          <Body2>
+            <i18n.Translate>Metropolitan Area:</i18n.Translate>
+          </Body2>
+        </div>
+        <Select
+          name="metropolitan"
+          options={Object.values(Metropolitan).map(type => ({
+            text: metropolitanEnumToText(type),
             value: type,
           }))}
           placeholder={i18n.translate`select`}
