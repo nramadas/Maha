@@ -2,9 +2,15 @@ import { NominalID } from '@/lib/typeHelpers/nominal';
 import { MediaParentType } from '@/models/MediaParentType';
 import { MediaType } from '@/models/MediaType';
 
-export interface Data {}
+export interface Data {
+  sizes: {
+    [size: string]: string;
+  };
+}
 
-export const DEFAULT_DATA: Data = {};
+export const DEFAULT_DATA: Data = {
+  sizes: {},
+};
 
 export interface Media {
   id: NominalID<'media id'>;

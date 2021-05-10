@@ -47,7 +47,7 @@ export interface PropertyModel
     | 'quantity'
     | 'sqft'
   > {
-  media: Pick<MediaModel, 'id' | 'type'>[];
+  media: Pick<MediaModel, 'id' | 'type' | 'src'>[];
 }
 
 interface Props {
@@ -62,7 +62,11 @@ export function Property(props: Props) {
   return (
     <article className={cx(styles.container, props.className)}>
       <div className={styles.thumbnail}>
-        <ImageIcon className={styles.imageIcon} />
+        {props.property.media?.length ? (
+          <img className={styles.image} src={props.property.media[0].src} />
+        ) : (
+          <ImageIcon className={styles.imageIcon} />
+        )}
       </div>
       <div className={styles.content}>
         <header className={styles.header}>

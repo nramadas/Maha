@@ -11,6 +11,8 @@ export function getMessage(type: ErrorType): ReturnType<typeof i18n.translate> {
       return i18n.translate`This does not exist`;
     case ErrorType.FailedGoogleLogin:
       return i18n.translate`Could not sign into Google`;
+    case ErrorType.FailedUpload:
+      return i18n.translate`Could not upload file`;
     case ErrorType.MissingGoogleCredentials:
       return i18n.translate`Missing Google credentials`;
     case ErrorType.Unauthorized:

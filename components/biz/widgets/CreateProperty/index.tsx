@@ -17,6 +17,7 @@ import { Amenities } from './Amenities';
 import { Basic } from './Basic';
 import { BedBath } from './BedBath';
 import styles from './index.module.scss';
+import { Media } from './Media';
 import { Other } from './Other';
 import { Parking } from './Parking';
 import { Schools } from './Schools';
@@ -83,6 +84,10 @@ function canonicalizeForm(formValues: any) {
         }
         break;
       }
+      case 'media': {
+        canonicalValues.mediaIds = value.map((m: any) => m.id);
+        break;
+      }
     }
   });
 
@@ -142,6 +147,7 @@ export function CreateProperty(props: Props) {
         </H6>
       </header>
       <Basic />
+      <Media />
       <BedBath />
       <Amenities />
       <Utilities />

@@ -25,6 +25,7 @@ const viewProperties = gql`
           }
           media {
             id
+            src
             type
           }
           numBedrooms

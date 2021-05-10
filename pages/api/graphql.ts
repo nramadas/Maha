@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { RedisCache } from 'apollo-server-cache-redis';
 import { ApolloServer } from 'apollo-server-micro';
-import Cors from 'micro-cors';
+import { processRequest } from 'graphql-upload';
 import { buildSchema } from 'type-graphql';
 import { Container } from 'typedi';
 import { useContainer } from 'typeorm';
@@ -35,12 +35,11 @@ const setup = async () => {
     context: async ({ req }) => {
       return await contextFromHeaders(req.headers);
     },
+    uploads: false,
   });
 
   return apolloServer.createHandler({ path: '/api/graphql' });
 };
-
-const handler = setup();
 
 export const config = {
   api: {
@@ -48,10 +47,16 @@ export const config = {
   },
 };
 
-const cors = Cors({
-  allowMethods: ['GET', 'POST', 'OPTIONS'],
-});
+const handler = setup();
 
-export default cors(async (req, res) =>
-  req.method === 'OPTIONS' ? res.end() : handler.then(h => h(req, res)),
-);
+export default async function graphql(req: any, res: any) {
+  const contentType = req.headers['content-type'];
+
+  if (contentType && contentType.startsWith('multipart/form-data')) {
+    req.filePayload = await processRequest(req, res);
+  }
+
+  const h = await handler;
+
+  return h(req, res);
+}
