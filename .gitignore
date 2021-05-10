@@ -120,3 +120,6 @@ buck-out/
 web-build/
 
 # @end expo-cli
+
+# Other
+tsconfig.tsbuildinfo
