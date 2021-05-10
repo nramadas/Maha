@@ -1,4 +1,3 @@
-import { AuthenticationError } from 'apollo-server-micro';
 import { Arg, Authorized, Ctx, ID, Mutation, Resolver } from 'type-graphql';
 import { Repository } from 'typeorm';
 import { InjectRepository } from 'typeorm-typedi-extensions';
@@ -8,6 +7,7 @@ import { Role as RoleEntity } from '@/db/entities/Role';
 import { User as UserEntity } from '@/db/entities/User';
 import { Context } from '@/graphql/context';
 import { MyOrganization } from '@/graphql/decorators';
+import * as errors from '@/graphql/errors';
 import { InviteType } from '@/graphql/types/InviteType';
 import { Organization } from '@/graphql/types/Organization';
 import { Permission } from '@/graphql/types/Permission';
@@ -17,21 +17,20 @@ import {
   userExists,
   createUser,
 } from '@/lib/authn/api';
-import { ErrorType } from '@/lib/errors/type';
 import { userIsAdmin } from '@/lib/permissions/userIsAdmin';
 
 async function doAuthentication(email: string) {
   const existingUser = await userExists(email);
 
   if (!existingUser.ok) {
-    throw new AuthenticationError(ErrorType.SomethingElse);
+    throw new errors.Unauthorized();
   }
 
   if (!existingUser.exists) {
     const createUserResult = await createUser(email);
 
     if (!createUserResult.ok) {
-      throw new AuthenticationError(ErrorType.SomethingElse);
+      throw new errors.Unauthorized();
     }
   }
 
@@ -65,7 +64,7 @@ export class SideEffectMutationResolver {
     const user = ctx.me;
 
     if (!user || !userIsAdmin(user)) {
-      throw new AuthenticationError(ErrorType.Unauthorized);
+      throw new errors.Unauthorized();
     }
 
     const existingInvite = await this._invites.findOne({

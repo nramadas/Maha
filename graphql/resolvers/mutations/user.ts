@@ -1,13 +1,12 @@
-import { UserInputError } from 'apollo-server-micro';
 import { Arg, Authorized, ID, Mutation, Resolver } from 'type-graphql';
 import { Repository } from 'typeorm';
 import { InjectRepository } from 'typeorm-typedi-extensions';
 
 import { Role as RoleEntity } from '@/db/entities/Role';
 import { User as UserEntity } from '@/db/entities/User';
+import * as errors from '@/graphql/errors';
 import { Permission } from '@/graphql/types/Permission';
 import { User } from '@/graphql/types/User';
-import { ErrorType } from '@/lib/errors/type';
 import { convertFromDBModel as convertFromUserDBModel } from '@/lib/modelConversions/user';
 
 @Resolver(of => User)
@@ -36,10 +35,7 @@ export class UserMutationResolver {
       const role = dbRoles.find(r => r.id === roleId);
 
       if (!role) {
-        throw new UserInputError(ErrorType.DoesNotExist, {
-          field: 'roleIds',
-          value: roleId,
-        });
+        throw new errors.DoesNotExist('roleIds', roleId);
       }
     }
 
@@ -50,9 +46,7 @@ export class UserMutationResolver {
     });
 
     if (!dbUser) {
-      throw new UserInputError(ErrorType.DoesNotExist, {
-        field: 'userId',
-      });
+      throw new errors.DoesNotExist('userId', userId);
     }
 
     // Assign the roles to the user

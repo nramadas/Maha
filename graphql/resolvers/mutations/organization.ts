@@ -1,4 +1,3 @@
-import { AuthenticationError, UserInputError } from 'apollo-server-micro';
 import { Arg, Authorized, ID, Mutation, Resolver } from 'type-graphql';
 import { Repository } from 'typeorm';
 import { InjectRepository } from 'typeorm-typedi-extensions';
@@ -8,11 +7,11 @@ import { Organization as OrganizationEntity } from '@/db/entities/Organization';
 import { Role as RoleEntity } from '@/db/entities/Role';
 import { User as UserEntity } from '@/db/entities/User';
 import { Me, MyOrganization } from '@/graphql/decorators';
+import * as errors from '@/graphql/errors';
 import { Organization } from '@/graphql/types/Organization';
 import { Permission } from '@/graphql/types/Permission';
 import { User } from '@/graphql/types/User';
 import { PG_UNIQUE_VIOLATION } from '@/lib/errors/pg';
-import { ErrorType } from '@/lib/errors/type';
 import { convertFromDBModel as convertFromOrganizationDBModel } from '@/lib/modelConversions/organization';
 import { CommonRoleType } from '@/models/CommonRoleType';
 import { InviteType as InviteTypeModel } from '@/models/InviteType';
@@ -35,7 +34,7 @@ export class OrganizationMutationResolver {
   })
   async createOrganization(@Me() user: User | null, @Arg('name') name: string) {
     if (!user) {
-      throw new AuthenticationError(ErrorType.Unauthorized);
+      throw new errors.Unauthorized();
     }
 
     const dbUser = await this._users.findOne({
@@ -43,7 +42,7 @@ export class OrganizationMutationResolver {
     });
 
     if (!dbUser) {
-      throw new AuthenticationError(ErrorType.Unauthorized);
+      throw new errors.Unauthorized();
     }
 
     const invite = await this._invites.findOne({
@@ -55,7 +54,7 @@ export class OrganizationMutationResolver {
     });
 
     if (!invite) {
-      throw new AuthenticationError(ErrorType.Unauthorized);
+      throw new errors.Unauthorized();
     }
 
     try {
@@ -104,13 +103,11 @@ export class OrganizationMutationResolver {
       if ('code' in e) {
         switch (e.code) {
           case PG_UNIQUE_VIOLATION: {
-            throw new UserInputError(ErrorType.AlreadyTaken, {
-              field: 'name',
-            });
+            throw new errors.AlreadyTaken('name', name);
           }
         }
       }
-      throw new AuthenticationError(ErrorType.SomethingElse);
+      throw new errors.Unauthorized();
     }
   }
 
@@ -132,9 +129,7 @@ export class OrganizationMutationResolver {
     const existingRole = dbRoles.find(role => role.name === name);
 
     if (existingRole) {
-      throw new UserInputError(ErrorType.AlreadyTaken, {
-        field: 'name',
-      });
+      throw new errors.AlreadyTaken('name', name);
     }
 
     const newRole = this._roles.create({
@@ -161,9 +156,7 @@ export class OrganizationMutationResolver {
     });
 
     if (!dbRole) {
-      throw new UserInputError(ErrorType.DoesNotExist, {
-        field: 'id',
-      });
+      throw new errors.DoesNotExist('id', id);
     }
 
     await this._roles.delete(dbRole.id);
@@ -181,7 +174,7 @@ export class OrganizationMutationResolver {
     @Arg('organizationName') organizationName: string,
   ) {
     if (!user) {
-      throw new AuthenticationError(ErrorType.Unauthorized);
+      throw new errors.Unauthorized();
     }
 
     const dbOrganization = await this._organizations.findOne({
@@ -190,9 +183,7 @@ export class OrganizationMutationResolver {
     });
 
     if (!dbOrganization) {
-      throw new UserInputError(ErrorType.DoesNotExist, {
-        field: 'organizationName',
-      });
+      throw new errors.DoesNotExist('organizationName', organizationName);
     }
 
     const dbUser = await this._users.findOne({
@@ -201,7 +192,7 @@ export class OrganizationMutationResolver {
     });
 
     if (!dbUser) {
-      throw new AuthenticationError(ErrorType.Unauthorized);
+      throw new errors.Unauthorized();
     }
 
     const dbInvite = await this._invites.findOne({
@@ -215,7 +206,7 @@ export class OrganizationMutationResolver {
     });
 
     if (!dbInvite) {
-      throw new AuthenticationError(ErrorType.Unauthorized);
+      throw new errors.Unauthorized();
     }
 
     dbUser.data = {
@@ -247,7 +238,7 @@ export class OrganizationMutationResolver {
     @Arg('userId', type => ID) userId: string,
   ) {
     if (!org) {
-      throw new AuthenticationError(ErrorType.Unauthorized);
+      throw new errors.Unauthorized();
     }
 
     const dbUser = await this._users.findOne({
@@ -256,9 +247,7 @@ export class OrganizationMutationResolver {
     });
 
     if (!dbUser) {
-      throw new UserInputError(ErrorType.DoesNotExist, {
-        field: 'userId',
-      });
+      throw new errors.DoesNotExist('userId', userId);
     }
 
     dbUser.organization = null;

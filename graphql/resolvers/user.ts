@@ -1,4 +1,3 @@
-import { AuthenticationError } from 'apollo-server-micro';
 import { Ctx, FieldResolver, Resolver, Root } from 'type-graphql';
 import { Repository } from 'typeorm';
 import { InjectRepository } from 'typeorm-typedi-extensions';
@@ -7,13 +6,13 @@ import { Media as MediaEntity } from '@/db/entities/Media';
 import { Role as RoleEntity } from '@/db/entities/Role';
 import { User as UserEntity } from '@/db/entities/User';
 import { Context } from '@/graphql/context';
+import * as errors from '@/graphql/errors';
 import { Media } from '@/graphql/types/Media';
 import { MediaParentType } from '@/graphql/types/MediaParentType';
 import { Organization } from '@/graphql/types/Organization';
 import { Permission } from '@/graphql/types/Permission';
 import { Role } from '@/graphql/types/Role';
 import { User } from '@/graphql/types/User';
-import { ErrorType } from '@/lib/errors/type';
 import { convertFromDBModel as convertFromMediaDBModel } from '@/lib/modelConversions/media';
 import { convertFromDBModel as convertFromOrganizationDBModel } from '@/lib/modelConversions/organization';
 import { convertFromDBModel as convertFromRoleDBModel } from '@/lib/modelConversions/role';
@@ -57,11 +56,11 @@ export class UserResolver {
     const { me, roles } = ctx;
 
     if (!me) {
-      throw new AuthenticationError(ErrorType.Unauthorized);
+      throw new errors.Unauthorized();
     }
 
     if (root.id !== me.id && !hasPermission(Permission.ModifyRoles, roles)) {
-      throw new AuthenticationError(ErrorType.Unauthorized);
+      throw new errors.Unauthorized();
     }
 
     const dbUser = await this._users.findOne({

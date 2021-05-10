@@ -1,16 +1,15 @@
-import { AuthenticationError } from 'apollo-server-micro';
 import { Arg, Mutation, Resolver } from 'type-graphql';
 import { Repository } from 'typeorm';
 import { InjectRepository } from 'typeorm-typedi-extensions';
 
 import { User as UserEntity } from '@/db/entities/User';
+import * as errors from '@/graphql/errors';
 import { CompleteAuthenticationInput } from '@/graphql/types/CompleteAuthentication';
 import { JWT } from '@/graphql/types/JWT';
 import { JWTWithRefresh } from '@/graphql/types/JWTWithRefresh';
 import { RefreshAuthenticationInput } from '@/graphql/types/RefreshAuthenticationInput';
 import { submitPasswordlessLogin, refreshSession } from '@/lib/authn/api';
 import { extractAuthId } from '@/lib/authn/token';
-import { ErrorType } from '@/lib/errors/type';
 
 @Resolver(of => JWT)
 export class JWTMutationResolver {
@@ -30,14 +29,14 @@ export class JWTMutationResolver {
     const result = await submitPasswordlessLogin(token);
 
     if (!result.ok) {
-      throw new AuthenticationError(ErrorType.SomethingElse);
+      throw new errors.Unauthorized();
     }
 
     const idToken = result.idToken;
     const refreshToken = result.refreshToken;
 
     const authId = await extractAuthId(idToken).catch(() => {
-      throw new AuthenticationError(ErrorType.SomethingElse);
+      throw new errors.SomethingElse();
     });
 
     let user = await this.users.findOne({
@@ -53,7 +52,7 @@ export class JWTMutationResolver {
 
       await this.users.save(user);
     } else if (user.authId !== authId) {
-      throw new AuthenticationError(ErrorType.SomethingElse);
+      throw new errors.Unauthorized();
     }
 
     return { jwt: idToken, aut: refreshToken };
@@ -66,13 +65,13 @@ export class JWTMutationResolver {
     const { refreshToken } = credentials;
 
     if (!refreshToken) {
-      throw new AuthenticationError(ErrorType.Unauthorized);
+      throw new errors.Unauthorized();
     }
 
     const result = await refreshSession(refreshToken);
 
     if (!result.ok) {
-      throw new AuthenticationError(ErrorType.SomethingElse);
+      throw new errors.SomethingElse();
     }
 
     const idToken = result.idToken;

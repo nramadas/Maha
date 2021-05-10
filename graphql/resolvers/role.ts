@@ -1,14 +1,13 @@
-import { ValidationError } from 'apollo-server-micro';
 import { Authorized, FieldResolver, Resolver, Root } from 'type-graphql';
 import { Repository } from 'typeorm';
 import { InjectRepository } from 'typeorm-typedi-extensions';
 
 import { Role as RoleEntity } from '@/db/entities/Role';
+import * as errors from '@/graphql/errors';
 import { Organization } from '@/graphql/types/Organization';
 import { Permission } from '@/graphql/types/Permission';
 import { Role } from '@/graphql/types/Role';
 import { User } from '@/graphql/types/User';
-import { ErrorType } from '@/lib/errors/type';
 import { convertFromDBModel as convertFromOrganizationDBModel } from '@/lib/modelConversions/organization';
 import { convertFromDBModel as convertFromUserDBModel } from '@/lib/modelConversions/user';
 
@@ -46,8 +45,12 @@ export class RoleResolver {
       relations: ['organization'],
     });
 
-    if (!dbRole || !dbRole.organization) {
-      throw new ValidationError(ErrorType.SomethingElse);
+    if (!dbRole) {
+      throw new errors.DoesNotExist('this', root.id);
+    }
+
+    if (!dbRole.organization) {
+      throw new errors.DoesNotExist('this.organization', null);
     }
 
     return convertFromOrganizationDBModel(dbRole.organization);

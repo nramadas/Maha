@@ -1,4 +1,3 @@
-import { ApolloError, UserInputError } from 'apollo-server-micro';
 import AWS from 'aws-sdk';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { Arg, Authorized, ID, Mutation, Resolver } from 'type-graphql';
@@ -6,10 +5,10 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from 'typeorm-typedi-extensions';
 
 import { Media as MediaEntity } from '@/db/entities/Media';
+import * as errors from '@/graphql/errors';
 import { Media } from '@/graphql/types/Media';
 import { MediaType } from '@/graphql/types/MediaType';
 import { Permission } from '@/graphql/types/Permission';
-import { ErrorType } from '@/lib/errors/type';
 import { convertFromDBModel as convertFromMediaDBModel } from '@/lib/modelConversions/media';
 import { randomId } from '@/lib/random';
 
@@ -30,9 +29,7 @@ export class MediaMutationResolver {
     const media = await this._media.findOne({ where: { id } });
 
     if (!media) {
-      throw new UserInputError(ErrorType.DoesNotExist, {
-        field: 'id',
-      });
+      throw new errors.DoesNotExist('id', id);
     }
 
     await this._media.delete(media.id);
@@ -52,11 +49,7 @@ export class MediaMutationResolver {
       const fileName = randomId();
 
       fileStream.on('error', () => {
-        rej(
-          new UserInputError(ErrorType.FailedUpload, {
-            field: file.filename,
-          }),
-        );
+        rej(new errors.FailedFileParse(file.filename));
       });
 
       const params = {
@@ -68,11 +61,7 @@ export class MediaMutationResolver {
 
       S3.upload(params, (err: Error, data: any) => {
         if (err) {
-          rej(
-            new ApolloError(ErrorType.FailedUpload, ErrorType.FailedUpload, {
-              field: file.filename,
-            }),
-          );
+          rej(new errors.FailedUpload(file.filename));
         } else {
           res(data.Location);
         }

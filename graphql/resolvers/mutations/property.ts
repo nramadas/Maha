@@ -1,4 +1,3 @@
-import { AuthenticationError, UserInputError } from 'apollo-server-micro';
 import { Arg, Authorized, ID, Mutation, Resolver } from 'type-graphql';
 import { Repository } from 'typeorm';
 import { InjectRepository } from 'typeorm-typedi-extensions';
@@ -9,12 +8,12 @@ import { Property as PropertyEntity } from '@/db/entities/Property';
 import { School as SchoolEntity } from '@/db/entities/School';
 import { User as UserEntity } from '@/db/entities/User';
 import { MyOrganization } from '@/graphql/decorators';
+import * as errors from '@/graphql/errors';
 import { CreateProperty } from '@/graphql/types/CreateProperty';
 import { MediaParentType } from '@/graphql/types/MediaParentType';
 import { Organization } from '@/graphql/types/Organization';
 import { Permission } from '@/graphql/types/Permission';
 import { Property } from '@/graphql/types/Property';
-import { ErrorType } from '@/lib/errors/type';
 
 @Resolver(of => Property)
 export class PropertyMutationResolver {
@@ -40,7 +39,7 @@ export class PropertyMutationResolver {
     @Arg('property') property: CreateProperty,
   ) {
     if (!org) {
-      throw new AuthenticationError(ErrorType.Unauthorized);
+      throw new errors.Unauthorized();
     }
 
     const { mediaIds, schoolIds, ...rest } = property;
@@ -51,10 +50,7 @@ export class PropertyMutationResolver {
 
     for (const media of dbMedia) {
       if (media.parentId) {
-        throw new UserInputError(ErrorType.AlreadyTaken, {
-          field: 'mediaIds',
-          value: media.id,
-        });
+        throw new errors.AlreadyAssigned('mediaIds', media.id);
       }
     }
 
@@ -93,15 +89,13 @@ export class PropertyMutationResolver {
     @Arg('id', type => ID) id: string,
   ) {
     if (!org) {
-      throw new AuthenticationError(ErrorType.Unauthorized);
+      throw new errors.Unauthorized();
     }
 
     const property = await this._properties.findOne({ where: { id } });
 
     if (!property) {
-      throw new UserInputError(ErrorType.DoesNotExist, {
-        field: 'id',
-      });
+      throw new errors.DoesNotExist('id', id);
     }
 
     await this._properties.delete(property.id);

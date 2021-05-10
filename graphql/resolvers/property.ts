@@ -1,4 +1,3 @@
-import { ValidationError } from 'apollo-server-micro';
 import { Arg, Authorized, FieldResolver, Resolver, Root } from 'type-graphql';
 import { Repository } from 'typeorm';
 import { InjectRepository } from 'typeorm-typedi-extensions';
@@ -7,6 +6,7 @@ import { Media as MediaEntity } from '@/db/entities/Media';
 import { Organization as OrganizationEntity } from '@/db/entities/Organization';
 import { Property as PropertyEntity } from '@/db/entities/Property';
 import { School as SchoolEntity } from '@/db/entities/School';
+import * as errors from '@/graphql/errors';
 import { Media } from '@/graphql/types/Media';
 import { MediaParentType } from '@/graphql/types/MediaParentType';
 import { Organization } from '@/graphql/types/Organization';
@@ -14,7 +14,6 @@ import { Permission } from '@/graphql/types/Permission';
 import { Property } from '@/graphql/types/Property';
 import { School } from '@/graphql/types/School';
 import { SchoolType } from '@/graphql/types/SchoolType';
-import { ErrorType } from '@/lib/errors/type';
 import { convertFromDBModel as convertFromMediaDBModel } from '@/lib/modelConversions/media';
 import { convertFromDBModel as convertFromOrganizationDBModel } from '@/lib/modelConversions/organization';
 import { convertFromDBModel as convertFromSchoolDBModel } from '@/lib/modelConversions/school';
@@ -53,7 +52,7 @@ export class PropertyResolver {
     });
 
     if (!dbOrg) {
-      throw new ValidationError(ErrorType.SomethingElse);
+      throw new errors.DoesNotExist('this.organization', root.organizationId);
     }
 
     return convertFromOrganizationDBModel(dbOrg);
@@ -68,7 +67,7 @@ export class PropertyResolver {
     });
 
     if (!dbOrg) {
-      throw new ValidationError(ErrorType.SomethingElse);
+      throw new errors.DoesNotExist('this.organization', root.organizationId);
     }
 
     return dbOrg.name;
@@ -87,7 +86,7 @@ export class PropertyResolver {
     });
 
     if (!dbProperty) {
-      throw new ValidationError(ErrorType.SomethingElse);
+      throw new errors.DoesNotExist('this', root.id);
     }
 
     const schools = dbProperty.schools;
