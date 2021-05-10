@@ -42,7 +42,7 @@ export function Checkbox<V extends Value>(props: Props<V>) {
   const { disabled, label, name, value, onSelect } = props;
   const form = useForm();
   const defaultSelections = useRef(form.getValue(name) || []);
-  const defaultChecked = !!defaultSelections.current.find(s =>
+  const defaultChecked = !!defaultSelections.current.find((s: V) =>
     isEqual(s, value),
   );
 

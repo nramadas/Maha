@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 import React from 'react';
 
-import findParent from './index';
+import { findParent } from './index';
 
 test('finds ancestors', () => {
   const testid = 'test';

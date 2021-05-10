@@ -96,7 +96,9 @@ export function NoopFormProvider(props: Props) {
         getFormValues: () => ({}),
         getValue: name => {},
         setValue: (name, value) => {},
+        onFormChange: () => {},
         onFormSubmit: () => {},
+        removeFormChange: () => {},
         removeFormSubmit: () => {},
         triggerFormSubmit: () => {},
       }}

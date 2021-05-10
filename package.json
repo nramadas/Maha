@@ -9,6 +9,7 @@
     "web.dev": "export IS_WEB=true && next dev",
     "web.build": "export IS_WEB=true && next build",
     "web.start": "export IS_WEB=true && next start",
+    "web.typecheck": "tsc --noEmit --incremental --watch",
     "native.start": "react-native start",
     "native.start.expo": "expo start --config ./app.json",
     "native.android": "react-native run-android",

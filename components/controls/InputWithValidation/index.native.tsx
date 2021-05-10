@@ -13,7 +13,7 @@ interface Props extends React.ComponentProps<typeof Input> {
    * value. The validation can be asynchronous, in which case the validator
    * should return a Promise. Signature: `(text: string) => string | Promise<string>`
    */
-  onValidate?: (text: Text) => string | Promise<Text>;
+  onValidate?: (text: string) => string | Promise<Text>;
 }
 
 /**
