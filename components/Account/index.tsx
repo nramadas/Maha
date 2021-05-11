@@ -49,10 +49,6 @@ export function Account(props: Props) {
 
   const colors = theme || 'light';
 
-  if (result.fetching) {
-    return null;
-  }
-
   if (!result.data || result.error || !result.data.me) {
     const currentPath =
       typeof window === 'undefined' ? undefined : window.location.pathname;

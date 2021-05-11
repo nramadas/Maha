@@ -75,6 +75,10 @@ export function Members(props: Props) {
   const canManageMembers = props.permissions.includes(Permission.ManageMembers);
   const [result] = useQuery({ query: getOrganization(canModifyRoles) });
 
+  if (!result.data) {
+    return null;
+  }
+
   const organization = result.data?.me.organization;
   const members: MemberModel[] = organization.members;
   const allRoles: Pick<Role, 'id' | 'name'>[] = canModifyRoles

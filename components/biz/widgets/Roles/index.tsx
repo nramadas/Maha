@@ -94,6 +94,10 @@ export function Roles(props: Props) {
   const [, createRole] = useMutation(addRole);
   const textToString = useTextToString();
 
+  if (!rolesResult.data) {
+    return null;
+  }
+
   const roles: Pick<Role, 'id' | 'name' | 'description' | 'permissions'>[] =
     rolesResult.data?.me.organization.roles;
 

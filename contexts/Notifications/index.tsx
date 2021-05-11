@@ -83,7 +83,7 @@ export function NotificationsProvider(props: Props) {
       <NotificationContext.Provider value={{ displayNotification }}>
         {children}
       </NotificationContext.Provider>
-      {container &&
+      {container ? (
         createPortal(
           <TransitionMotion
             willEnter={() => ({
@@ -125,7 +125,10 @@ export function NotificationsProvider(props: Props) {
             )}
           </TransitionMotion>,
           container,
-        )}
+        )
+      ) : (
+        <div className={styles.container} />
+      )}
     </>
   );
 }

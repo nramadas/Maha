@@ -2,9 +2,6 @@
   "name": "maha",
   "version": "0.1.0",
   "private": true,
-  "browser": {
-    "react-ssr-prepass": false
-  },
   "scripts": {
     "db": "ts-node --require ./db/env.js --project ./db/typeorm.tsconfig.json ./node_modules/typeorm/cli.js --config db/ormconfig.ts",
     "db.m.new": "yarn db migration:generate -p -n",
@@ -33,6 +30,7 @@
     "@sendgrid/mail": "7.4.2",
     "@urql/exchange-graphcache": "^4.0.0",
     "@urql/exchange-multipart-fetch": "^0.1.12",
+    "@urql/exchange-persisted-fetch": "^1.3.1",
     "apollo-server-cache-redis": "1.3.0",
     "apollo-server-micro": "2.22.2",
     "aws-sdk": "^2.903.0",

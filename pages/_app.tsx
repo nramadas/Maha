@@ -1,11 +1,10 @@
 import Cookies from 'js-cookie';
-import BaseApp from 'next/app';
+import BaseApp, { AppContext } from 'next/app';
 import React from 'react';
 
 import '@/styles/fonts.css';
 import '@/styles/normalize.css';
 
-import { IsomorphicSuspense } from '@/components/IsomorphicSuspense';
 import { JWTRefresh } from '@/components/JWTRefresh';
 import { ConfirmationProvider } from '@/contexts/Confirmation';
 import { DialogProvider } from '@/contexts/Dialog';
@@ -17,7 +16,6 @@ import { NotificationsProvider } from '@/contexts/Notifications';
 import { TooltipProvider } from '@/contexts/Tooltip';
 import { URQLProvider } from '@/contexts/URQL';
 import { Route } from '@/lib/route';
-import { establishAuthentication } from '@/lib/ssr';
 import { DEFAULT as DEFAULT_LANGUAGE_PACK } from '@/models/LanguagePack';
 
 function getBody() {
@@ -28,53 +26,59 @@ function getBody() {
   }
 }
 
-export default establishAuthentication(
-  class MyApp extends BaseApp {
-    render() {
-      const { Component, pageProps } = this.props;
-      const jwt = Cookies.get('token') || pageProps.jwt;
-      const aut = Cookies.get('authn') || pageProps.aut;
+export default class MyApp extends BaseApp {
+  static getInitialProps = async (context: AppContext) => {
+    const pageProps = {
+      query: context.ctx.query,
+      pathname: context.ctx.pathname,
+    };
 
-      return (
-        <>
-          <JWTProvider
-            initialJwt={jwt}
-            initialAut={aut}
-            preserveJwt={jwt => Cookies.set('token', jwt, { path: Route.Home })}
-            preserveAut={aut => Cookies.set('authn', aut, { path: Route.Home })}
+    return { pageProps };
+  };
+
+  render() {
+    const { Component, pageProps } = this.props;
+    const jwt = Cookies.get('token') || pageProps.jwt;
+    const aut = Cookies.get('authn') || pageProps.aut;
+    const ssrInitialState =
+      typeof window === 'undefined'
+        ? pageProps.ssrInitialState
+        : // @ts-ignore
+          window.__INITIAL_STATE__;
+
+    return (
+      <JWTProvider
+        initialJwt={jwt}
+        initialAut={aut}
+        preserveJwt={jwt => Cookies.set('token', jwt, { path: Route.Home })}
+        preserveAut={aut => Cookies.set('authn', aut, { path: Route.Home })}
+      >
+        <URQLProvider
+          ssrExchange={pageProps.ssrExchange}
+          initialState={ssrInitialState}
+        >
+          <JWTRefresh />
+          <LanguagePackProvider
+            initialLanguagePack={DEFAULT_LANGUAGE_PACK}
+            getLanguagePack={language => Promise.resolve(DEFAULT_LANGUAGE_PACK)}
           >
-            <URQLProvider
-              ssrExchange={pageProps.ssrExchange}
-              initialState={pageProps.ssrInitialState}
-            >
-              <JWTRefresh />
-              <LanguagePackProvider
-                initialLanguagePack={DEFAULT_LANGUAGE_PACK}
-                getLanguagePack={language =>
-                  Promise.resolve(DEFAULT_LANGUAGE_PACK)
-                }
-              >
-                <DialogProvider getContainer={getBody}>
-                  <TooltipProvider>
-                    <NotificationsProvider getContainer={getBody}>
-                      <ConfirmationProvider>
-                        <NoopFormProvider>
-                          <DomContainerProvider body>
-                            <IsomorphicSuspense fallback={<div />}>
-                              <Component {...pageProps} />
-                            </IsomorphicSuspense>
-                          </DomContainerProvider>
-                          <div id="extra-container" />
-                        </NoopFormProvider>
-                      </ConfirmationProvider>
-                    </NotificationsProvider>
-                  </TooltipProvider>
-                </DialogProvider>
-              </LanguagePackProvider>
-            </URQLProvider>
-          </JWTProvider>
-        </>
-      );
-    }
-  },
-);
+            <DialogProvider getContainer={getBody}>
+              <TooltipProvider>
+                <NotificationsProvider getContainer={getBody}>
+                  <ConfirmationProvider>
+                    <NoopFormProvider>
+                      <DomContainerProvider body>
+                        <Component {...pageProps} />
+                      </DomContainerProvider>
+                      <div id="extra-container" />
+                    </NoopFormProvider>
+                  </ConfirmationProvider>
+                </NotificationsProvider>
+              </TooltipProvider>
+            </DialogProvider>
+          </LanguagePackProvider>
+        </URQLProvider>
+      </JWTProvider>
+    );
+  }
+}
