@@ -119,6 +119,7 @@ export const userExists = (email: string) =>
 
 interface CreateUserSuccess {
   ok: true;
+  idToken: string;
 }
 
 type CreateUser = CreateUserSuccess | Failure;
@@ -140,7 +141,10 @@ export const createUser = (email: string) =>
           return { ok: false } as Failure;
         }
 
-        return { ok: true } as CreateUserSuccess;
+        return {
+          ok: true,
+          idToken: result.result.id_token,
+        } as CreateUserSuccess;
       } catch (e) {
         return { ok: false } as Failure;
       }
