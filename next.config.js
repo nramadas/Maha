@@ -12,8 +12,8 @@ module.exports = withPlugins([
 
         /* changing any value means you'll have to copy over all the defaults  */
         /* next-offline */
-        globPatterns: ['static/**/*'],
-        globDirectory: '.',
+        // globPatterns: ['static/**/*'],
+        // globDirectory: '.',
         runtimeCaching: [
           {
             urlPattern: /^https?.*/,

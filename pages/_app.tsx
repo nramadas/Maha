@@ -5,6 +5,7 @@ import React from 'react';
 import '@/styles/fonts.css';
 import '@/styles/normalize.css';
 
+import { IsomorphicSuspense } from '@/components/IsomorphicSuspense';
 import { JWTRefresh } from '@/components/JWTRefresh';
 import { ConfirmationProvider } from '@/contexts/Confirmation';
 import { DialogProvider } from '@/contexts/Dialog';
@@ -59,7 +60,9 @@ export default establishAuthentication(
                       <ConfirmationProvider>
                         <NoopFormProvider>
                           <DomContainerProvider body>
-                            <Component {...pageProps} />
+                            <IsomorphicSuspense fallback={<div />}>
+                              <Component {...pageProps} />
+                            </IsomorphicSuspense>
                           </DomContainerProvider>
                           <div id="extra-container" />
                         </NoopFormProvider>

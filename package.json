@@ -2,11 +2,15 @@
   "name": "maha",
   "version": "0.1.0",
   "private": true,
+  "browser": {
+    "react-ssr-prepass": false
+  },
   "scripts": {
     "db": "ts-node --require ./db/env.js --project ./db/typeorm.tsconfig.json ./node_modules/typeorm/cli.js --config db/ormconfig.ts",
     "db.m.new": "yarn db migration:generate -p -n",
     "db.m.run": "yarn db migration:run",
     "db.populate": "ts-node --require tsconfig-paths/register --require ./db/env.js --project ./scriptstsconfig.json ./scripts/makeFakeData.ts",
+    "web.analyze": "export ANALYZE=true && export IS_WEB=true && next build",
     "web.dev": "export IS_WEB=true && next dev",
     "web.build": "export IS_WEB=true && next build",
     "web.start": "export IS_WEB=true && next start",
@@ -99,6 +103,7 @@
     "@babel/plugin-proposal-class-properties": "7.13.0",
     "@babel/plugin-proposal-decorators": "7.13.5",
     "@expo/next-adapter": "^2.1.65",
+    "@next/bundle-analyzer": "^10.2.0",
     "@testing-library/jest-dom": "5.11.10",
     "@testing-library/react": "11.2.6",
     "@testing-library/user-event": "13.1.1",
