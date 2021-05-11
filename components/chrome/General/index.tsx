@@ -15,10 +15,10 @@ interface Props {
 export function General(props: Props) {
   return (
     <div className={cx(styles.container, props.className)}>
-      <Header className={styles.header} />
-      <div className={styles.content}>
-        <DomContainerProvider>{props.children}</DomContainerProvider>
-      </div>
+      <DomContainerProvider>
+        <Header className={styles.header} />
+        <div className={styles.content}>{props.children}</div>
+      </DomContainerProvider>
     </div>
   );
 }

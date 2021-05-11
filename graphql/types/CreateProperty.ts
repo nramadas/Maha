@@ -4,7 +4,7 @@ import { AmenityAccess } from '@/graphql/types/AmenityAccess';
 import { CreateLocalizedStrings } from '@/graphql/types/CreateLocalizedStrings';
 import { CreateLocation } from '@/graphql/types/CreateLocation';
 import { Media } from '@/graphql/types/Media';
-import { Metropolitan } from '@/graphql/types/Metropolitan';
+import { MetropolitanKey } from '@/graphql/types/MetropolitanKey';
 import { PropertyCondition } from '@/graphql/types/PropertyCondition';
 import { PropertyType } from '@/graphql/types/PropertyType';
 import { School } from '@/graphql/types/School';
@@ -91,7 +91,7 @@ export class CreateProperty {
     description: 'Which metropolitan area is the property in',
     nullable: true,
   })
-  metropolitan?: Metropolitan;
+  metropolitanKey?: MetropolitanKey;
 
   @Field({
     description: "The property's name, if any",

@@ -1,74 +1,80 @@
 import cx from 'classnames';
 import React from 'react';
+import { useQuery } from 'urql';
+import { gql } from 'urql/core';
 
 import { Body1 } from '@/components/typography/Body1';
 import { H4 } from '@/components/typography/H4';
 import { useTextToString } from '@/hooks/useTextToString';
 import { enumToText } from '@/lib/enumToText/metropolitan';
-import { enabled } from '@/lib/flags/metropolitan';
 import { metropolitanRoute } from '@/lib/route';
 import { i18n } from '@/lib/translate';
-import { Metropolitan } from '@/models/Metropolitan';
+import { MetropolitanKey } from '@/models/MetropolitanKey';
 
 import { City } from './City';
 import styles from './index.module.scss';
 
-const CITIES = [
-  {
-    key: Metropolitan.Bengaluru,
-    src: require('./blr.jpg'),
-  },
-  {
-    key: Metropolitan.Ahmedabad,
-    src: require('./amd.jpg'),
-  },
-  {
-    key: Metropolitan.Chennai,
-    src: require('./maa.jpg'),
-  },
-  {
-    key: Metropolitan.Delhi,
-    src: require('./del.webp'),
-  },
-  {
-    key: Metropolitan.Hyderabad,
-    src: require('./hyd.jpg'),
-  },
-  {
-    key: Metropolitan.Kolkata,
-    src: require('./ccu.jpg'),
-  },
-  {
-    key: Metropolitan.Mumbai,
-    src: require('./bom.jpg'),
-  },
-  {
-    key: Metropolitan.Thiruvananthapuram,
-    src: require('./trv.jpg'),
-  },
-  {
-    key: Metropolitan.Visakhapatnam,
-    src: require('./vtz.jpg'),
-  },
-].sort((a, b) => {
-  const aEnabled = enabled(a.key);
-  const bEnabled = enabled(b.key);
+const query = gql`
+  query {
+    metropolitans {
+      enabled
+      key
+    }
+  }
+`;
 
-  if (!aEnabled && bEnabled) {
+interface CityModel {
+  enabled: boolean;
+  key: MetropolitanKey;
+}
+
+function getImg(mkey: MetropolitanKey): string {
+  switch (mkey) {
+    case MetropolitanKey.Bengaluru:
+      return require('./blr.jpg');
+    case MetropolitanKey.Ahmedabad:
+      return require('./amd.jpg');
+    case MetropolitanKey.Chennai:
+      return require('./maa.jpg');
+    case MetropolitanKey.Delhi:
+      return require('./del.webp');
+    case MetropolitanKey.Hyderabad:
+      return require('./hyd.jpg');
+    case MetropolitanKey.Kolkata:
+      return require('./ccu.jpg');
+    case MetropolitanKey.Mumbai:
+      return require('./bom.jpg');
+    case MetropolitanKey.Thiruvananthapuram:
+      return require('./trv.jpg');
+    case MetropolitanKey.Visakhapatnam:
+      return require('./vtz.jpg');
+  }
+}
+
+function sortCities(a: CityModel, b: CityModel) {
+  if (!a.enabled && b.enabled) {
     return 1;
-  } else if (aEnabled && !bEnabled) {
+  } else if (a.enabled && !b.enabled) {
     return -1;
   } else {
     return String(a.key).localeCompare(String(b.key));
   }
-});
+}
 
 interface Props {
   className?: string;
 }
 
 export function Cities(props: Props) {
+  const [result] = useQuery({ query });
   const textToString = useTextToString();
+
+  if (result.error || !result.data) {
+    return null;
+  }
+
+  const cities: CityModel[] = result.data.metropolitans;
+  const sortedCities = cities.sort(sortCities);
 
   return (
     <div className={cx(styles.container, props.className)}>
@@ -88,11 +94,11 @@ export function Cities(props: Props) {
             </Body1>
           </div>
         </header>
-        {CITIES.map(city => (
+        {sortedCities.map(city => (
           <City
-            disabled={!enabled(city.key)}
+            disabled={!city.enabled}
             key={city.key}
-            src={city.src}
+            src={getImg(city.key)}
             url={metropolitanRoute(city.key)}
           >
             <H4 className={styles.cityName}>

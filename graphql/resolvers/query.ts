@@ -10,7 +10,10 @@ import { School as SchoolEntity } from '@/db/entities/School';
 import { User as UserEntity } from '@/db/entities/User';
 import { Context } from '@/graphql/context';
 import { AddressMatch } from '@/graphql/types/AddressMatch';
+import { Flags } from '@/graphql/types/Flags';
 import { Location } from '@/graphql/types/Location';
+import { Metropolitan } from '@/graphql/types/Metropolitan';
+import { MetropolitanKey } from '@/graphql/types/MetropolitanKey';
 import { Organization } from '@/graphql/types/Organization';
 import { Place } from '@/graphql/types/Place';
 import { PlaceSearchType } from '@/graphql/types/PlaceSearchType';
@@ -35,6 +38,20 @@ export class QueryResolver {
     @InjectRepository(UserEntity)
     private readonly _users: Repository<UserEntity>,
   ) {}
+
+  @Query(returns => Flags, {
+    description: 'Feature flags',
+  })
+  async flags() {
+    return {};
+  }
+
+  @Query(returns => [Metropolitan], {
+    description: 'A list of metropolitan areas',
+  })
+  async metropolitans() {
+    return Object.values(MetropolitanKey).map(key => ({ key }));
+  }
 
   @Query(returns => Organization, {
     description: "Given an Organization's id, return the organization",

@@ -1,25 +1,27 @@
 import { i18n } from '@/lib/translate';
-import { Metropolitan } from '@/models/Metropolitan';
+import { MetropolitanKey } from '@/models/MetropolitanKey';
 
-export function enumToText(p: Metropolitan): ReturnType<typeof i18n.translate> {
+export function enumToText(
+  p: MetropolitanKey,
+): ReturnType<typeof i18n.translate> {
   switch (p) {
-    case Metropolitan.Ahmedabad:
+    case MetropolitanKey.Ahmedabad:
       return i18n.translate`Ahmedabad`;
-    case Metropolitan.Bengaluru:
+    case MetropolitanKey.Bengaluru:
       return i18n.translate`Bengaluru`;
-    case Metropolitan.Chennai:
+    case MetropolitanKey.Chennai:
       return i18n.translate`Chennai`;
-    case Metropolitan.Delhi:
+    case MetropolitanKey.Delhi:
       return i18n.translate`Delhi`;
-    case Metropolitan.Hyderabad:
+    case MetropolitanKey.Hyderabad:
       return i18n.translate`Hyderabad`;
-    case Metropolitan.Kolkata:
+    case MetropolitanKey.Kolkata:
       return i18n.translate`Kolkata`;
-    case Metropolitan.Mumbai:
+    case MetropolitanKey.Mumbai:
       return i18n.translate`Mumbai`;
-    case Metropolitan.Thiruvananthapuram:
+    case MetropolitanKey.Thiruvananthapuram:
       return i18n.translate`Thiruvananthapuram`;
-    case Metropolitan.Visakhapatnam:
+    case MetropolitanKey.Visakhapatnam:
       return i18n.translate`Visakhapatnam`;
   }
 }

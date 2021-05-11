@@ -2,7 +2,7 @@ import { NominalID } from '@/lib/typeHelpers/nominal';
 import { AmenityAccess } from '@/models/AmenityAccess';
 import { LocalizedStrings } from '@/models/LocalizedStrings';
 import { Location } from '@/models/Location';
-import { Metropolitan } from '@/models/Metropolitan';
+import { MetropolitanKey } from '@/models/MetropolitanKey';
 import type { OrganizationId } from '@/models/Organization';
 import { PropertyCondition } from '@/models/PropertyCondition';
 import { PropertyType } from '@/models/PropertyType';
@@ -22,7 +22,6 @@ export interface Data {
   constructionMaterials?: LocalizedStrings;
   fees: number;
   location: Location;
-  metropolitan?: Metropolitan;
   name: string;
   numBathrooms: number;
   numBathroomsHalf: number;
@@ -74,6 +73,7 @@ export const DEFAULT_DATA: Data = {
 export interface Property extends Data {
   id: NominalID<'property id'>;
   created: Date;
+  metropolitanKey?: MetropolitanKey;
   organizationId: OrganizationId;
 }
 

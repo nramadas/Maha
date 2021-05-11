@@ -1,7 +1,5 @@
-import { Metropolitan } from '@/models/Metropolitan';
+import { MetropolitanKey } from '@/models/MetropolitanKey';
 
-const ENABLED_METROPOLITANS = new Set<Metropolitan>([Metropolitan.Bengaluru]);
-
-export function enabled(m: Metropolitan) {
-  return ENABLED_METROPOLITANS.has(m);
-}
+export const ENABLED_METROPOLITANS = new Set<MetropolitanKey>([
+  MetropolitanKey.Bengaluru,
+]);

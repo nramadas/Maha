@@ -69,11 +69,7 @@ export class OrganizationMutationResolver {
       await this._invites.save(invite);
 
       await Promise.all(
-        [
-          CommonRoleType.Owner,
-          CommonRoleType.Manager,
-          CommonRoleType.SalesAgent,
-        ].map(async name => {
+        Object.values(CommonRoleType).map(async name => {
           let role = await this._roles.findOne({
             where: {
               name,

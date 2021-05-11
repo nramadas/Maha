@@ -11,6 +11,7 @@ export function convertFromDBModel(dbModel: PropertyDBModel): PropertyModel {
     id: dbModel.id,
     created: dbModel.created,
     organizationId: dbModel.organizationId,
+    metropolitanKey: dbModel.metropolitanKey,
     ...data,
   };
 }

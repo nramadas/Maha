@@ -15,7 +15,7 @@ import { patch, today } from '@/lib/date';
 import { enumToText as metropolitanEnumToText } from '@/lib/enumToText/metropolitan';
 import { enumToText as propertyTypeToText } from '@/lib/enumToText/propertyType';
 import { i18n } from '@/lib/translate';
-import { Metropolitan } from '@/models/Metropolitan';
+import { MetropolitanKey } from '@/models/MetropolitanKey';
 import { PropertyType } from '@/models/PropertyType';
 
 import styles from './index.module.scss';
@@ -90,8 +90,8 @@ export function Basic() {
           </Body2>
         </div>
         <Select
-          name="metropolitan"
-          options={Object.values(Metropolitan).map(type => ({
+          name="metropolitanKey"
+          options={Object.values(MetropolitanKey).map(type => ({
             text: metropolitanEnumToText(type),
             value: type,
           }))}

@@ -9,6 +9,7 @@ import {
   ManyToMany,
 } from 'typeorm';
 
+import { MetropolitanKey } from '../../models/MetropolitanKey';
 import { Data } from '../../models/Property';
 import { Organization } from '../entities/Organization';
 import { School } from '../entities/School';
@@ -20,6 +21,9 @@ export class Property {
 
   @Column({ type: 'jsonb' })
   data!: Partial<Data>;
+
+  @Column({ nullable: true, type: 'varchar' })
+  metropolitanKey?: MetropolitanKey;
 
   @Column()
   organizationId!: string;

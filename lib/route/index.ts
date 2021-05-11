@@ -1,4 +1,4 @@
-import { Metropolitan } from '@/models/Metropolitan';
+import { MetropolitanKey } from '@/models/MetropolitanKey';
 
 export enum Route {
   AccountSettings = '/account/settings',
@@ -31,29 +31,29 @@ export function fullBizRoute(subRoute: BizRoute) {
   return `${Route.BizLandingPage}${subRoute}`;
 }
 
-function metropolitanSubRoute(metro: Metropolitan): string {
+function metropolitanSubRoute(metro: MetropolitanKey): string {
   switch (metro) {
-    case Metropolitan.Ahmedabad:
+    case MetropolitanKey.Ahmedabad:
       return '/ahmedabad';
-    case Metropolitan.Bengaluru:
+    case MetropolitanKey.Bengaluru:
       return '/bengaluru';
-    case Metropolitan.Chennai:
+    case MetropolitanKey.Chennai:
       return '/chennai';
-    case Metropolitan.Delhi:
+    case MetropolitanKey.Delhi:
       return '/delhi';
-    case Metropolitan.Hyderabad:
+    case MetropolitanKey.Hyderabad:
       return '/hyderabad';
-    case Metropolitan.Kolkata:
+    case MetropolitanKey.Kolkata:
       return '/kolkata';
-    case Metropolitan.Mumbai:
+    case MetropolitanKey.Mumbai:
       return '/mumbai';
-    case Metropolitan.Thiruvananthapuram:
+    case MetropolitanKey.Thiruvananthapuram:
       return '/thiruvananthapuram';
-    case Metropolitan.Visakhapatnam:
+    case MetropolitanKey.Visakhapatnam:
       return '/visakhapatnam';
   }
 }
 
-export function metropolitanRoute(metro: Metropolitan) {
+export function metropolitanRoute(metro: MetropolitanKey) {
   return `${Route.Explore}${metropolitanSubRoute(metro)}`;
 }

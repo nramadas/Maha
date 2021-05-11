@@ -38,7 +38,7 @@ function canonicalizeForm(formValues: any) {
       case 'amenitiesPool':
       case 'appliancesDryer':
       case 'appliancesWasher':
-      case 'metropolitan':
+      case 'metropolitanKey':
       case 'propertyCondition':
       case 'type':
       case 'utilitiesAirConditioning':

@@ -42,7 +42,7 @@ export class PropertyMutationResolver {
       throw new errors.Unauthorized();
     }
 
-    const { mediaIds, schoolIds, ...rest } = property;
+    const { mediaIds, metropolitanKey, schoolIds, ...rest } = property;
 
     const dbMedia = mediaIds
       ? await this._media.find({ where: mediaIds.map(id => ({ id })) })
@@ -60,6 +60,7 @@ export class PropertyMutationResolver {
 
     const newProperty = this._properties.create({
       organizationId: org.id,
+      metropolitanKey,
       data: rest,
     });
 
