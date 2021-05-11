@@ -1,3 +1,4 @@
+const bundleAnalyzer = require('@next/bundle-analyzer');
 const withPlugins = require('next-compose-plugins');
 const fonts = require('next-fonts');
 const images = require('next-images');
@@ -31,6 +32,11 @@ module.exports = withPlugins([
   ],
   [images],
   [fonts],
+  [
+    bundleAnalyzer({
+      enabled: process.env.ANALYZE === 'true',
+    }),
+  ],
   {
     images: {
       domains: ['s3.ap-south-1.amazonaws.com'],
