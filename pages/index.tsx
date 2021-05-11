@@ -11,7 +11,7 @@ import styles from './index.module.scss';
 
 export default function Index() {
   return (
-    <General transparentHeader>
+    <General>
       <Hero className={styles.hero}>
         <Tagline />
       </Hero>

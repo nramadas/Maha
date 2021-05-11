@@ -838,11 +838,6 @@
             "template": "",
             "variations": {}
         },
-        "ddb9b3c159d762d5f17ef6d71": {
-            "reference": "No realtors, no middlemen, no fuss.",
-            "template": "",
-            "variations": {}
-        },
         "047ecd46c731afe749def2c76": {
             "reference": "Buying direct means you get the most accurate prices, the most up-to-date information, and your questions are answered directly by the property developer ",
             "template": "",
@@ -930,6 +925,31 @@
                 "%%person.one": "",
                 "%%person.many": ""
             }
+        },
+        "41e8402c21ec9e693f7eb9014": {
+            "reference": "No realtors, no middlemen, no fuss",
+            "template": "",
+            "variations": {}
+        },
+        "1d0b1cea8631097ded3eeaf29": {
+            "reference": "Log in / Sign up",
+            "template": "",
+            "variations": {}
+        },
+        "3d34846d21f577455b560552b": {
+            "reference": "Success!",
+            "template": "",
+            "variations": {}
+        },
+        "8d444e2fb9152fc47c8697043": {
+            "reference": "You must provide an email",
+            "template": "",
+            "variations": {}
+        },
+        "f83118b7d82764ea0d0f9fc0f": {
+            "reference": "Please check your email to complete the log in process ",
+            "template": "",
+            "variations": {}
         }
     }
 }

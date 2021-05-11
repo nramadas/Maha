@@ -9,7 +9,7 @@ import { ErrorType } from '@/lib/errors/type';
 import { Error } from './Error';
 import { Processing } from './Processing';
 
-const completeAuthorization = gql`
+const completeAuthenticationMutation = gql`
   mutation($email: String!, $token: String!) {
     completeAuthentication(credentials: { email: $email, token: $token }) {
       jwt
@@ -24,15 +24,17 @@ interface Props {
   onComplete(): void;
 }
 
-export function CompleteAuthorization(props: Props) {
+export function CompleteAuthentication(props: Props) {
   const { email, token, onComplete } = props;
   const { setJwt, setAut } = useContext(JWTContext);
-  const [, complete] = useMutation(completeAuthorization);
+  const [, completeAuthentication] = useMutation(
+    completeAuthenticationMutation,
+  );
   const [error, setError] = useState<ErrorType | null>(null);
 
   useEffect(() => {
     waitAtLeast(3000, () => {
-      return complete({ email, token }).then(result => {
+      return completeAuthentication({ email, token }).then(result => {
         if (result.error) {
           const errorType = result.error.graphQLErrors[0].message as ErrorType;
           setError(errorType);

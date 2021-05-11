@@ -12,7 +12,7 @@ export class Organization implements OrganizationModel {
   })
   created!: Date;
 
-  @Field(type => ID, { description: 'User ID' })
+  @Field(type => ID, { description: 'Organization ID' })
   id!: OrganizationModel['id'];
 
   @Authorized(Permission.ViewMembers)

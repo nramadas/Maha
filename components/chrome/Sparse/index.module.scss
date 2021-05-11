@@ -10,16 +10,25 @@ $header-size: 60px;
   top: 0;
 }
 
-.content {
-  position: relative;
-}
-
 .header {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
   height: $header-size;
+  justify-content: center;
   left: 0;
   padding: 0 8px;
   position: absolute;
   right: 0;
   top: 0;
   z-index: var(--z-header);
+}
+
+.headerContent {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  max-width: var(--width-content-max);
+  width: 100%;
 }

@@ -9,7 +9,6 @@ import styles from './index.module.scss';
 interface Props {
   children?: React.ReactNode;
   className?: string;
-  transparentHeader?: boolean;
 }
 
 export function General(props: Props) {

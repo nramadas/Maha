@@ -2,7 +2,7 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { CompleteAuthorization } from '@/components/CompleteAuthentication';
+import { CompleteAuthentication } from '@/components/CompleteAuthentication';
 import { Error } from '@/components/CompleteAuthentication/Error';
 import { useGetFromStorage } from '@/hooks/useGetFromStorage';
 import { emailActionToUrl } from '@/lib/emailActionToUrl';
@@ -27,7 +27,7 @@ export default function Continue(props: Props) {
   }
 
   return (
-    <CompleteAuthorization
+    <CompleteAuthentication
       email={props.email}
       token={props.token}
       onComplete={() => router.push(gotoUrl)}

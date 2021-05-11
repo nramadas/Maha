@@ -1,63 +1,28 @@
 {
     "name": "",
     "translations": {
-        "4a96799fe490b296f7d2c3ca3": {
-            "reference": "Basic information",
+        "883f9178dd8dff9dc3b251ea0": {
+            "reference": "Add member",
             "template": "",
             "variations": {}
         },
-        "886f3ff50f0fd0eab2d71ae21": {
-            "reference": "name",
+        "66a0abf8fd00f1ed1bbf6850b": {
+            "reference": "Could not add member",
             "template": "",
             "variations": {}
         },
-        "b47c9461def9b72506b2eac76": {
-            "reference": "You must provide a name",
+        "02c914fb3ed563001f6750d72": {
+            "reference": "Apartment",
             "template": "",
             "variations": {}
         },
-        "c7f54c661eb823e2867949eb1": {
-            "reference": "price",
+        "8d086ef9127ee9d68870ba7a2": {
+            "reference": "Flat",
             "template": "",
             "variations": {}
         },
-        "e0b9a76868ca272facaaa7013": {
-            "reference": "approx. yearly tax",
-            "template": "",
-            "variations": {}
-        },
-        "a6da8a80e7bddb551c66f20c3": {
-            "reference": "monthly fees",
-            "template": "",
-            "variations": {}
-        },
-        "f8cd845647dc19f6e2c0939e0": {
-            "reference": "sqft",
-            "template": "",
-            "variations": {}
-        },
-        "2416d167760552e9ad3125b53": {
-            "reference": "Date built",
-            "template": "",
-            "variations": {}
-        },
-        "faf2706bca312213b7292e965": {
-            "reference": "quantity",
-            "template": "",
-            "variations": {}
-        },
-        "bf0ceaa6b8996a8f1a71a3a07": {
-            "reference": "Property Type:",
-            "template": "",
-            "variations": {}
-        },
-        "ff41d2fcbf78ac7bd6a88c5fb": {
-            "reference": "select",
-            "template": "",
-            "variations": {}
-        },
-        "02da64da1fec0bb8731a76d41": {
-            "reference": "Metropolitan Area:",
+        "d41bca3e4a86fc72d88d99ce5": {
+            "reference": "House",
             "template": "",
             "variations": {}
         },
@@ -121,18 +86,93 @@
             "template": "",
             "variations": {}
         },
-        "02c914fb3ed563001f6750d72": {
-            "reference": "Apartment",
+        "595cd1e9100d019094f3093a9": {
+            "reference": "Integrated gas",
             "template": "",
             "variations": {}
         },
-        "8d086ef9127ee9d68870ba7a2": {
-            "reference": "Flat",
+        "29923e0473601c2ef956efa3e": {
+            "reference": "Canister gas",
             "template": "",
             "variations": {}
         },
-        "d41bca3e4a86fc72d88d99ce5": {
-            "reference": "House",
+        "3a9bef6fb6c0a9e607dbd0c89": {
+            "reference": "None",
+            "template": "",
+            "variations": {}
+        },
+        "40aca8c4de7424b58f7f5e9a3": {
+            "reference": "That's already been assigned.",
+            "template": "",
+            "variations": {}
+        },
+        "26a15c439918abc7682b06885": {
+            "reference": "That's already taken. Why not try something else?",
+            "template": "",
+            "variations": {}
+        },
+        "b0e02f4d96da3e9a0026f9d20": {
+            "reference": "This does not exist",
+            "template": "",
+            "variations": {}
+        },
+        "360a9f53765d3c23a4be350e4": {
+            "reference": "Could not read file",
+            "template": "",
+            "variations": {}
+        },
+        "9a2893e199df0abe6df0fb152": {
+            "reference": "Could not upload file",
+            "template": "",
+            "variations": {}
+        },
+        "986ce7b3f6403e89ef0d445f5": {
+            "reference": "You are unauthorized to perform that action",
+            "template": "",
+            "variations": {}
+        },
+        "cc89c7e09acbb0825d2786ed8": {
+            "reference": "Something went wrong",
+            "template": "",
+            "variations": {}
+        },
+        "cef541c3afa2c64341d1540e5": {
+            "reference": "Manage members",
+            "template": "",
+            "variations": {}
+        },
+        "5ca3e161a680cda3bbc32823b": {
+            "reference": "Manage properties",
+            "template": "",
+            "variations": {}
+        },
+        "a6c9cbd8bc2b72fc4f43dbbc0": {
+            "reference": "Manage sales",
+            "template": "",
+            "variations": {}
+        },
+        "0d55606cc2b65885d6ca242bc": {
+            "reference": "Modify roles",
+            "template": "",
+            "variations": {}
+        },
+        "8ed4207bac371c0f5f5a51793": {
+            "reference": "View data insights",
+            "template": "",
+            "variations": {}
+        },
+        "4e9d9e2684ee017ce1bd58264": {
+            "reference": "View members",
+            "template": "",
+            "variations": {}
+        },
+        "8109653a4ef1b8b5bc3847132": {
+            "reference": "View properties",
+            "template": "",
+            "variations": {}
+        },
+        "c56c77c18d17f558ec0af1b72": {
+            "reference": "View sales",
             "template": "",
             "variations": {}
         },
@@ -146,33 +186,18 @@
             "template": "",
             "variations": {}
         },
-        "3a9bef6fb6c0a9e607dbd0c89": {
-            "reference": "None",
+        "1220cccb6e181c82205fb3a5f": {
+            "reference": "Owner of the company. Cannot be changed, added, or removed.",
             "template": "",
             "variations": {}
         },
-        "595cd1e9100d019094f3093a9": {
-            "reference": "Integrated gas",
+        "432d1cf8c77b6ed203a510c3a": {
+            "reference": "A manager within the company.",
             "template": "",
             "variations": {}
         },
-        "29923e0473601c2ef956efa3e": {
-            "reference": "Canister gas",
-            "template": "",
-            "variations": {}
-        },
-        "ecb713617cd235b0f65514c53": {
-            "reference": "Centrally filtered water",
-            "template": "",
-            "variations": {}
-        },
-        "607990990de52668df7ffe1d1": {
-            "reference": "Filters are attached to taps",
-            "template": "",
-            "variations": {}
-        },
-        "cace2ef193dc8a2f230e46ac1": {
-            "reference": "No water filters",
+        "4f97ed0228ad020e4176b1cdc": {
+            "reference": "Responsible to selling properties.",
             "template": "",
             "variations": {}
         },
@@ -231,18 +256,18 @@
             "template": "",
             "variations": {}
         },
-        "1220cccb6e181c82205fb3a5f": {
-            "reference": "Owner of the company. Cannot be changed, added, or removed.",
+        "ecb713617cd235b0f65514c53": {
+            "reference": "Centrally filtered water",
             "template": "",
             "variations": {}
         },
-        "432d1cf8c77b6ed203a510c3a": {
-            "reference": "A manager within the company.",
+        "607990990de52668df7ffe1d1": {
+            "reference": "Filters are attached to taps",
             "template": "",
             "variations": {}
         },
-        "4f97ed0228ad020e4176b1cdc": {
-            "reference": "Responsible to selling properties.",
+        "cace2ef193dc8a2f230e46ac1": {
+            "reference": "No water filters",
             "template": "",
             "variations": {}
         },
@@ -261,81 +286,6 @@
             "template": "",
             "variations": {}
         },
-        "cef541c3afa2c64341d1540e5": {
-            "reference": "Manage members",
-            "template": "",
-            "variations": {}
-        },
-        "5ca3e161a680cda3bbc32823b": {
-            "reference": "Manage properties",
-            "template": "",
-            "variations": {}
-        },
-        "a6c9cbd8bc2b72fc4f43dbbc0": {
-            "reference": "Manage sales",
-            "template": "",
-            "variations": {}
-        },
-        "0d55606cc2b65885d6ca242bc": {
-            "reference": "Modify roles",
-            "template": "",
-            "variations": {}
-        },
-        "8ed4207bac371c0f5f5a51793": {
-            "reference": "View data insights",
-            "template": "",
-            "variations": {}
-        },
-        "4e9d9e2684ee017ce1bd58264": {
-            "reference": "View members",
-            "template": "",
-            "variations": {}
-        },
-        "8109653a4ef1b8b5bc3847132": {
-            "reference": "View properties",
-            "template": "",
-            "variations": {}
-        },
-        "c56c77c18d17f558ec0af1b72": {
-            "reference": "View sales",
-            "template": "",
-            "variations": {}
-        },
-        "40aca8c4de7424b58f7f5e9a3": {
-            "reference": "That's already been assigned.",
-            "template": "",
-            "variations": {}
-        },
-        "26a15c439918abc7682b06885": {
-            "reference": "That's already taken. Why not try something else?",
-            "template": "",
-            "variations": {}
-        },
-        "b0e02f4d96da3e9a0026f9d20": {
-            "reference": "This does not exist",
-            "template": "",
-            "variations": {}
-        },
-        "360a9f53765d3c23a4be350e4": {
-            "reference": "Could not read file",
-            "template": "",
-            "variations": {}
-        },
-        "9a2893e199df0abe6df0fb152": {
-            "reference": "Could not upload file",
-            "template": "",
-            "variations": {}
-        },
-        "986ce7b3f6403e89ef0d445f5": {
-            "reference": "You are unauthorized to perform that action",
-            "template": "",
-            "variations": {}
-        },
-        "cc89c7e09acbb0825d2786ed8": {
-            "reference": "Something went wrong",
-            "template": "",
-            "variations": {}
-        },
         "b8db0eb0565e0484de4cb9801": {
             "reference": "Private",
             "template": "",
@@ -346,38 +296,83 @@
             "template": "",
             "variations": {}
         },
-        "a417a1507272aa34f3ba8f0ce": {
-            "reference": "Amenities",
+        "ce918784bb61a6aea1af43efa": {
+            "reference": "email",
             "template": "",
             "variations": {}
         },
-        "21aa3d7e8f73db87a9b4ece24": {
-            "reference": "Gym / fitness center:",
+        "68e4c3c156e3d94fff0a7e1e0": {
+            "reference": "Roles:",
             "template": "",
             "variations": {}
         },
-        "77fc84dd1ddef6aed5ad03e06": {
-            "reference": "Yes",
+        "0ed3b076ff822f6e883cd13d2": {
+            "reference": "Invite",
             "template": "",
             "variations": {}
         },
-        "a11e3be15e018cb120e27cda9": {
-            "reference": "No",
+        "47e363a0c29908daf43463dc5": {
+            "reference": "Sent invites",
             "template": "",
             "variations": {}
         },
-        "13da2f9a803933c738827b581": {
-            "reference": "On site security:",
+        "4a96799fe490b296f7d2c3ca3": {
+            "reference": "Basic information",
             "template": "",
             "variations": {}
         },
-        "972f9e9be0a02bc76a7cf3c38": {
-            "reference": "Swimming pool:",
+        "886f3ff50f0fd0eab2d71ae21": {
+            "reference": "name",
             "template": "",
             "variations": {}
         },
-        "568a6e6109c523a4a106a6256": {
-            "reference": "Grill:",
+        "b47c9461def9b72506b2eac76": {
+            "reference": "You must provide a name",
+            "template": "",
+            "variations": {}
+        },
+        "c7f54c661eb823e2867949eb1": {
+            "reference": "price",
+            "template": "",
+            "variations": {}
+        },
+        "e0b9a76868ca272facaaa7013": {
+            "reference": "approx. yearly tax",
+            "template": "",
+            "variations": {}
+        },
+        "a6da8a80e7bddb551c66f20c3": {
+            "reference": "monthly fees",
+            "template": "",
+            "variations": {}
+        },
+        "f8cd845647dc19f6e2c0939e0": {
+            "reference": "sqft",
+            "template": "",
+            "variations": {}
+        },
+        "2416d167760552e9ad3125b53": {
+            "reference": "Date built",
+            "template": "",
+            "variations": {}
+        },
+        "faf2706bca312213b7292e965": {
+            "reference": "quantity",
+            "template": "",
+            "variations": {}
+        },
+        "bf0ceaa6b8996a8f1a71a3a07": {
+            "reference": "Property Type:",
+            "template": "",
+            "variations": {}
+        },
+        "ff41d2fcbf78ac7bd6a88c5fb": {
+            "reference": "select",
+            "template": "",
+            "variations": {}
+        },
+        "02da64da1fec0bb8731a76d41": {
+            "reference": "Metropolitan Area:",
             "template": "",
             "variations": {}
         },
@@ -401,16 +396,6 @@
             "template": "",
             "variations": {}
         },
-        "47e363a0c29908daf43463dc5": {
-            "reference": "Sent invites",
-            "template": "",
-            "variations": {}
-        },
-        "ce918784bb61a6aea1af43efa": {
-            "reference": "email",
-            "template": "",
-            "variations": {}
-        },
         "e41809724de52991e5d3b4e93": {
             "reference": "Could not create a new property",
             "template": "",
@@ -428,6 +413,26 @@
         },
         "8b1377b278416bb5b1342c249": {
             "reference": "Submit",
+            "template": "",
+            "variations": {}
+        },
+        "654c35f65d480ee3c48df8dae": {
+            "reference": "Other",
+            "template": "",
+            "variations": {}
+        },
+        "cf9368fe9514fd25401c5534e": {
+            "reference": "Condition of the property:",
+            "template": "",
+            "variations": {}
+        },
+        "60de8cc495cec9f418b83186b": {
+            "reference": "Construction materials",
+            "template": "",
+            "variations": {}
+        },
+        "ef6d26bc4ba65ab28395c6a2f": {
+            "reference": "Security features available on premises",
             "template": "",
             "variations": {}
         },
@@ -471,6 +476,16 @@
             "template": "",
             "variations": {}
         },
+        "77fc84dd1ddef6aed5ad03e06": {
+            "reference": "Yes",
+            "template": "",
+            "variations": {}
+        },
+        "a11e3be15e018cb120e27cda9": {
+            "reference": "No",
+            "template": "",
+            "variations": {}
+        },
         "767ed27e1d2e492124e59dc0b": {
             "reference": "Air conditioning:",
             "template": "",
@@ -501,33 +516,78 @@
             "template": "",
             "variations": {}
         },
-        "654c35f65d480ee3c48df8dae": {
-            "reference": "Other",
+        "ac5f689aeb8489f2c995128a8": {
+            "reference": "Could not change user's roles",
             "template": "",
             "variations": {}
         },
-        "cf9368fe9514fd25401c5534e": {
-            "reference": "Condition of the property:",
+        "2014213d72872a6e97a820981": {
+            "reference": "Are you sure you want to remove this member?",
             "template": "",
             "variations": {}
         },
-        "60de8cc495cec9f418b83186b": {
-            "reference": "Construction materials",
+        "651b7bda720f924b10fd0a3d7": {
+            "reference": "Could not remove user",
             "template": "",
             "variations": {}
         },
-        "ef6d26bc4ba65ab28395c6a2f": {
-            "reference": "Security features available on premises",
+        "4bad70c86dd71afdb376e8601": {
+            "reference": "Add a new property %%arrowIcon",
             "template": "",
             "variations": {}
         },
-        "68e4c3c156e3d94fff0a7e1e0": {
-            "reference": "Roles:",
+        "fbd8825a468646263a2cffe03": {
+            "reference": "All Properties",
             "template": "",
             "variations": {}
         },
-        "0ed3b076ff822f6e883cd13d2": {
-            "reference": "Invite",
+        "7aea0d40a8302c9764c7d659b": {
+            "reference": "Add role",
+            "template": "",
+            "variations": {}
+        },
+        "fbb85959466781efddd819742": {
+            "reference": "description",
+            "template": "",
+            "variations": {}
+        },
+        "fc8d8284d8d3e206b95db4a41": {
+            "reference": "Permissions:",
+            "template": "",
+            "variations": {}
+        },
+        "b67355b177e7876c1e0734104": {
+            "reference": "Add",
+            "template": "",
+            "variations": {}
+        },
+        "a417a1507272aa34f3ba8f0ce": {
+            "reference": "Amenities",
+            "template": "",
+            "variations": {}
+        },
+        "21aa3d7e8f73db87a9b4ece24": {
+            "reference": "Gym / fitness center:",
+            "template": "",
+            "variations": {}
+        },
+        "13da2f9a803933c738827b581": {
+            "reference": "On site security:",
+            "template": "",
+            "variations": {}
+        },
+        "972f9e9be0a02bc76a7cf3c38": {
+            "reference": "Swimming pool:",
+            "template": "",
+            "variations": {}
+        },
+        "568a6e6109c523a4a106a6256": {
+            "reference": "Grill:",
+            "template": "",
+            "variations": {}
+        },
+        "e4267e68c6f30c9713a817635": {
+            "reference": "homes",
             "template": "",
             "variations": {}
         },
@@ -580,11 +640,6 @@
             "template": "",
             "variations": {}
         },
-        "fbb85959466781efddd819742": {
-            "reference": "description",
-            "template": "",
-            "variations": {}
-        },
         "69c0b7080a5b25a4ec2f132c5": {
             "reference": "permissions",
             "template": "",
@@ -615,68 +670,8 @@
             "template": "",
             "variations": {}
         },
-        "883f9178dd8dff9dc3b251ea0": {
-            "reference": "Add member",
-            "template": "",
-            "variations": {}
-        },
-        "66a0abf8fd00f1ed1bbf6850b": {
-            "reference": "Could not add member",
-            "template": "",
-            "variations": {}
-        },
-        "4bad70c86dd71afdb376e8601": {
-            "reference": "Add a new property %%arrowIcon",
-            "template": "",
-            "variations": {}
-        },
-        "fbd8825a468646263a2cffe03": {
-            "reference": "All Properties",
-            "template": "",
-            "variations": {}
-        },
-        "ac5f689aeb8489f2c995128a8": {
-            "reference": "Could not change user's roles",
-            "template": "",
-            "variations": {}
-        },
-        "2014213d72872a6e97a820981": {
-            "reference": "Are you sure you want to remove this member?",
-            "template": "",
-            "variations": {}
-        },
-        "651b7bda720f924b10fd0a3d7": {
-            "reference": "Could not remove user",
-            "template": "",
-            "variations": {}
-        },
-        "e4267e68c6f30c9713a817635": {
-            "reference": "homes",
-            "template": "",
-            "variations": {}
-        },
-        "7aea0d40a8302c9764c7d659b": {
-            "reference": "Add role",
-            "template": "",
-            "variations": {}
-        },
-        "fc8d8284d8d3e206b95db4a41": {
-            "reference": "Permissions:",
-            "template": "",
-            "variations": {}
-        },
-        "b67355b177e7876c1e0734104": {
-            "reference": "Add",
-            "template": "",
-            "variations": {}
-        },
-        "e345785e5d9181b4f40e8052f": {
-            "reference": "The best homes in your favourite cities ",
-            "template": "",
-            "variations": {}
-        },
-        "d1d080e90a13e79cb47eb477b": {
-            "reference": "Select from premium-built flats, sold directly by the property developer. ",
+        "8e6996274d7a0ee127a5659e8": {
+            "reference": "Coming soon!",
             "template": "",
             "variations": {}
         },
@@ -730,11 +725,6 @@
             "template": "",
             "variations": {}
         },
-        "37a864a95b8b379457a21418d": {
-            "reference": "You must enter a rupee amount",
-            "template": "",
-            "variations": {}
-        },
         "5ed7e65632eb89aceb560aa93": {
             "reference": "middle name",
             "template": "",
@@ -752,6 +742,11 @@
         },
         "630862921e66a5bf97c510ed2": {
             "reference": "You must provide your last name",
+            "template": "",
+            "variations": {}
+        },
+        "37a864a95b8b379457a21418d": {
+            "reference": "You must enter a rupee amount",
             "template": "",
             "variations": {}
         },
@@ -780,11 +775,6 @@
             "template": "",
             "variations": {}
         },
-        "8e6996274d7a0ee127a5659e8": {
-            "reference": "Coming soon!",
-            "template": "",
-            "variations": {}
-        },
         "9b2cd8dc5b58e09e7b5a030ab": {
             "reference": "© %%year Maha",
             "template": "",
@@ -795,8 +785,8 @@
             "template": "",
             "variations": {}
         },
-        "ddb9b3c159d762d5f17ef6d71": {
-            "reference": "No realtors, no middlemen, no fuss.",
+        "41e8402c21ec9e693f7eb9014": {
+            "reference": "No realtors, no middlemen, no fuss",
             "template": "",
             "variations": {}
         },
@@ -805,8 +795,33 @@
             "template": "",
             "variations": {}
         },
-        "ec9bbddd837f67130d1c5aa59": {
-            "reference": "Before you can be added as a member of your company, you must provide a few details. ",
+        "1d0b1cea8631097ded3eeaf29": {
+            "reference": "Log in / Sign up",
+            "template": "",
+            "variations": {}
+        },
+        "3d34846d21f577455b560552b": {
+            "reference": "Success!",
+            "template": "",
+            "variations": {}
+        },
+        "8d444e2fb9152fc47c8697043": {
+            "reference": "You must provide an email",
+            "template": "",
+            "variations": {}
+        },
+        "f83118b7d82764ea0d0f9fc0f": {
+            "reference": "Please check your email to complete the log in process ",
+            "template": "",
+            "variations": {}
+        },
+        "484ce80cb13c21cd36b122f2a": {
+            "reference": "M",
+            "template": "",
+            "variations": {}
+        },
+        "90d6c4b0005f5ffc85dbf8c0c": {
+            "reference": "Maha",
             "template": "",
             "variations": {}
         },
@@ -830,13 +845,18 @@
             "template": "",
             "variations": {}
         },
-        "484ce80cb13c21cd36b122f2a": {
-            "reference": "M",
+        "e345785e5d9181b4f40e8052f": {
+            "reference": "The best homes in your favourite cities ",
             "template": "",
             "variations": {}
         },
-        "90d6c4b0005f5ffc85dbf8c0c": {
-            "reference": "Maha",
+        "d1d080e90a13e79cb47eb477b": {
+            "reference": "Select from premium-built flats, sold directly by the property developer. ",
+            "template": "",
+            "variations": {}
+        },
+        "ec9bbddd837f67130d1c5aa59": {
+            "reference": "Before you can be added as a member of your company, you must provide a few details. ",
             "template": "",
             "variations": {}
         },

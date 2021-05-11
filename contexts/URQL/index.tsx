@@ -1,7 +1,7 @@
 import { cacheExchange } from '@urql/exchange-graphcache';
 import { multipartFetchExchange } from '@urql/exchange-multipart-fetch';
 import { persistedFetchExchange } from '@urql/exchange-persisted-fetch';
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { createClient, Provider, ssrExchange, dedupExchange } from 'urql';
 
 import { JWTContext } from '@/contexts/JWT';
@@ -11,7 +11,10 @@ type SSRExchange = ReturnType<typeof ssrExchange>;
 
 const isServerSide = typeof window === 'undefined';
 
-const setupClient = (ssr: SSRExchange, jwt?: string) => {
+const setupClient = (
+  ssr: SSRExchange,
+  jwt: { current: () => string | undefined },
+) => {
   const exchanges: any = [];
 
   exchanges.push(dedupExchange);
@@ -32,7 +35,7 @@ const setupClient = (ssr: SSRExchange, jwt?: string) => {
     exchanges,
     fetchOptions: () => ({
       headers: {
-        Authorization: jwt ? `Bearer ${jwt}` : '',
+        Authorization: jwt.current() ? `Bearer ${jwt.current()}` : '',
       },
     }),
     suspense: isServerSide,
@@ -55,6 +58,13 @@ export function URQLProvider(props: Props) {
       initialState: props.initialState,
     });
 
-  const client = useRef(setupClient(ssr, jwt));
+  const getJwt = useRef(() => jwt);
+
+  useEffect(() => {
+    getJwt.current = () => jwt;
+  }, [jwt]);
+
+  const client = useRef(setupClient(ssr, getJwt));
+
   return <Provider value={client.current}>{props.children}</Provider>;
 }

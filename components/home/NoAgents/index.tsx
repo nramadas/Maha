@@ -20,7 +20,7 @@ export function NoAgents(props: Props) {
           <i18n.Translate>Buy directly from the source</i18n.Translate>
         </H1>
         <H3 className={styles.tagline}>
-          <i18n.Translate>No realtors, no middlemen, no fuss.</i18n.Translate>
+          <i18n.Translate>No realtors, no middlemen, no fuss</i18n.Translate>
         </H3>
         <article className={styles.explanation}>
           <H5>

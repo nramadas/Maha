@@ -2,6 +2,8 @@ import React from 'react';
 import { useTheme } from 'styled-components';
 
 import * as buttons from '@/emails/components/buttons';
+import { Container } from '@/emails/components/Container';
+import { Title } from '@/emails/components/Title';
 import { Email } from '@/emails/models';
 import { buildQuery } from '@/lib/url/buildQuery';
 import { EmailAction } from '@/models/EmailAction';
@@ -25,15 +27,8 @@ export const JoinOrganization: Email<Props> = {
     });
 
     return (
-      <div
-        style={{
-          backgroundColor: theme.field,
-          borderRadius: 24,
-          fontFamily: theme.font,
-          padding: 12,
-        }}
-      >
-        <h1 style={{ color: theme.primary }}>Welcome to Maha!</h1>
+      <Container>
+        <Title>Welcome to Maha!</Title>
         <p>
           You have been invited to join {props.organizationName} on{' '}
           <span style={{ color: theme.primary, fontWeight: 'bold' }}>Maha</span>
@@ -46,7 +41,7 @@ export const JoinOrganization: Email<Props> = {
             Continue to Maha
           </buttons.Filled>
         </p>
-      </div>
+      </Container>
     );
   },
 };
