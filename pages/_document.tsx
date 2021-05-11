@@ -1,5 +1,11 @@
 import 'setimmediate';
-import Document, { DocumentContext } from 'next/document';
+import Document, {
+  DocumentContext,
+  Head,
+  Html,
+  Main,
+  NextScript,
+} from 'next/document';
 import React from 'react';
 import ssrPrepass from 'react-ssr-prepass';
 import { ssrExchange } from 'urql';
@@ -90,5 +96,17 @@ export default class MyDocument extends Document {
         </>
       ),
     };
+  }
+
+  render() {
+    return (
+      <Html>
+        <Head />
+        <body>
+          <Main />
+          <NextScript />
+        </body>
+      </Html>
+    );
   }
 }
