@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Pressable, TextInput } from 'react-native';
 import { useEventCallback } from 'rxjs-hooks';
 import { debounceTime, concatMap, tap, map } from 'rxjs/operators';
@@ -8,12 +8,20 @@ import { Input } from '@/components/controls/Input/index.native';
 import { Body1 } from '@/components/typography/Body1/index.native';
 import { useForm } from '@/hooks/useForm';
 import { useTextToString } from '@/hooks/useTextToString';
+import { i18n } from '@/lib/translate';
+import { PartialPick } from '@/lib/typeHelpers/PartialPick';
 import { Text } from '@/models/Text';
 
 function makeItems<O>(items: O[], text: string) {
   return {
     items,
-    error: text && !items.length ? `No results matching '${text}'` : undefined,
+    error:
+      text && !items.length
+        ? i18n.translate`No results matching '${{
+            name: 'matchText',
+            value: text,
+          }}'`
+        : undefined,
   };
 }
 
@@ -35,16 +43,15 @@ const Result = styled.View<{ pressed: boolean }>`
     `}
 `;
 
-interface Option {
-  text: string;
+interface Option<V, E> {
+  text: Text;
+  value: V;
+  extraData?: E;
 }
 
-interface Props<O> {
+interface Props<V, E> {
   __doNotWriteToForm?: boolean;
-  /**
-   * Initialize the autocomplete with this value
-   */
-  defaultValue?: O;
+  allowInvalidValues?: boolean;
   /**
    * Display an icon on the right hand side of the input field
    */
@@ -58,34 +65,53 @@ interface Props<O> {
    */
   name: string;
   /**
-   * Function that returns a list of items to display in the autocomplete.
-   * Function can return a `Promise` if needed. Signature:
-   * `<O extends {text: string}>(inputText?: string | undefined) => O[] | Promise<O[]>`
+   * Control the autocomplete
    */
-  getItems: (inputText?: string | undefined) => O[] | Promise<O[]>;
+  value?: PartialPick<Option<V, E>, 'value' | 'text'>;
+  /**
+   * Function that returns a list of items to display in the autocomplete.
+   * Function can return a `Promise` if needed. `
+   */
+  getItems: (
+    inputText?: string | undefined,
+  ) => Option<V, E>[] | Promise<Option<V, E>[]>;
+  /**
+   * Callback that returns what the user is typing
+   */
+  onChange?: (text: string) => void;
   /**
    * Callback that returns when an item is selected
    */
-  onSelect?: (item: O | null) => void;
+  onSelect?: (item: Option<V, E> | null) => void;
 }
 
-export function Autocomplete<O extends Option>(props: Props<O>) {
-  const { getItems, label, name, onSelect } = props;
-  const [error, setError] = useState<string | undefined>(undefined);
-  const [focused, setFocused] = useState(false);
+export function Autocomplete<V, E = any>(props: Props<V, E>) {
+  const {
+    allowInvalidValues,
+    getItems,
+    label,
+    name,
+    onChange,
+    onSelect,
+  } = props;
   const form = useForm();
   const textToString = useTextToString();
-  const defaultValues = useRef(form.getFormValues());
-  const defaultValue =
-    props.defaultValue || !props.__doNotWriteToForm
-      ? defaultValues.current[name]
-      : undefined;
+  const [error, setError] = useState<Text | undefined>(undefined);
+  const [focused, setFocused] = useState(false);
+
+  const currentValue: Option<V, E> | undefined = form.getValue(name);
 
   const [localValue, setLocalValue] = useState(
-    defaultValue ? textToString(defaultValue) : '',
+    currentValue ? textToString(currentValue.text) : '',
   );
 
-  const [itemsCallback, items] = useEventCallback<string, O[]>(
+  useEffect(() => {
+    const text = currentValue ? textToString(currentValue.text) : '';
+    setLocalValue(text);
+    onChange?.(text);
+  }, [currentValue, setLocalValue]);
+
+  const [itemsCallback, items] = useEventCallback<string, Option<V, E>[]>(
     event =>
       event.pipe(
         debounceTime(150),
@@ -96,7 +122,7 @@ export function Autocomplete<O extends Option>(props: Props<O>) {
             : Promise.resolve(makeItems(result, inputText));
         }),
         tap(results => {
-          setError(results.error);
+          setError(() => results.error);
         }),
         map(results => results.items),
       ),
@@ -107,15 +133,18 @@ export function Autocomplete<O extends Option>(props: Props<O>) {
   const selectionLock = useRef(false);
 
   const selectItem = useCallback(
-    (item: O) => {
-      itemsCallback(item.text);
-      setLocalValue(item.text);
+    (item: Option<V, E>) => {
+      const text = textToString(item.text);
+      itemsCallback(text);
+      setLocalValue(text);
+      onChange?.(text);
+      onSelect?.(item);
+
       if (!props.__doNotWriteToForm) {
         form.setValue(name, item);
       }
-      onSelect?.(item);
     },
-    [itemsCallback, setLocalValue, onSelect],
+    [itemsCallback, setLocalValue, onChange, onSelect],
   );
 
   const doneEditing = useCallback(
@@ -123,7 +152,7 @@ export function Autocomplete<O extends Option>(props: Props<O>) {
       setFocused(false);
       if (!selectionLock.current && e.nativeEvent.text && items.length) {
         selectItem(items[0]);
-      } else if (!selectionLock.current) {
+      } else if (!selectionLock.current && !allowInvalidValues) {
         form.setValue(name, null);
         onSelect?.(null);
       }
@@ -134,7 +163,7 @@ export function Autocomplete<O extends Option>(props: Props<O>) {
   );
 
   React.useEffect(() => {
-    itemsCallback(defaultValue ? textToString(defaultValue) : '');
+    itemsCallback(localValue);
   }, [itemsCallback]);
 
   return (
@@ -149,6 +178,7 @@ export function Autocomplete<O extends Option>(props: Props<O>) {
         onChangeText={text => {
           setLocalValue(text);
           itemsCallback(text);
+          onChange?.(text);
           onSelect?.(null);
         }}
         onEndEditing={doneEditing}
@@ -160,7 +190,7 @@ export function Autocomplete<O extends Option>(props: Props<O>) {
         <Results>
           {items.map(item => (
             <Pressable
-              key={item.text}
+              key={textToString(item.text)}
               onPress={() => {
                 selectionLock.current = true;
                 selectItem(item);

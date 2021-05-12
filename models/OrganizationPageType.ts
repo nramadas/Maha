@@ -1,5 +1,7 @@
 export enum OrganizationPageType {
   AddProperty = 'AddProperty',
+  DynamicRoute = 'DynamicRoute',
+  EditProperty = 'EditProperty',
   Insights = 'Insights',
   Members = 'Members',
   Overview = 'Overview',

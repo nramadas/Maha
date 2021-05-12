@@ -67,7 +67,12 @@ export function Datepicker<R extends boolean>(props: Props<R>) {
   );
   const [format] = useDateFormatter({});
   const [isOpen, setIsOpen] = useState(false);
-  const [{ start, end }, select] = useRangeSelection(range, selectDates);
+  const selectedDates = form.getValue(name);
+
+  const start = (range ? (selectedDates || [])[0] : selectedDates) || null;
+  const end = (range && (selectedDates || [])[1]) || null;
+
+  const [, select] = useRangeSelection(range, selectDates);
   const theme = useTheme();
 
   return (

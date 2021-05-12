@@ -6,12 +6,14 @@ import { Car } from '@/components/icons/Car';
 import { CarEmpty } from '@/components/icons/CarEmpty';
 import { Body2 } from '@/components/typography/Body2';
 import { Overline } from '@/components/typography/Overline';
+import { useForm } from '@/hooks/useForm';
 import { i18n } from '@/lib/translate';
 
 import styles from './index.module.scss';
 
 export function Parking() {
-  const [parkingEnabled, setParkingEnabled] = useState(false);
+  const form = useForm();
+  const parkingEnabled = form.getValue('parkingGarage');
 
   return (
     <>
@@ -26,10 +28,7 @@ export function Parking() {
             <i18n.Translate>Is there parking available?</i18n.Translate>
           </Body2>
         </div>
-        <Switch
-          name="parkingGarage"
-          onChange={enabled => setParkingEnabled(enabled)}
-        />
+        <Switch name="parkingGarage" />
       </div>
       <div className={styles.grid}>
         <Number

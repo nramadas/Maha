@@ -65,20 +65,21 @@ export function Datepicker<R extends boolean>(props: Props<R>) {
     type: 'focus',
   });
 
-  const [
-    currentView,
-    rangeStart,
-    rangeEnd,
-    rangePosition,
-    setView,
-    select,
-  ] = useDateSelection(range, selectDates);
+  const [currentView, , , rangePosition, setView, select] = useDateSelection(
+    range,
+    selectDates,
+  );
+
+  const selectedDates = form.getValue(name);
+  const rangeStart = (range ? (selectedDates || [])[0] : selectedDates) || null;
+  const rangeEnd = (range && (selectedDates || [])[1]) || null;
 
   return (
     <>
       <Target>
         <Input
           {...rest}
+          __doNotWriteToForm
           readOnly
           data-ignore="true"
           icon={<CalendarIcon />}

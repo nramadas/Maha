@@ -25,6 +25,20 @@ export function breadcrumbsFromPages(
         },
       ];
 
+      if (page.type === OrganizationPageType.EditProperty) {
+        const propertyId = pathParts[level];
+
+        crumbs[0].url = page.url + `/${propertyId}`;
+
+        crumbs.push({
+          type: OrganizationPageType.DynamicRoute,
+          name: () => propertyId,
+          url: page.url + `/${propertyId}`,
+        });
+
+        return crumbs;
+      }
+
       return page.children
         ? crumbs.concat(
             breadcrumbsFromPages(page.children, pathParts, level + 1),

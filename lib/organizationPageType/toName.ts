@@ -7,6 +7,10 @@ export function toName(
   switch (pageType) {
     case OrganizationPageType.AddProperty:
       return i18n.translate`add`;
+    case OrganizationPageType.DynamicRoute:
+      return i18n.translate``;
+    case OrganizationPageType.EditProperty:
+      return i18n.translate`edit`;
     case OrganizationPageType.Insights:
       return i18n.translate`insights`;
     case OrganizationPageType.Members:

@@ -1,5 +1,5 @@
 import cx from 'classnames';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { useForm } from '@/hooks/useForm';
 
@@ -10,10 +10,6 @@ interface Props {
    * Extra styling
    */
   className?: string;
-  /**
-   * Starting value for the switch. One of `'on'` or `'off'`.
-   */
-  defaultValue?: boolean;
   /**
    * When set to true, prevents the users for toggling teh Switch
    */
@@ -33,15 +29,10 @@ interface Props {
  * Switch, behaves like a checkbox
  */
 export function Switch(props: Props) {
-  const { className, disabled, defaultValue, name, onChange } = props;
+  const { className, disabled, name, onChange } = props;
 
   const form = useForm();
-
-  useEffect(() => {
-    if (defaultValue) {
-      form.setValue(name, defaultValue);
-    }
-  }, []);
+  const checked = form.getValue(name) || false;
 
   return (
     <div className={styles.wrapper}>
@@ -51,8 +42,8 @@ export function Switch(props: Props) {
         })}
       >
         <input
+          checked={checked}
           className={styles.hidden}
-          defaultChecked={defaultValue}
           disabled={disabled}
           type="checkbox"
           onChange={e => {

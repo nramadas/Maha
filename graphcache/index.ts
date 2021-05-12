@@ -27,7 +27,7 @@ export const config: Config = {
         `;
 
         cache.updateQuery({ query }, data => {
-          data.me.organization.properties.push(result.createProperty);
+          data.me.organization?.properties.push(result.createProperty);
           return data;
         });
       },
@@ -47,7 +47,7 @@ export const config: Config = {
         `;
 
         cache.updateQuery({ query }, data => {
-          data.me.organization.roles.push(result.createRole);
+          data.me.organization?.roles.push(result.createRole);
           return data;
         });
       },

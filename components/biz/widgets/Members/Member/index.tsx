@@ -68,7 +68,7 @@ export function Member(props: Props) {
 
   const selectedChoices = (member.roles || []).map(role => ({
     disabled: role.name === CommonRoleType.Owner,
-    id: role.id,
+    value: role.id,
     text: roleName(role),
   }));
 
@@ -76,7 +76,7 @@ export function Member(props: Props) {
     .filter(role => role.name !== CommonRoleType.Owner)
     .map(role => ({
       disabled: role.name === CommonRoleType.Owner,
-      id: role.id,
+      value: role.id,
       text: roleName(role),
     }));
 
@@ -119,13 +119,13 @@ export function Member(props: Props) {
           })}
         >
           <PickGrow
-            defaultSelected={selectedChoices}
             choices={roleChoices}
             name="roles"
+            selected={selectedChoices}
             onChoose={choices => {
               setUserRoles({
                 userId: props.member.id,
-                roleIds: choices.map(c => c.id),
+                roleIds: choices.map(c => c.value),
               }).then(result => {
                 if (result.error) {
                   displayError(i18n.translate`Could not change user's roles`);

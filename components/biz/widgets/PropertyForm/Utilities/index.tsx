@@ -33,12 +33,12 @@ export function Utilities() {
         <div className={styles.radioGroup}>
           <Radio
             name="appliancesDishwasher"
-            value
+            value={{ value: true }}
             label={i18n.translate`Yes`}
           />
           <Radio
             name="appliancesDishwasher"
-            value={false}
+            value={{ value: false }}
             label={i18n.translate`No`}
           />
         </div>

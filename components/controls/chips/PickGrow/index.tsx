@@ -14,28 +14,30 @@ import { Text } from '@/models/Text';
 
 import styles from './index.module.scss';
 
-interface Choice {
+interface Choice<V, E> {
   disabled?: boolean;
   text: Text;
+  value: V;
+  extraData?: E;
 }
 
-interface Props<C> extends React.InputHTMLAttributes<HTMLInputElement> {
+interface Props<V, E> extends React.InputHTMLAttributes<HTMLInputElement> {
   /**
    * A list of choices to select from
    */
-  choices: C[];
-  /**
-   * Choices that are selected by default
-   */
-  defaultSelected?: C[];
+  choices: Choice<V, E>[];
   /**
    * Reference name for chips value
    */
   name: string;
   /**
+   * Controlled input, selected choices
+   */
+  selected?: Choice<V, E>[];
+  /**
    * Callback that returns when an item is selected
    */
-  onChoose?: (choices: C[]) => void;
+  onChoose?: (choices: Choice<V, E>[]) => void;
 }
 
 /**
@@ -43,7 +45,7 @@ interface Props<C> extends React.InputHTMLAttributes<HTMLInputElement> {
  * component. Only displays what has been selected; additional selections are
  * chosen from a dropdown.
  */
-export function PickGrow<C extends Choice>(props: Props<C>) {
+export function PickGrow<V, E = any>(props: Props<V, E>) {
   const form = useForm();
   const [Target, Tooltip] = useTooltip({
     alignment: 'center',
@@ -53,15 +55,15 @@ export function PickGrow<C extends Choice>(props: Props<C>) {
   });
   const textToString = useTextToString();
 
-  const { choices, defaultSelected, name, onChoose, ...rest } = props;
-  const selected: C[] = form.getValue(name) || defaultSelected || [];
-  const remaining: C[] = choices.filter(choice => {
-    return isNil(selected.find(c => isEqual(c, choice)));
+  const { choices, name, selected, onChoose, ...rest } = props;
+  const _selected: Choice<V, E>[] = selected || form.getValue(name) || [];
+  const remaining: Choice<V, E>[] = choices.filter(choice => {
+    return isNil(_selected.find(c => isEqual(c.value, choice.value)));
   });
 
   return (
     <div className={styles.container}>
-      {selected.map(choice => (
+      {_selected.map(choice => (
         <label
           className={cx(styles.label, {
             [styles.disabled]: !!choice.disabled,
@@ -86,7 +88,9 @@ export function PickGrow<C extends Choice>(props: Props<C>) {
                   return;
                 }
 
-                const withoutChoice = selected.filter(s => !isEqual(s, choice));
+                const withoutChoice = _selected.filter(
+                  s => !isEqual(s.value, choice.value),
+                );
                 form.setValue(name, withoutChoice);
                 onChoose?.(withoutChoice);
               }}
@@ -118,7 +122,7 @@ export function PickGrow<C extends Choice>(props: Props<C>) {
                   key={textToString(choice.text)}
                   className={styles.remainingChoice}
                   onClick={() => {
-                    const newSelected = selected.concat(choice);
+                    const newSelected = _selected.concat(choice);
                     form.setValue(name, newSelected);
                     onChoose?.(newSelected);
                   }}

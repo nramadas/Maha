@@ -129,12 +129,15 @@ export const Input = forwardRef<TextInput, Props>((props, ref) => {
     name,
     style,
     type,
+    value,
     ...rest
   } = props;
+
   const [isFocused, setIsFocused] = React.useState(false);
   const form = useForm();
   const textToString = useTextToString();
-  const hasText = __doNotWriteToForm ? !!rest.value : !!form.getValue(name);
+
+  const hasText = __doNotWriteToForm ? !!value : !!form.getValue(name);
 
   return (
     <KeyboardAvoidingView
@@ -149,6 +152,7 @@ export const Input = forwardRef<TextInput, Props>((props, ref) => {
           hasText={hasText}
           ref={ref}
           secureTextEntry={type === 'password'}
+          value={__doNotWriteToForm ? value : form.getValue(name) || ''}
           onBlur={e => {
             setIsFocused(false);
             rest.onBlur?.(e);

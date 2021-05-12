@@ -1,6 +1,6 @@
 import { gql } from '@urql/core';
 import cx from 'classnames';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useMutation } from 'urql';
 
@@ -41,29 +41,31 @@ interface Props {
   className?: string;
   multiple?: boolean;
   name: string;
+  softDelete?: boolean;
 }
 
 export function MediaUpload(props: Props) {
   const displayError = useDisplayError();
   const form = useForm();
-  const [media, setMedia] = useState<Media[]>([]);
   const [, deleteMedia] = useMutation(deleteMediaMutation);
   const [, createMedia] = useMutation(createMediaMutation);
+  const media: Media[] = form.getValue(props.name) || [];
 
   const onDelete = useCallback(
     async (id: string) => {
-      const result = await deleteMedia({ id });
+      if (!props.softDelete) {
+        const result = await deleteMedia({ id });
 
-      if (result.error) {
-        displayError(i18n.translate`Error removing media`);
-        return;
+        if (result.error) {
+          displayError(i18n.translate`Error removing media`);
+          return;
+        }
       }
 
       const newMedia = media.filter(m => m.id !== id);
-      setMedia(newMedia);
       form.setValue(props.name, newMedia);
     },
-    [form, media, setMedia],
+    [form, media],
   );
 
   const onDrop = useCallback(
@@ -93,11 +95,10 @@ export function MediaUpload(props: Props) {
           ? media.concat(newMediaObject)
           : [newMediaObject];
 
-        setMedia(newMedia);
         form.setValue(props.name, newMedia);
       }
     },
-    [form, media, setMedia],
+    [form, media],
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });

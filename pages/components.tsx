@@ -38,7 +38,10 @@ export default function Components() {
   const languagePack = useLanguagePack();
 
   return (
-    <Form onSubmit={values => console.log(values)}>
+    <Form
+      onChange={values => console.log(values)}
+      onSubmit={values => console.log(values)}
+    >
       <h1>Translation</h1>
       <h2>Using JSX to translate</h2>
       <div>
@@ -121,7 +124,7 @@ export default function Components() {
             .filter(str =>
               str.toLowerCase().includes((inputText || '').toLowerCase()),
             )
-            .map(text => ({ text }))
+            .map(text => ({ text, value: text }))
         }
       />
 
@@ -138,11 +141,11 @@ export default function Components() {
       <buttons.Hollow disabled>Hollow</buttons.Hollow>
 
       <h2>Checkbox</h2>
-      <Checkbox value={{ text: 'optionA' }} name="checkbox" label="Checkbox" />
-      <Checkbox value={{ text: 'optionB' }} name="checkbox" label="Checkbox" />
-      <Checkbox value={{ text: 'optionC' }} name="checkbox" label="Checkbox" />
+      <Checkbox value={{ value: 'optionA' }} name="checkbox" label="Checkbox" />
+      <Checkbox value={{ value: 'optionB' }} name="checkbox" label="Checkbox" />
+      <Checkbox value={{ value: 'optionC' }} name="checkbox" label="Checkbox" />
       <Checkbox
-        value={{ text: 'optionD' }}
+        value={{ value: 'optionD' }}
         name="checkbox"
         label="Checkbox"
         disabled
@@ -151,13 +154,13 @@ export default function Components() {
       <h2>Chips - Choice</h2>
       <chips.Choice
         choices={[
-          { text: 'Apple' },
-          { text: 'Bat' },
-          { text: 'Cat' },
-          { text: 'Dog' },
-          { text: 'Elephant' },
-          { text: 'Frog', disabled: true },
-          { text: 'Garden' },
+          { text: 'Apple', value: 'Apple' },
+          { text: 'Bat', value: 'Bat' },
+          { text: 'Cat', value: 'Cat' },
+          { text: 'Dog', value: 'Dog' },
+          { text: 'Elephant', value: 'Elephant' },
+          { text: 'Frog', disabled: true, value: 'Frong' },
+          { text: 'Garden', value: 'Garden' },
         ]}
         name="chips_Choice"
       />
@@ -169,7 +172,7 @@ export default function Components() {
             .filter(str =>
               str.toLowerCase().includes((inputText || '').toLowerCase()),
             )
-            .map(text => ({ text }))
+            .map(text => ({ text, value: text }))
         }
         label="input chips"
         name="chips_Input"
@@ -178,13 +181,13 @@ export default function Components() {
       <h2>Chips - Pick</h2>
       <chips.Pick
         choices={[
-          { text: 'Apple' },
-          { text: 'Bat' },
-          { text: 'Cat' },
-          { text: 'Dog' },
-          { text: 'Elephant' },
-          { text: 'Frog', disabled: true },
-          { text: 'Garden' },
+          { text: 'Apple', value: 'Apple' },
+          { text: 'Bat', value: 'Bat' },
+          { text: 'Cat', value: 'Cat' },
+          { text: 'Dog', value: 'Dog' },
+          { text: 'Elephant', value: 'Elephant' },
+          { text: 'Frog', disabled: true, value: 'Frong' },
+          { text: 'Garden', value: 'Garden' },
         ]}
         name="chips_Pick"
       />
@@ -215,22 +218,22 @@ export default function Components() {
       <links.Hollow>Hollow</links.Hollow>
 
       <h2>Radio</h2>
-      <Radio value={{ text: 'optionA' }} name="radio" label="Radio" />
-      <Radio value={{ text: 'optionB' }} name="radio" label="Radio" />
-      <Radio value={{ text: 'optionC' }} name="radio" label="Radio" />
-      <Radio value={{ text: 'optionD' }} name="radio" label="Radio" disabled />
+      <Radio value={{ value: 'optionA' }} name="radio" label="Radio" />
+      <Radio value={{ value: 'optionB' }} name="radio" label="Radio" />
+      <Radio value={{ value: 'optionC' }} name="radio" label="Radio" />
+      <Radio value={{ value: 'optionD' }} name="radio" label="Radio" disabled />
 
       <h2>Select</h2>
       <Select
         name="select"
         options={[
-          { text: 'Apple' },
-          { text: 'Bat' },
-          { text: 'Cat' },
-          { text: 'Dog' },
-          { text: 'Elephant' },
-          { text: 'Frog' },
-          { text: 'Garden' },
+          { text: 'Apple', value: 'Apple' },
+          { text: 'Bat', value: 'Bat' },
+          { text: 'Cat', value: 'Cat' },
+          { text: 'Dog', value: 'Dog' },
+          { text: 'Elephant', value: 'Elephant' },
+          { text: 'Frog', value: 'Frog' },
+          { text: 'Garden', value: 'Garden' },
         ]}
         placeholder="Please select"
       >
@@ -239,7 +242,6 @@ export default function Components() {
 
       <h2>Switch</h2>
       <Switch name="switch" />
-      <Switch name="switch2" defaultValue />
       <Switch name="switch_disabled" disabled />
 
       <h1>Icons</h1>

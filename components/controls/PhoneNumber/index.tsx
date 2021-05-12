@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { InputWithValidation } from '@/components/controls/InputWithValidation';
 import { Phone } from '@/components/icons/Phone';
@@ -20,7 +20,7 @@ interface Props
 export function PhoneNumber(props: Props) {
   const { required, ...rest } = props;
   const form = useForm();
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const value = rest.value || form.getValue(rest.name) || '';
 
   const label = i18n.translate`phone number`;
   const emptyError = i18n.translate`You must provide a phone number`;
@@ -32,12 +32,10 @@ export function PhoneNumber(props: Props) {
       icon={<Phone />}
       label={label}
       type="tel"
-      value={phoneNumber}
+      value={_formatPhoneNumber(value)}
       onInput={e => {
         const value = e.currentTarget.value;
         form.setValue(props.name, value);
-        const display = _formatPhoneNumber(value);
-        setPhoneNumber(display);
         rest.onInput?.(e);
       }}
       onValidate={required ? text => (text ? '' : emptyError) : undefined}

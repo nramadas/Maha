@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Pressable, View } from 'react-native';
 import styled, { css, useTheme } from 'styled-components/native';
 
@@ -10,18 +10,19 @@ import { Text } from '@/models/Text';
 
 import { sortOptions } from './sortOptions';
 
-interface Option {
+interface Option<V, E> {
   disabled?: boolean;
   text: Text;
+  value: V;
+  extraData?: E;
 }
 
-interface Props<O> {
-  children: (option: O & { text: string }) => JSX.Element;
-  defaultSelected?: O;
+interface Props<V, E> {
+  children: (option: Option<V, E> & { text: string }) => JSX.Element;
   name: string;
-  options: O[];
+  options: Option<V, E>[];
   placeholder?: Text;
-  onChange?(option: O): void;
+  onChange?(option: Option<V, E>): void;
 }
 
 const Container = styled.View<{ open?: boolean }>`
@@ -72,25 +73,20 @@ const Placeholder = styled(Body1)`
   color: ${props => props.theme.primary};
 `;
 
-export function Select<O extends Option>(props: Props<O>) {
+export function Select<V, E = any>(props: Props<V, E>) {
   const form = useForm();
   const textToString = useTextToString();
   const preSort = sortOptions(props.options, textToString, null);
+  const selected =
+    form.getValue(props.name) || (props.placeholder ? null : preSort[0]);
 
-  const [selected, setSelected] = useState<O | null>(
-    props.defaultSelected || (props.placeholder ? null : preSort[0]),
-  );
   const [isOpen, setIsOpen] = useState(false);
   const theme = useTheme();
-
-  useEffect(() => {
-    form.setValue(props.name, selected);
-  }, [selected]);
 
   const sortedOptions = sortOptions(props.options, textToString, selected);
   const showPlaceholder = !selected && props.placeholder;
 
-  const render = (option: O) =>
+  const render = (option: Option<V, E>) =>
     props.children({ ...option, text: textToString(option.text) });
 
   return (
@@ -118,7 +114,7 @@ export function Select<O extends Option>(props: Props<O>) {
               key={textToString(o.text)}
               onPress={() => {
                 if (!o.disabled) {
-                  setSelected(o);
+                  form.setValue(props.name, o);
                   props.onChange?.(o);
                   setIsOpen(false);
                 }

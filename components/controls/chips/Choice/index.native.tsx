@@ -7,16 +7,18 @@ import { useForm } from '@/hooks/useForm';
 import { useTextToString } from '@/hooks/useTextToString';
 import { Text } from '@/models/Text';
 
-interface ChoiceObj {
+interface ChoiceObj<V, E> {
   disabled?: boolean;
   text: Text;
+  value: V;
+  extraData?: E;
 }
 
-interface Props<C> {
+interface Props<V, E> {
   /**
    * A list of choices to select from
    */
-  choices: C[];
+  choices: ChoiceObj<V, E>[];
   /**
    * Reference name for chips value
    */
@@ -24,7 +26,7 @@ interface Props<C> {
   /**
    * Callback that returns when an item is selected
    */
-  onChoose?: (choice: C) => void;
+  onChoose?: (choice: ChoiceObj<V, E>) => void;
 }
 
 const Container = styled.View`
@@ -84,11 +86,10 @@ const PillText = styled(Body2)<{ disabled?: boolean; selected?: boolean }>`
     `};
 `;
 
-export function Choice<C extends ChoiceObj>(props: Props<C>) {
+export function Choice<V, E = any>(props: Props<V, E>) {
+  const { name, choices, onChoose } = props;
   const form = useForm();
   const textToString = useTextToString();
-
-  const { name, choices, onChoose } = props;
   const selected = form.getValue(name);
 
   return (
@@ -108,7 +109,7 @@ export function Choice<C extends ChoiceObj>(props: Props<C>) {
             <Pill
               disabled={choice.disabled}
               pressed={!choice.disabled && pressed}
-              selected={isEqual(selected, choice)}
+              selected={isEqual(selected?.value, choice.value)}
             >
               <PillText disabled={choice.disabled}>
                 {textToString(choice.text)}

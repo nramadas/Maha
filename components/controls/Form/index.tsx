@@ -6,12 +6,13 @@ import { useForm } from '@/hooks/useForm';
 interface Props<V> {
   className?: string;
   children?: React.ReactNode;
+  defaultValues?: V;
   onChange?(values: V): void;
   onSubmit?(values: V): void;
 }
 
 function FormInner<V extends FormValues>(props: Props<V>) {
-  const { onChange, onSubmit, className, children } = props;
+  const { onChange, onSubmit, className, children, defaultValues } = props;
   const form = useForm();
 
   const change = useCallback(
@@ -27,6 +28,12 @@ function FormInner<V extends FormValues>(props: Props<V>) {
       form.removeFormChange(change);
     };
   }, [form, change]);
+
+  useEffect(() => {
+    if (defaultValues) {
+      form.setFormValues(defaultValues);
+    }
+  }, []);
 
   const onSubmitForm = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
@@ -45,11 +52,16 @@ function FormInner<V extends FormValues>(props: Props<V>) {
 }
 
 export function Form<V extends FormValues>(props: Props<V>) {
-  const { children, className, onChange, onSubmit } = props;
+  const { children, className, defaultValues, onChange, onSubmit } = props;
 
   return (
     <FormProvider>
-      <FormInner className={className} onChange={onChange} onSubmit={onSubmit}>
+      <FormInner
+        className={className}
+        defaultValues={defaultValues}
+        onChange={onChange}
+        onSubmit={onSubmit}
+      >
         {children}
       </FormInner>
     </FormProvider>

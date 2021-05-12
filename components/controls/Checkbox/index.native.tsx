@@ -5,11 +5,9 @@ import styled, { css, useTheme } from 'styled-components/native';
 import { Checkmark } from '@/components/icons/Checkmark/index.native';
 import { Body2 } from '@/components/typography/Body2/index.native';
 import { useForm } from '@/hooks/useForm';
+import { useTextToString } from '@/hooks/useTextToString';
 import { quick as quickAnimation } from '@/lib/animations/native';
-
-interface Value {
-  text: string;
-}
+import { Text } from '@/models/Text';
 
 interface ExtraProps {
   checked?: boolean;
@@ -69,7 +67,7 @@ const Press = styled.View<ExtraProps>`
     `}
 `;
 
-const Text = styled(Body2)<ExtraProps>`
+const LabelText = styled(Body2)<ExtraProps>`
   ${props =>
     props.pressed &&
     css`
@@ -77,21 +75,31 @@ const Text = styled(Body2)<ExtraProps>`
     `}
 `;
 
-interface Props<V> {
-  __doNotWriteToForm?: boolean;
-  disabled?: boolean;
-  label?: string;
-  name: string;
+interface Value<V, E> {
   value: V;
-  onSelect?(value: V): void;
+  extraData?: E;
 }
 
-export function Checkbox<V extends Value>(props: Props<V>) {
-  const form = useForm();
-  const theme = useTheme();
+interface Props<V, E> {
+  __doNotWriteToForm?: boolean;
+  disabled?: boolean;
+  label?: Text;
+  name: string;
+  value: Value<V, E>;
+  onSelect?(value: Value<V, E>): void;
+}
+
+export function Checkbox<V, E = any>(props: Props<V, E>) {
   const { disabled, label, name, value, onSelect } = props;
-  const currentSelections: V[] = form.getValue(name) || [];
-  const isSelected = !!currentSelections.find(s => isEqual(s, value));
+
+  const form = useForm();
+  const textToString = useTextToString();
+  const theme = useTheme();
+
+  const currentSelections: Value<V, E>[] = form.getValue(name) || [];
+  const isSelected = !!currentSelections.find(s =>
+    isEqual(s.value, value.value),
+  );
 
   quickAnimation();
 
@@ -102,9 +110,12 @@ export function Checkbox<V extends Value>(props: Props<V>) {
           return;
         }
 
+        const withoutSelected = currentSelections.filter(
+          s => !isEqual(s.value, value.value),
+        );
         const newSelections = isSelected
-          ? currentSelections.filter(s => !isEqual(s, value))
-          : currentSelections.concat(value);
+          ? withoutSelected
+          : withoutSelected.concat(value);
 
         if (!props.__doNotWriteToForm) {
           form.setValue(name, newSelections);
@@ -120,7 +131,7 @@ export function Checkbox<V extends Value>(props: Props<V>) {
             {isSelected && <Checkmark height={24} fill={theme.onPrimary} />}
           </Box>
           <Label>
-            <Text>{label}</Text>
+            <LabelText>{label && textToString(label)}</LabelText>
           </Label>
         </>
       )}

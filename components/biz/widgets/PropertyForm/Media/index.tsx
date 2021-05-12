@@ -6,7 +6,11 @@ import { i18n } from '@/lib/translate';
 
 import styles from './index.module.scss';
 
-export function Media() {
+interface Props {
+  isEditMode?: boolean;
+}
+
+export function Media(props: Props) {
   return (
     <>
       <p>
@@ -14,7 +18,12 @@ export function Media() {
           <i18n.Translate>Media</i18n.Translate>
         </Overline>
       </p>
-      <MediaUpload multiple className={styles.media} name="media" />
+      <MediaUpload
+        multiple
+        className={styles.media}
+        name="media"
+        softDelete={props.isEditMode}
+      />
     </>
   );
 }

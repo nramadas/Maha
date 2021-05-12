@@ -1,6 +1,6 @@
 import { gql } from '@urql/core';
 import cx from 'classnames';
-import React, { useState } from 'react';
+import React from 'react';
 import { useMutation } from 'urql';
 
 import { Autocomplete } from '@/components/controls/Autocomplete';
@@ -10,9 +10,14 @@ import { Body2 } from '@/components/typography/Body2';
 import { useForm } from '@/hooks/useForm';
 import { createRequest } from '@/lib/gql/createRequest';
 import { i18n } from '@/lib/translate';
+import { Location } from '@/models/Location';
 import { School } from '@/models/School';
 
 import styles from './index.module.scss';
+
+interface ExtraData {
+  googleId: string;
+}
 
 const getResults = createRequest`
   query($text: String!) {
@@ -43,79 +48,79 @@ const createSchoolMutation = gql`
   }
 `;
 
-interface Props<M extends boolean> {
+interface Props {
   className?: string;
   name: string;
-  multiSelect?: M;
-  onSelect?: M extends true
-    ? (schools: School) => void
-    : (school: School) => void;
+  onSelect?: (schools: School) => void;
 }
 
-export function SchoolAutocomplete<M extends boolean>(props: Props<M>) {
+export function SchoolAutocomplete(props: Props) {
   const form = useForm();
   const [, createSchool] = useMutation(createSchoolMutation);
-  const [selectedSchools, setSelectedSchools] = useState<School[]>([]);
+
+  const selectedSchools: School[] = form.getValue(props.name) || [];
 
   return (
     <div className={cx(props.className, styles.container)}>
-      {props.multiSelect &&
-        selectedSchools.map(school => (
-          <div className={styles.school} key={school.id}>
-            <Body2>{school.name}</Body2>
-            <Trash
-              className={styles.trashIcon}
-              onClick={() => {
-                const newSchools = selectedSchools.filter(
-                  s => s.id !== school.id,
-                );
-                form.setValue(props.name, newSchools);
-                setSelectedSchools(newSchools);
-
-                // @ts-ignore
-                props.onSelect?.(newSchools);
-              }}
-            />
-          </div>
-        ))}
-      <Autocomplete
+      {selectedSchools.map(school => (
+        <div className={styles.school} key={school.id}>
+          <Body2>{school.name}</Body2>
+          <Trash
+            className={styles.trashIcon}
+            onClick={() => {
+              const newSchools = selectedSchools.filter(
+                s => s.id !== school.id,
+              );
+              form.setValue(props.name, newSchools);
+              // @ts-ignore
+              props.onSelect?.(newSchools);
+            }}
+          />
+        </div>
+      ))}
+      <Autocomplete<Location, ExtraData>
         __doNotWriteToForm
         icon={<Book />}
         label={i18n.translate`School name`}
         name="school"
         key={selectedSchools.map(({ id }) => id).join('-')}
         getItems={text =>
-          getResults({ variables: { text } }).then(({ data }) =>
-            data.matchingPlaces.map((place: any) => ({
-              text: place.name,
-              googleId: place.googleId,
-              location: place.location,
-            })),
-          )
+          !text
+            ? []
+            : getResults({ variables: { text } }).then(({ data }) =>
+                data
+                  ? data.matchingPlaces.map((place: any) => ({
+                      text: place.name,
+                      value: place.location,
+                      extraData: {
+                        googleId: place.googleId,
+                      },
+                    }))
+                  : [],
+              )
         }
         onSelect={item => {
-          // @ts-ignore
-          const { text, googleId, location } = item;
+          if (!item) {
+            return;
+          }
 
-          createSchool({ school: { googleId, location, name: text } }).then(
-            result => {
-              if (result.data) {
-                const newSchool = result.data.createSchool;
+          const { text, value, extraData } = item;
 
-                if (props.multiSelect === true) {
-                  const curValues = form.getValue(props.name) || [];
-                  const newValues = curValues.concat(newSchool);
-                  form.setValue(props.name, newValues);
-                  props.onSelect?.(newValues);
-                  setSelectedSchools(newValues);
-                } else {
-                  form.setValue(props.name, newSchool);
-                  props.onSelect?.(newSchool);
-                  setSelectedSchools([newSchool]);
-                }
-              }
+          createSchool({
+            school: {
+              googleId: extraData!.googleId,
+              location: value,
+              name: text,
             },
-          );
+          }).then(result => {
+            if (result.data) {
+              const newSchool = result.data.createSchool;
+              const curValues = form.getValue(props.name) || [];
+              const newValues = curValues.concat(newSchool);
+              form.setValue(props.name, newValues);
+              props.onSelect?.(newValues);
+            }
+          });
         }}
       />
     </div>

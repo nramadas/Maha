@@ -1,17 +1,20 @@
 import isEqual from 'lodash/isEqual';
-import React, { useRef } from 'react';
+import React from 'react';
 
 import { Checkmark } from '@/components/icons/Checkmark';
 import { Caption } from '@/components/typography/Caption';
 import { useForm } from '@/hooks/useForm';
+import { useTextToString } from '@/hooks/useTextToString';
+import { Text } from '@/models/Text';
 
 import styles from './index.module.scss';
 
-interface Value {
-  text: string;
+interface Value<V, E> {
+  value: V;
+  extraData?: E;
 }
 
-interface Props<V> {
+interface Props<V, E> {
   __doNotWriteToForm?: boolean;
   /**
    * Whether or not the checkbox is disabled
@@ -20,7 +23,7 @@ interface Props<V> {
   /**
    * Optional label that is displayed next to the checkbox
    */
-  label?: string;
+  label?: Text;
   /**
    * Reference name for checkbox value
    */
@@ -28,42 +31,50 @@ interface Props<V> {
   /**
    * Value of the checkbox option
    */
-  value: V;
+  value: Value<V, E>;
   /**
    * Callback for when this checkbox option is selected
    */
-  onSelect?(value: V): void;
+  onSelect?(value: Value<V, E>): void;
 }
 
 /**
  * Custom checkbox
  */
-export function Checkbox<V extends Value>(props: Props<V>) {
+export function Checkbox<V, E = any>(props: Props<V, E>) {
   const { disabled, label, name, value, onSelect } = props;
+
   const form = useForm();
-  const defaultSelections = useRef(form.getValue(name) || []);
-  const defaultChecked = !!defaultSelections.current.find((s: V) =>
-    isEqual(s, value),
+  const textToString = useTextToString();
+
+  const currentSelections: Value<V, E>[] = form.getValue(name) || [];
+  const isSelected = !!currentSelections.find(s =>
+    isEqual(s.value, value.value),
   );
 
   return (
     <label className={styles.container}>
       <input
+        checked={isSelected}
         className={styles.input}
-        defaultChecked={defaultChecked}
         disabled={disabled}
         type="checkbox"
-        onInput={e => {
-          const currentlySelected = new Set<V>(form.getValue(name) || []);
-
-          if (e.currentTarget.checked) {
-            currentlySelected.add(value);
-          } else {
-            currentlySelected.delete(value);
+        onChange={e => {
+          if (disabled) {
+            return;
           }
 
+          const currentlySelected: Value<V, E>[] = form.getValue(name) || [];
+          const withoutSelected = currentlySelected.filter(
+            s => !isEqual(s.value, value.value),
+          );
+
+          const newSelected = e.currentTarget.checked
+            ? withoutSelected.concat(value)
+            : withoutSelected;
+
           if (!props.__doNotWriteToForm) {
-            form.setValue(name, Array.from(currentlySelected.values()));
+            form.setValue(name, newSelected);
           }
 
           onSelect?.(value);
@@ -74,7 +85,7 @@ export function Checkbox<V extends Value>(props: Props<V>) {
         <Checkmark className={styles.check} />
       </div>
       <div className={styles.label}>
-        <Caption>{label}</Caption>
+        <Caption>{label && textToString(label)}</Caption>
       </div>
     </label>
   );

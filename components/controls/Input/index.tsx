@@ -1,5 +1,5 @@
 import cx from 'classnames';
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useRef } from 'react';
 
 import { ErrorText } from '@/components/controls/ErrorText';
 import { useForm } from '@/hooks/useForm';
@@ -61,9 +61,11 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(
     name,
     style,
     type,
+    value,
     ...rest
   } = props;
   const form = useForm();
+
   const textToString = useTextToString();
   const labelText = textToString(label);
   const errorText = error ? textToString(error) : undefined;
@@ -86,6 +88,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(
           ref={ref}
           style={style}
           type={type}
+          value={__doNotWriteToForm ? value : form.getValue(name) || ''}
           onInput={e => {
             const value = e.currentTarget.value;
             if (!__doNotWriteToForm) {

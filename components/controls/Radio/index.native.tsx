@@ -8,12 +8,17 @@ import { useTextToString } from '@/hooks/useTextToString';
 import { quick as quickAnimation } from '@/lib/animations/native';
 import { Text } from '@/models/Text';
 
-interface Props<V> {
+interface Value<V, E> {
+  value: V;
+  extraData?: E;
+}
+
+interface Props<V, E> {
   disabled?: boolean;
   label?: Text;
   name: string;
-  value: V;
-  onSelect?(value: V): void;
+  value: Value<V, E>;
+  onSelect?(value: Value<V, E>): void;
 }
 
 const Circle = styled.View<{ disabled?: boolean }>`
@@ -85,7 +90,7 @@ const Press = styled.View<{ pressed?: boolean }>`
 /**
  * Custom radio button
  */
-export function Radio<V>(props: Props<V>) {
+export function Radio<V, E>(props: Props<V, E>) {
   const { disabled, label, name, value, onSelect } = props;
   const form = useForm();
   const textToString = useTextToString();
@@ -93,7 +98,7 @@ export function Radio<V>(props: Props<V>) {
   quickAnimation();
 
   const currentlySelected = form.getValue(name);
-  const selected = isEqual(currentlySelected, value);
+  const selected = isEqual(currentlySelected?.value, value.value);
 
   return (
     <Container

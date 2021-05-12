@@ -1,4 +1,5 @@
 import cx from 'classnames';
+import isEqual from 'lodash/isEqual';
 import React from 'react';
 
 import { Caption } from '@/components/typography/Caption';
@@ -8,16 +9,18 @@ import { Text } from '@/models/Text';
 
 import styles from './index.module.scss';
 
-interface ChoiceObj {
+interface ChoiceObj<V, E> {
   disabled?: boolean;
   text: Text;
+  value: V;
+  extraData?: E;
 }
 
-interface Props<C> extends React.InputHTMLAttributes<HTMLInputElement> {
+interface Props<V, E> extends React.InputHTMLAttributes<HTMLInputElement> {
   /**
    * A list of choices to select from
    */
-  choices: C[];
+  choices: ChoiceObj<V, E>[];
   /**
    * Reference name for chips value
    */
@@ -25,16 +28,17 @@ interface Props<C> extends React.InputHTMLAttributes<HTMLInputElement> {
   /**
    * Callback that returns when an item is selected
    */
-  onChoose?: (choice: C) => void;
+  onChoose?: (choice: ChoiceObj<V, E>) => void;
 }
 
 /**
  * Chips componet that allows for a single choice. Behaves like a radio button
  */
-export function Choice<C extends ChoiceObj>(props: Props<C>) {
-  const { choices, onChoose, ...rest } = props;
+export function Choice<V, E = any>(props: Props<V, E>) {
+  const { name, choices, onChoose, ...rest } = props;
   const form = useForm();
   const textToString = useTextToString();
+  const selected = form.getValue(name);
 
   return (
     <div className={styles.container}>
@@ -48,10 +52,11 @@ export function Choice<C extends ChoiceObj>(props: Props<C>) {
           <input
             {...rest}
             className={styles.hidden}
+            checked={isEqual(selected?.value, choice.value)}
             disabled={choice.disabled}
             type="radio"
-            onInput={() => {
-              form.setValue(rest.name, choice);
+            onChange={() => {
+              form.setValue(name, choice);
               onChoose?.(choice);
             }}
           />

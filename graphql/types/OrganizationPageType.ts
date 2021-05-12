@@ -9,6 +9,12 @@ registerEnumType(OrganizationPageType, {
     AddProperty: {
       description: 'Add a new property',
     },
+    DynamicRoute: {
+      description: 'A page that gets its value from the url',
+    },
+    EditProperty: {
+      description: 'Edit a property',
+    },
     Insights: {
       description: 'Data graphs and other insights',
     },

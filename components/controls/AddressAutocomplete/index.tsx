@@ -35,16 +35,16 @@ interface Props {
   className?: string;
   name: string;
   requireLatLng?: boolean;
-  onSelect?(loc: LocationModel): void;
+  onSelect?(loc: LocationModel | null): void;
 }
 
 export function AddressAutocomplete(props: Props) {
   const form = useForm();
   const [showLatLng, setShowLatLng] = useState(false);
+
   const latInput = useRef<HTMLInputElement | null>(null);
   const lngInput = useRef<HTMLInputElement | null>(null);
-  const defaultValues = useRef(form.getFormValues());
-  const defaultValue = defaultValues.current[props.name] || {};
+  const value: Partial<LocationModel> = form.getValue(props.name) || {};
 
   return (
     <div className={cx(props.className, styles.container)}>
@@ -53,43 +53,86 @@ export function AddressAutocomplete(props: Props) {
         className={cx(styles.lat, {
           [styles.vislatlng]: showLatLng,
         })}
-        defaultValue={defaultValue['lat']}
+        value={value.lat || ''}
         icon={<Latitude />}
         name="lat"
         label={i18n.translate`lat`}
         ref={latInput}
+        onInput={e => {
+          const lat = parseFloat(e.currentTarget.value);
+
+          if (lat !== value.lat) {
+            const newValue = { ...value, lat };
+            form.setValue(props.name, newValue);
+          }
+        }}
       />
       <Input
         __doNotWriteToForm
         className={cx(styles.lng, {
           [styles.vislatlng]: showLatLng,
         })}
-        defaultValue={defaultValue['lng']}
+        value={value.lng || ''}
         icon={<Longitude />}
         name="lng"
         label={i18n.translate`lng`}
         ref={lngInput}
+        onInput={e => {
+          const lng = parseFloat(e.currentTarget.value);
+
+          if (lng !== value.lng) {
+            const newValue = { ...value, lng };
+            form.setValue(props.name, newValue);
+          }
+        }}
       />
       <Autocomplete
         __doNotWriteToForm
+        allowInvalidValues
         className={cx(styles.input, {
           [styles.latLngVisible]: showLatLng,
         })}
-        defaultValue={defaultValue['address']}
+        value={
+          value.address
+            ? { value: value.address, text: value.address }
+            : undefined
+        }
         icon={<Location />}
         label={i18n.translate`address`}
         name="address"
         getItems={address =>
-          getResults({ variables: { address } }).then(({ data }) =>
-            data.matchingAddress.map((match: any) => ({
-              text: match.address,
-              googleId: match.googleId,
-            })),
-          )
+          !address
+            ? []
+            : getResults({ variables: { address } }).then(({ data }) =>
+                data
+                  ? data.matchingAddress.map((match: any) => ({
+                      text: match.address,
+                      value: match.address,
+                      extraData: {
+                        googleId: match.googleId,
+                      },
+                    }))
+                  : [],
+              )
         }
+        onChange={text => {
+          if (text !== value.address) {
+            const newValue = {
+              ...value,
+              address: text,
+            };
+
+            form.setValue(props.name, newValue);
+          }
+        }}
         onSelect={item => {
-          //@ts-ignore
-          const googleId = item.googleId;
+          if (!item) {
+            form.setValue(props.name, null);
+            props.onSelect?.(null);
+            return;
+          }
+
+          const googleId = item.extraData.googleId;
 
           getLocation({ variables: { googleId } }).then(({ data }) => {
             if (props.requireLatLng) {

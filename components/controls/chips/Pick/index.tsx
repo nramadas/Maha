@@ -11,20 +11,18 @@ import { Text } from '@/models/Text';
 
 import styles from './index.module.scss';
 
-interface Choice {
+interface Choice<V, E> {
   disabled?: boolean;
   text: Text;
+  value: V;
+  extraData?: E;
 }
 
-interface Props<C> extends React.InputHTMLAttributes<HTMLInputElement> {
+interface Props<V, E> extends React.InputHTMLAttributes<HTMLInputElement> {
   /**
    * A list of choices to select from
    */
-  choices: C[];
-  /**
-   * Choices that are selected by default
-   */
-  defaultSelected?: C[];
+  choices: Choice<V, E>[];
   /**
    * Reference name for chips value
    */
@@ -32,24 +30,27 @@ interface Props<C> extends React.InputHTMLAttributes<HTMLInputElement> {
   /**
    * Callback that returns when an item is selected
    */
-  onChoose?: (choices: C[]) => void;
+  onChoose?: (choices: Choice<V, E>[]) => void;
 }
 
 /**
  * Chips componet that allows for multiple choices. Behaves like a checkbox
  * component.
  */
-export function Pick<C extends Choice>(props: Props<C>) {
+export function Pick<V, E = any>(props: Props<V, E>) {
+  const { choices, name, onChoose, ...rest } = props;
+
   const form = useForm();
   const textToString = useTextToString();
 
-  const { choices, defaultSelected, name, onChoose, ...rest } = props;
-  const selected: C[] = form.getValue(name) || defaultSelected || [];
+  const selected: Choice<V, E>[] = form.getValue(name) || [];
 
   return (
     <div className={styles.container}>
       {choices.map(choice => {
-        const isSelected = !isNil(selected.find(s => isEqual(s, choice)));
+        const isSelected = !isNil(
+          selected.find(s => isEqual(s.value, choice.value)),
+        );
 
         return (
           <label
@@ -71,7 +72,9 @@ export function Pick<C extends Choice>(props: Props<C>) {
                   return;
                 }
 
-                const withoutChoice = selected.filter(s => !isEqual(s, choice));
+                const withoutChoice = selected.filter(
+                  s => !isEqual(s.value, choice.value),
+                );
                 const newSelected =
                   withoutChoice.length === selected.length
                     ? withoutChoice.concat(choice)

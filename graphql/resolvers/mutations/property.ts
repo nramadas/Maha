@@ -1,3 +1,4 @@
+import isNil from 'lodash/isNil';
 import { Arg, Authorized, ID, Mutation, Resolver } from 'type-graphql';
 import { Repository } from 'typeorm';
 import { InjectRepository } from 'typeorm-typedi-extensions';
@@ -10,6 +11,7 @@ import { User as UserEntity } from '@/db/entities/User';
 import { MyOrganization } from '@/graphql/decorators';
 import * as errors from '@/graphql/errors';
 import { CreateProperty } from '@/graphql/types/CreateProperty';
+import { EditProperty } from '@/graphql/types/EditProperty';
 import { MediaParentType } from '@/graphql/types/MediaParentType';
 import { Organization } from '@/graphql/types/Organization';
 import { Permission } from '@/graphql/types/Permission';
@@ -104,5 +106,83 @@ export class PropertyMutationResolver {
     const propertyModel = convertFromPropertyDBModel(property);
     await this._properties.delete(property.id);
     return propertyModel;
+  }
+
+  @Authorized(Permission.ManageProperties)
+  @Mutation(returns => Property, {
+    description: 'Make changes to a property',
+  })
+  async editProperty(
+    @MyOrganization() org: Organization | null,
+    @Arg('property') property: EditProperty,
+  ) {
+    if (!org) {
+      throw new errors.Unauthorized();
+    }
+
+    const dbProperty = await this._properties.findOne({
+      where: { id: property.id },
+    });
+
+    if (!dbProperty) {
+      throw new errors.DoesNotExist('property.id', property.id);
+    }
+
+    if (org.id !== dbProperty.organizationId) {
+      throw new errors.Unauthorized();
+    }
+
+    const { id, mediaIds, metropolitanKey, schoolIds, ...rest } = property;
+
+    const dbMedia = mediaIds
+      ? await this._media.find({ where: mediaIds.map(id => ({ id })) })
+      : [];
+
+    const dbCurrentMedia = await this._media.find({
+      where: { parentId: dbProperty.id, parentType: MediaParentType.Property },
+    });
+
+    const mediaIdsSet = new Set(mediaIds);
+    const newMedia: MediaEntity[] = [];
+
+    for (const media of dbMedia) {
+      if (!isNil(media.parentId) && media.parentId !== id) {
+        throw new errors.AlreadyAssigned('mediaIds', media.id);
+      } else if (!media.parentId) {
+        newMedia.push(media);
+      }
+    }
+
+    const expiredMedia: MediaEntity[] = [];
+
+    for (const media of dbCurrentMedia) {
+      if (!mediaIdsSet.has(media.id)) {
+        expiredMedia.push(media);
+      }
+    }
+
+    const dbSchools = schoolIds
+      ? await this._schools.find({ where: schoolIds.map(id => ({ id })) })
+      : [];
+
+    dbProperty.data = removeUndefinedKeys(rest);
+    dbProperty.metropolitanKey = metropolitanKey;
+    dbProperty.schools = dbSchools;
+
+    await this._properties.save(dbProperty);
+
+    await Promise.all([
+      ...([] as any[]), // just for typescript
+      ...newMedia.map(media => {
+        media.parentId = dbProperty.id;
+        media.parentType = MediaParentType.Property;
+        return this._media.save(media);
+      }),
+      ...expiredMedia.map(media => {
+        return this._media.delete(media.id);
+      }),
+    ]);
+
+    return convertFromPropertyDBModel(dbProperty);
   }
 }

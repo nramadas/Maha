@@ -1,4 +1,4 @@
-import { Field, ObjectType, ID } from 'type-graphql';
+import { GraphQLISODateTime, Field, ObjectType, ID } from 'type-graphql';
 
 import { AmenityAccess } from '@/graphql/types/AmenityAccess';
 import { LocalizedStrings } from '@/graphql/types/LocalizedStrings';

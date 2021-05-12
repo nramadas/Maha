@@ -151,9 +151,9 @@ export function Roles(props: Props) {
                   </Body2>
                 ) : (
                   <PickGrow
-                    defaultSelected={selected}
                     choices={allPermissions}
                     name="permissions"
+                    selected={selected}
                     onChoose={permissions => {
                       setRolePermissions({
                         roleId: role.id,

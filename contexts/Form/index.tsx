@@ -11,6 +11,7 @@ export interface FormValues {
 export interface FormDetails {
   getFormValues(): FormValues;
   getValue(name: string): any;
+  setFormValues(values: FormValues): void;
   setValue(name: string, value: any): void;
   onFormChange(fn: (values: FormValues) => void): void;
   onFormSubmit(fn: () => void): void;
@@ -22,6 +23,7 @@ export interface FormDetails {
 export const FormContext = createContext<FormDetails>({
   getFormValues: () => ({}),
   getValue: () => {},
+  setFormValues: () => {},
   setValue: () => {},
   onFormChange: () => {},
   onFormSubmit: () => {},
@@ -74,6 +76,9 @@ export function FormProvider(props: Props) {
         removeFormSubmit,
         getFormValues: () => formValues,
         getValue: name => formValues[name],
+        setFormValues: formValues => {
+          setFormValues(formValues);
+        },
         setValue: (name, value) => {
           const newFormValues = { ...formValues, [name]: value };
           changeCallbackContainer.current.forEach(fn => fn(newFormValues));
@@ -95,6 +100,7 @@ export function NoopFormProvider(props: Props) {
       value={{
         getFormValues: () => ({}),
         getValue: name => {},
+        setFormValues: values => {},
         setValue: (name, value) => {},
         onFormChange: () => {},
         onFormSubmit: () => {},

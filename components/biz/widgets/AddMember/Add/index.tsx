@@ -6,7 +6,6 @@ import { PickGrow } from '@/components/controls/chips/PickGrow';
 import { Form } from '@/components/controls/Form';
 import { Input } from '@/components/controls/Input';
 import { Overline } from '@/components/typography/Overline';
-import { useLanguagePack } from '@/hooks/useLanguagePack';
 import { name as roleName } from '@/lib/role/name';
 import { i18n } from '@/lib/translate';
 import { CommonRoleType } from '@/models/CommonRoleType';
@@ -30,7 +29,6 @@ interface Props {
 }
 
 export function Add(props: Props) {
-  const languagePack = useLanguagePack();
   const [email, setEmail] = useState('');
 
   return (
@@ -40,7 +38,7 @@ export function Add(props: Props) {
         props.onSubmit({
           email: formValues.email,
           roles: (formValues.roles || []).map((role: any) => ({
-            id: role.id,
+            id: role.value,
           })),
         })
       }
@@ -62,8 +60,8 @@ export function Add(props: Props) {
           choices={props.roles
             .filter(r => r.name !== CommonRoleType.Owner)
             .map(role => ({
-              id: role.id,
               text: roleName(role),
+              value: role.id,
             }))}
         />
       </div>

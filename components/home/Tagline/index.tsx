@@ -51,7 +51,7 @@ export function Tagline(props: Props) {
       </H1>
       <Form
         className={styles.cta}
-        onSubmit={({ city }) => router.push(city.url)}
+        onSubmit={({ city }) => router.push(city.value)}
       >
         <Body1 className={styles.prompt}>
           <i18n.Translate>Show me homes in</i18n.Translate>
@@ -61,7 +61,7 @@ export function Tagline(props: Props) {
           options={cities.map(city => ({
             disabled: !city.enabled,
             text: enumToText(city.key),
-            url: metropolitanRoute(city.key),
+            value: metropolitanRoute(city.key),
           }))}
         >
           {option =>

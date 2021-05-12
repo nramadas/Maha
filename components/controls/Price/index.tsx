@@ -16,7 +16,8 @@ interface Props
 export function Price(props: Props) {
   const { required, ...rest } = props;
   const form = useForm();
-  const [value, setValue] = useState('');
+  const _value = rest.value || form.getValue(rest.name);
+  const value = _value ? toString(_value) : isNil(_value) ? '' : '0';
 
   const emptyError = i18n.translate`You must enter a rupee amount`;
 
@@ -26,20 +27,12 @@ export function Price(props: Props) {
       __doNotWriteToForm
       icon={<DollarRupee />}
       type="text"
-      value={value}
+      value={value ? `₹${value}` : ''}
       onInput={e => {
         const val = e.currentTarget.value;
         const withoutSymbol = val.replaceAll('₹', '');
         const number = fromString(withoutSymbol);
-        const prettyNumber = withoutSymbol
-          ? number
-            ? `₹${toString(number)}`
-            : isNil(number)
-            ? ''
-            : '₹0'
-          : '';
         form.setValue(rest.name, number);
-        setValue(prettyNumber);
       }}
       onValidate={required ? text => (text ? '' : emptyError) : undefined}
     />

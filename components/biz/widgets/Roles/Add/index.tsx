@@ -42,7 +42,9 @@ export function Add(props: Props) {
           props.onSubmit({
             name: formValues.name,
             description: formValues.description,
-            permissions: (formValues.permissions || []).map((p: any) => p.id),
+            permissions: (formValues.permissions || []).map(
+              (p: any) => p.value,
+            ),
           })
         }
       >
@@ -62,7 +64,7 @@ export function Add(props: Props) {
           <PickGrow
             name="permissions"
             choices={allPermissions.map(permission => ({
-              id: permission,
+              value: permission,
               text: permissionName(permission)(languagePack),
             }))}
           />

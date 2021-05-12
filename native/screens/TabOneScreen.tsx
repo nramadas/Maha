@@ -122,7 +122,7 @@ export default function TabOneScreen() {
                   .filter(str =>
                     str.toLowerCase().includes((inputText || '').toLowerCase()),
                   )
-                  .map(text => ({ text }))
+                  .map(text => ({ text, value: text }))
               }
             />
           </Section>
@@ -139,33 +139,33 @@ export default function TabOneScreen() {
           <Checkbox
             label="checkbox"
             name="checkbox"
-            value={{ text: 'checkbox on!' }}
+            value={{ value: 'checkbox on!' }}
           />
           <T.H3>Chips</T.H3>
           <Section>
             <T.H4>Chips - Choice</T.H4>
             <C.Choice
               choices={[
-                { text: 'Apple' },
-                { text: 'Bat' },
-                { text: 'Cat' },
-                { text: 'Dog' },
-                { text: 'Elephant' },
-                { text: 'Frog', disabled: true },
-                { text: 'Garden' },
+                { text: 'Apple', value: 'Apple' },
+                { text: 'Bat', value: 'Bat' },
+                { text: 'Cat', value: 'Cat' },
+                { text: 'Dog', value: 'Dog' },
+                { text: 'Elephant', value: 'Elephant' },
+                { text: 'Frog', disabled: true, value: 'Frog' },
+                { text: 'Garden', value: 'Garden' },
               ]}
               name="chips_Choice"
             />
             <T.H4>Chips - Pick</T.H4>
             <C.Pick
               choices={[
-                { text: 'Apple' },
-                { text: 'Bat' },
-                { text: 'Cat' },
-                { text: 'Dog' },
-                { text: 'Elephant' },
-                { text: 'Frog', disabled: true },
-                { text: 'Garden' },
+                { text: 'Apple', value: 'Apple' },
+                { text: 'Bat', value: 'Bat' },
+                { text: 'Cat', value: 'Cat' },
+                { text: 'Dog', value: 'Dog' },
+                { text: 'Elephant', value: 'Elephant' },
+                { text: 'Frog', disabled: true, value: 'Frog' },
+                { text: 'Garden', value: 'Garden' },
               ]}
               name="chips_Pick"
             />
@@ -198,21 +198,21 @@ export default function TabOneScreen() {
           </Section>
           <T.H3>Radio</T.H3>
           <Section>
-            <Radio label="1" name="radio" value={{ text: 'optionA' }} />
-            <Radio label="2" name="radio" value={{ text: 'optionB' }} />
-            <Radio label="3" name="radio" value={{ text: 'optionC' }} />
+            <Radio label="1" name="radio" value={{ value: 'optionA' }} />
+            <Radio label="2" name="radio" value={{ value: 'optionB' }} />
+            <Radio label="3" name="radio" value={{ value: 'optionC' }} />
           </Section>
           <T.H3>Select</T.H3>
           <Section>
             <Select
               options={[
-                { text: 'Apple' },
-                { text: 'Bat' },
-                { text: 'Cat' },
-                { text: 'Dog' },
-                { text: 'Elephant' },
-                { text: 'Frog' },
-                { text: 'Garden' },
+                { text: 'Apple', value: 'Apple' },
+                { text: 'Bat', value: 'Bat' },
+                { text: 'Cat', value: 'Cat' },
+                { text: 'Dog', value: 'Dog' },
+                { text: 'Elephant', value: 'Elephant' },
+                { text: 'Frog', value: 'Frog' },
+                { text: 'Garden', value: 'Garden' },
               ]}
               placeholder="Please select"
               name="select"

@@ -25,8 +25,16 @@ export function Amenities() {
           </Body2>
         </div>
         <div className={styles.radioGroup}>
-          <Radio name="amenitiesGym" value label={i18n.translate`Yes`} />
-          <Radio name="amenitiesGym" value={false} label={i18n.translate`No`} />
+          <Radio
+            name="amenitiesGym"
+            value={{ value: true }}
+            label={i18n.translate`Yes`}
+          />
+          <Radio
+            name="amenitiesGym"
+            value={{ value: false }}
+            label={i18n.translate`No`}
+          />
         </div>
 
         <div className={styles.label}>
@@ -35,10 +43,14 @@ export function Amenities() {
           </Body2>
         </div>
         <div className={styles.radioGroup}>
-          <Radio name="amenitiesSecurity" value label={i18n.translate`Yes`} />
           <Radio
             name="amenitiesSecurity"
-            value={false}
+            value={{ value: true }}
+            label={i18n.translate`Yes`}
+          />
+          <Radio
+            name="amenitiesSecurity"
+            value={{ value: false }}
             label={i18n.translate`No`}
           />
         </div>

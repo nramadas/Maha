@@ -8,7 +8,7 @@ import { Autocomplete } from './index';
 const items = (inputText?: string | undefined) =>
   ['Apple', 'Bat', 'Cat', 'Dog', 'Elephant', 'Frog', 'Garden']
     .filter(str => str.toLowerCase().includes((inputText || '').toLowerCase()))
-    .map(text => ({ text }));
+    .map(text => ({ text, value: text }));
 
 const itemsAsync = (
   inputText?: string | undefined,

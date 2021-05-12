@@ -1,5 +1,7 @@
 import cx from 'classnames';
 import clamp from 'lodash/clamp';
+import isEqual from 'lodash/isEqual';
+import isNil from 'lodash/isNil';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useEventCallback } from 'rxjs-hooks';
 import { debounceTime, concatMap, tap, map } from 'rxjs/operators';
@@ -28,11 +30,13 @@ function makeItems<O>(items: O[], text: string) {
   };
 }
 
-interface Choice {
+interface Choice<V, E> {
   text: Text;
+  value: V;
+  extraData?: E;
 }
 
-interface Props<C> extends React.InputHTMLAttributes<HTMLInputElement> {
+interface Props<V, E> extends React.InputHTMLAttributes<HTMLInputElement> {
   /**
    * Placeholder text to show inside the input
    */
@@ -48,23 +52,27 @@ interface Props<C> extends React.InputHTMLAttributes<HTMLInputElement> {
    */
   getChoices: (
     inputText?: string | undefined,
-    currentlySelected?: C[],
-  ) => C[] | Promise<C[]>;
+    currentlySelected?: Choice<V, E>[],
+  ) => Choice<V, E>[] | Promise<Choice<V, E>[]>;
   /**
    * Callback that returns when an item is selected
    */
-  onChoose?: (choices: C[]) => void;
+  onChoose?: (choices: Choice<V, E>[]) => void;
 }
 
 /**
  * Chips component that behaves like an autocomplete, but allows for multiple
  * selections.
  */
-export function Input<C extends Choice>(props: Props<C>) {
+export function Input<V, E = any>(props: Props<V, E>) {
   const { getChoices, label, name, onChoose, ...rest } = props;
 
   const form = useForm();
   const textToString = useTextToString();
+
+  const currentSelections: Choice<V, E>[] = form.getValue(name) || [];
+
+  const [localValue, setLocalValue] = useState('');
 
   const [Target, Tooltip] = useTooltip({
     alignment: 'full',
@@ -72,20 +80,19 @@ export function Input<C extends Choice>(props: Props<C>) {
     type: 'focus',
   });
 
-  const [highlightedItem, setHighlightedItem] = useState<C | undefined>(
-    undefined,
-  );
+  const [highlightedItem, setHighlightedItem] = useState<
+    Choice<V, E> | undefined
+  >(undefined);
 
   const [error, setError] = useState<Text | undefined>(undefined);
-  const [selected, setSelected] = useState<C[]>([]);
   const [focused, setFocused] = useState(false);
-  const getSelected = useRef(() => selected);
+  const getSelected = useRef(() => currentSelections);
 
   useEffect(() => {
-    getSelected.current = () => selected;
-  }, [selected]);
+    getSelected.current = () => currentSelections;
+  }, [currentSelections]);
 
-  const [itemsCallback, items] = useEventCallback<string, C[]>(
+  const [itemsCallback, items] = useEventCallback<string, Choice<V, E>[]>(
     event =>
       event.pipe(
         debounceTime(150),
@@ -98,47 +105,46 @@ export function Input<C extends Choice>(props: Props<C>) {
         }),
         tap(results => {
           setHighlightedItem(results.items[0]);
-          setError(results.error);
+          setError(() => results.error);
         }),
         map(results => results.items),
       ),
     [],
   );
 
-  const inputRef = useRef<HTMLInputElement>(null);
-
   const selectChoice = useCallback(
-    (item: C) => {
+    (item: Choice<V, E>) => {
       itemsCallback('');
-      const newSelected = [...selected];
+      const newSelected = [...currentSelections];
+      const alreadyContains = !isNil(
+        newSelected.find(s => isEqual(s.value, item.value)),
+      );
 
-      if (!selected.includes(item)) {
+      if (!alreadyContains) {
         newSelected.push(item);
       }
 
-      setSelected(newSelected);
+      setLocalValue('');
       form.setValue(name, newSelected);
       onChoose && onChoose(newSelected);
-
-      if (inputRef.current) {
-        inputRef.current.value = '';
-      }
     },
-    [selected, itemsCallback, onChoose],
+    [currentSelections, itemsCallback, onChoose],
   );
 
   const deleteChoice = useCallback(
-    (item: C) => {
+    (item: Choice<V, E>) => {
       itemsCallback && itemsCallback('');
-      const newSelected = selected.filter(s => s !== item);
-      setSelected(newSelected);
+      const newSelected = currentSelections.filter(
+        s => !isEqual(s.value, item.value),
+      );
+      form.setValue(name, newSelected);
       onChoose && onChoose(newSelected);
     },
-    [selected, itemsCallback, onChoose],
+    [currentSelections, itemsCallback, onChoose],
   );
 
   useEffect(() => {
-    itemsCallback('');
+    itemsCallback(localValue);
   }, [itemsCallback]);
 
   return (
@@ -149,10 +155,10 @@ export function Input<C extends Choice>(props: Props<C>) {
             className={cx(styles.inputContainer, {
               [styles.withError]: !!error,
               [styles.inputContainerFocused]: focused,
-              [styles.inputContainerNotEmpty]: !!selected.length,
+              [styles.inputContainerNotEmpty]: !!currentSelections.length,
             })}
           >
-            {selected.map(choice => (
+            {currentSelections.map(choice => (
               <div
                 className={styles.choiceContainer}
                 key={textToString(choice.text)}
@@ -186,8 +192,8 @@ export function Input<C extends Choice>(props: Props<C>) {
               {...rest}
               className={styles.input}
               placeholder="&nbsp;"
-              ref={inputRef}
               type="text"
+              value={localValue}
               onBlur={e => {
                 // if the input is empty, don't make any selections
                 if (e.currentTarget.value && highlightedItem) {
@@ -199,9 +205,10 @@ export function Input<C extends Choice>(props: Props<C>) {
               onFocus={() => {
                 setFocused(true);
               }}
-              onInput={e =>
-                itemsCallback && itemsCallback(e.currentTarget.value)
-              }
+              onInput={e => {
+                setLocalValue(e.currentTarget.value);
+                itemsCallback && itemsCallback(e.currentTarget.value);
+              }}
               onKeyDown={e => {
                 if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
                   // the prevent default is require to keep the cursor from moving
@@ -241,10 +248,10 @@ export function Input<C extends Choice>(props: Props<C>) {
 
                 if (
                   e.key === 'Backspace' &&
-                  selected.length &&
+                  currentSelections.length &&
                   !e.currentTarget.value
                 ) {
-                  deleteChoice(selected[selected.length - 1]);
+                  deleteChoice(currentSelections[currentSelections.length - 1]);
                 }
               }}
             />

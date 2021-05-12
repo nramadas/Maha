@@ -1,5 +1,6 @@
 import cx from 'classnames';
-import React, { useEffect, useState } from 'react';
+import isEqual from 'lodash/isEqual';
+import React from 'react';
 
 import { ChevronDown } from '@/components/icons/ChevronDown';
 import { Body2 } from '@/components/typography';
@@ -11,21 +12,19 @@ import { Text } from '@/models/Text';
 import styles from './index.module.scss';
 import { sortOptions } from './sortOptions';
 
-interface Option {
+interface Option<V, E> {
   disabled?: boolean;
   text: Text;
+  value: V;
+  extraData?: E;
 }
 
-interface Props<O> {
+interface Props<V, E> {
   /**
    * Render method for each option in the select. Has the signature
    * `<O extends Option>(option: O) => JSX.Element`
    */
-  children: (option: O & { text: string }) => JSX.Element;
-  /**
-   * Whether the select should come pre-selected with an option.
-   */
-  defaultSelected?: O;
+  children: (option: Option<V, E> & { text: string }) => JSX.Element;
   /**
    * Input name
    */
@@ -34,7 +33,7 @@ interface Props<O> {
    * List of options to display in the select. Each option extends the shape
    * `{ text: string }`.
    */
-  options: O[];
+  options: Option<V, E>[];
   /**
    * If there are no options seleced, placeholder text to display.
    */
@@ -43,24 +42,21 @@ interface Props<O> {
    * Callback, fired when a new option is selected. Has the signature
    * `<O extends Option>(option: O) => void`
    */
-  onChange?: (option: O) => void;
+  onChange?: (option: Option<V, E>) => void;
 }
 
 /**
  * Select component, extends standard `<input/>` props.
  */
-export function Select<O extends Option>(props: Props<O>) {
+export function Select<V, E = any>(props: Props<V, E>) {
   const form = useForm();
   const textToString = useTextToString();
   const preSort = sortOptions(props.options, textToString, null);
 
-  const [selected, setSelected] = useState<O | null>(
-    props.defaultSelected || (props.placeholder ? null : preSort[0]),
-  );
+  const _selected =
+    form.getValue(props.name) || (props.placeholder ? null : preSort[0]);
 
-  useEffect(() => {
-    form.setValue(props.name, selected);
-  }, [selected]);
+  const selected = props.options.find(o => isEqual(o.value, _selected?.value));
 
   const [Target, Tooltip] = useTooltip({
     alignment: 'full',
@@ -72,7 +68,7 @@ export function Select<O extends Option>(props: Props<O>) {
 
   const sortedOptions = sortOptions(props.options, textToString, selected);
 
-  const render = (option: O) =>
+  const render = (option: Option<V, E>) =>
     props.children({ ...option, text: textToString(option.text) });
 
   return (
@@ -98,7 +94,7 @@ export function Select<O extends Option>(props: Props<O>) {
             )}
             <ChevronDown className={styles.icon} />
           </div>
-          {props.placeholder && !props.defaultSelected && (
+          {props.placeholder && (
             <div className={styles.size}>
               <Body2>{textToString(props.placeholder)}</Body2>
               <ChevronDown className={styles.icon} />
@@ -120,7 +116,7 @@ export function Select<O extends Option>(props: Props<O>) {
               key={textToString(option.text)}
               onClick={() => {
                 if (!option.disabled) {
-                  setSelected(option);
+                  form.setValue(props.name, option);
                   props.onChange?.(option);
                 }
               }}

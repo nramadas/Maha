@@ -5,5 +5,5 @@ import { LocalizedStrings as LocalizedStringsModel } from '@/models/LocalizedStr
 @ObjectType({ description: 'A map of translated strings' })
 export class LocalizedStrings implements LocalizedStringsModel {
   @Field({ description: 'String in english', nullable: true })
-  en: string | undefined;
+  en?: string;
 }

@@ -3,24 +3,19 @@ import isEqual from 'lodash/isEqual';
 import { useTextToString } from '@/hooks/useTextToString';
 import { Text } from '@/models/Text';
 
-interface Option {
+interface Option<V> {
   disabled?: boolean;
   text: Text;
+  value: V;
 }
 
-export function sortOptions<O extends Option>(
-  options: O[],
+export function sortOptions<V>(
+  options: Option<V>[],
   textToString: ReturnType<typeof useTextToString>,
-  selected?: O | null,
+  selected?: Option<V> | null,
 ) {
   return options
-    .filter(
-      option =>
-        !isEqual(
-          textToString(option.text),
-          selected ? textToString(selected.text) : null,
-        ),
-    )
+    .filter(option => !isEqual(option.value, selected?.value))
     .sort((a, b) => {
       if (a.disabled && !b.disabled) {
         return 1;

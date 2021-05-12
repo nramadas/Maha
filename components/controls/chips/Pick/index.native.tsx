@@ -9,20 +9,18 @@ import { useForm } from '@/hooks/useForm';
 import { useTextToString } from '@/hooks/useTextToString';
 import { Text } from '@/models/Text';
 
-interface ChoiceObj {
+interface Choice<V, E> {
   disabled?: boolean;
   text: Text;
+  value: V;
+  extraData?: E;
 }
 
-interface Props<C> {
+interface Props<V, E> {
   /**
    * A list of choices to select from
    */
-  choices: C[];
-  /**
-   * Choices that are selected by default
-   */
-  defaultSelected?: C[];
+  choices: Choice<V, E>[];
   /**
    * Reference name for chips value
    */
@@ -30,7 +28,7 @@ interface Props<C> {
   /**
    * Callback that returns when an item is selected
    */
-  onChoose?: (choices: C[]) => void;
+  onChoose?: (choices: Choice<V, E>[]) => void;
 }
 
 const Container = styled.View`
@@ -102,18 +100,21 @@ const PillText = styled(Body2)<{ disabled?: boolean; selected?: boolean }>`
     `};
 `;
 
-export function Pick<C extends ChoiceObj>(props: Props<C>) {
+export function Pick<V, E = any>(props: Props<V, E>) {
+  const { choices, name, onChoose } = props;
+
   const form = useForm();
   const theme = useTheme();
   const textToString = useTextToString();
 
-  const { choices, defaultSelected, name, onChoose } = props;
-  const selected: C[] = form.getValue(name) || defaultSelected || [];
+  const selected: Choice<V, E>[] = form.getValue(name) || [];
 
   return (
     <Container>
       {choices.map(choice => {
-        const isSelected = !isNil(selected.find(s => isEqual(s, choice)));
+        const isSelected = !isNil(
+          selected.find(s => isEqual(s.value, choice.value)),
+        );
 
         return (
           <PillContainer
@@ -123,7 +124,9 @@ export function Pick<C extends ChoiceObj>(props: Props<C>) {
                 return;
               }
 
-              const withoutChoice = selected.filter(s => !isEqual(s, choice));
+              const withoutChoice = selected.filter(
+                s => !isEqual(s.value, choice.value),
+              );
               const newSelected =
                 withoutChoice.length === selected.length
                   ? withoutChoice.concat(choice)

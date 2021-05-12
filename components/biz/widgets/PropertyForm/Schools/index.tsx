@@ -14,7 +14,7 @@ export function Schools() {
           <i18n.Translate>Schools</i18n.Translate>
         </Overline>
       </p>
-      <SchoolAutocomplete multiSelect name="schools" />
+      <SchoolAutocomplete name="schools" />
     </>
   );
 }
