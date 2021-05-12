@@ -28,7 +28,7 @@ const getResults = createRequest`
   }
 `;
 
-const createOrGetSchool = gql`
+const createSchoolMutation = gql`
   mutation($school: CreateSchool!) {
     createSchool(school: $school) {
       id
@@ -54,7 +54,7 @@ interface Props<M extends boolean> {
 
 export function SchoolAutocomplete<M extends boolean>(props: Props<M>) {
   const form = useForm();
-  const [, createSchool] = useMutation(createOrGetSchool);
+  const [, createSchool] = useMutation(createSchoolMutation);
   const [selectedSchools, setSelectedSchools] = useState<School[]>([]);
 
   return (

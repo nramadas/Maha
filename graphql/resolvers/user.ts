@@ -31,7 +31,7 @@ export class UserResolver {
   ) {}
 
   @FieldResolver(type => [Media], {
-    description: 'All the media for this property',
+    description: 'All the media for this user',
   })
   async media(@Root() root: User) {
     const dbMedia = await this._media.find({

@@ -7,7 +7,7 @@ export class CreateLocation implements LocationModel {
   @Field({ description: 'The full address' })
   address!: string;
 
-  @Field({ description: 'Lattitude', nullable: true })
+  @Field({ description: 'Latitude', nullable: true })
   lat?: number;
 
   @Field({ description: 'Longitude', nullable: true })

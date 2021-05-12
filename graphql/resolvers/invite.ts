@@ -17,7 +17,10 @@ export class InviteResolver {
   ) {}
 
   @Authorized(Permission.ModifyRoles)
-  @FieldResolver(type => [Role])
+  @FieldResolver(type => [Role], {
+    description:
+      'Returns a list of roles the recipient of the invite will be assigned',
+  })
   async roles(@Root() root: Invite) {
     const dbInvite = await this._invites.findOne({
       where: { id: root.id },

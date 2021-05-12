@@ -4,6 +4,6 @@ import { Location } from '@/graphql/types/Location';
 
 @ObjectType({ description: 'Return type for address autocomplete' })
 export class AddressMatch extends Location {
-  @Field({ description: 'The ID google associates with this address' })
+  @Field({ description: 'The ID google associated with this address' })
   googleId!: string;
 }

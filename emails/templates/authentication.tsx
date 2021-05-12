@@ -24,7 +24,7 @@ export const Authentication: Email<Props> = {
       <Container>
         <Title>Complete your log in</Title>
         <p>
-          After you log in, you'll be able to favorite properties, schedule
+          After you log in, you'll be able to favourite properties, schedule
           on-site visits, and get in touch with the property developers!
         </p>
         <p style={{ paddingTop: 12 }}>

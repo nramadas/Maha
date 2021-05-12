@@ -5,9 +5,9 @@ import { useMutation } from 'urql';
 import { JWTContext } from '@/contexts/JWT';
 import { extractPayload } from '@/lib/authn/extractPayload';
 
-const refreshAuthentication = gql`
+const refreshAuthenticationMutation = gql`
   mutation($refreshToken: String!) {
-    refreshAuthentication(credentials: { refreshToken: $refreshToken }) {
+    refreshAuthentication(refreshToken: $refreshToken) {
       jwt
     }
   }
@@ -15,7 +15,7 @@ const refreshAuthentication = gql`
 
 export function JWTRefresh() {
   const { jwt, aut, setJwt } = useContext(JWTContext);
-  const [, refresh] = useMutation(refreshAuthentication);
+  const [, refresh] = useMutation(refreshAuthenticationMutation);
 
   const timer = useRef<number | undefined>(undefined);
 

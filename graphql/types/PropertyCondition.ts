@@ -4,7 +4,7 @@ import { PropertyCondition } from '@/models/PropertyCondition';
 
 registerEnumType(PropertyCondition, {
   name: 'PropertyCondition',
-  description: '',
+  description: 'What condition the property is in',
   valuesConfig: {
     New: {
       description: 'This property has no previous owners',

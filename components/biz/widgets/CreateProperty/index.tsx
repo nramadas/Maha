@@ -94,21 +94,18 @@ function canonicalizeForm(formValues: any) {
   return canonicalValues;
 }
 
-const newProperty = gql`
+const createPropertyMutation = gql`
   mutation($property: CreateProperty!) {
     createProperty(property: $property) {
       id
-      properties {
-        id
-        location {
-          address
-        }
-        media {
-          id
-          type
-        }
-        name
+      location {
+        address
       }
+      media {
+        id
+        type
+      }
+      name
     }
   }
 `;
@@ -121,7 +118,7 @@ interface Props {
 export function CreateProperty(props: Props) {
   const router = useRouter();
   const [submitDisabled, setSubmitDisabled] = useState(true);
-  const [, createProperty] = useMutation(newProperty);
+  const [, createProperty] = useMutation(createPropertyMutation);
   const displayError = useDisplayError();
 
   return (

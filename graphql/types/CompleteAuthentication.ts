@@ -1,7 +1,7 @@
 import { Field, InputType } from 'type-graphql';
 
 @InputType({ description: 'Credentials required to complete authentication' })
-export class CompleteAuthenticationInput {
+export class CompleteAuthentication {
   @Field({ description: "The User's email" })
   email!: string;
 

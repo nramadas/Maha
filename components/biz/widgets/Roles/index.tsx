@@ -23,7 +23,7 @@ import { Role } from '@/models/Role';
 import { Add } from './Add';
 import styles from './index.module.scss';
 
-const getRoles = gql`
+const getRolesQuery = gql`
   query {
     me {
       id
@@ -40,7 +40,7 @@ const getRoles = gql`
   }
 `;
 
-const setPermissions = gql`
+const setRolePermissionsMutation = gql`
   mutation($roleId: ID!, $permissions: [Permission!]!) {
     setRolePermissions(roleId: $roleId, permissions: $permissions) {
       id
@@ -49,7 +49,7 @@ const setPermissions = gql`
   }
 `;
 
-const addRole = gql`
+const createRoleMutation = gql`
   mutation($name: String!, $description: String, $permissions: [Permission!]) {
     createRole(
       name: $name
@@ -57,26 +57,20 @@ const addRole = gql`
       permissions: $permissions
     ) {
       id
-      roles {
-        id
-        description
-        name
-        permissions
-      }
+      description
+      name
+      permissions
     }
   }
 `;
 
-const removeRole = gql`
+const deleteRoleMutation = gql`
   mutation($id: ID!) {
     deleteRole(id: $id) {
       id
-      roles {
-        id
-        description
-        name
-        permissions
-      }
+      description
+      name
+      permissions
     }
   }
 `;
@@ -88,10 +82,10 @@ interface Props {
 export function Roles(props: Props) {
   const confirm = useConfirmation();
   const displayError = useDisplayError();
-  const [rolesResult] = useQuery({ query: getRoles });
-  const [, setRolePermissions] = useMutation(setPermissions);
-  const [, deleteRole] = useMutation(removeRole);
-  const [, createRole] = useMutation(addRole);
+  const [rolesResult] = useQuery({ query: getRolesQuery });
+  const [, setRolePermissions] = useMutation(setRolePermissionsMutation);
+  const [, deleteRole] = useMutation(deleteRoleMutation);
+  const [, createRole] = useMutation(createRoleMutation);
   const textToString = useTextToString();
 
   if (!rolesResult.data) {

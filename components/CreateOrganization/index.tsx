@@ -6,7 +6,7 @@ import { ErrorType } from '@/lib/errors/type';
 
 import { Form } from './Form';
 
-const createOrganization = gql`
+const createOrganizationMutation = gql`
   mutation($name: String!) {
     createOrganization(name: $name) {
       id
@@ -26,7 +26,7 @@ interface Props {
 
 export function CreateOrganization(props: Props) {
   const { onComplete } = props;
-  const [result, create] = useMutation(createOrganization);
+  const [result, create] = useMutation(createOrganizationMutation);
 
   return (
     <Form

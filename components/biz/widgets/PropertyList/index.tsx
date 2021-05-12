@@ -12,7 +12,7 @@ import { i18n } from '@/lib/translate';
 import styles from './index.module.scss';
 import { Property, PropertyModel } from './Property';
 
-const viewProperties = gql`
+const viewPropertiesQuery = gql`
   query {
     me {
       id
@@ -46,7 +46,7 @@ interface Props {
 }
 
 export function PropertyList(props: Props) {
-  const [result] = useQuery({ query: viewProperties });
+  const [result] = useQuery({ query: viewPropertiesQuery });
 
   const properties: PropertyModel[] =
     result.data?.me?.organization?.properties || [];

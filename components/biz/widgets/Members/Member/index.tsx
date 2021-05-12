@@ -17,7 +17,7 @@ import { User } from '@/models/User';
 
 import styles from './index.module.scss';
 
-const setRoles = gql`
+const setUserRolesMutation = gql`
   mutation($userId: ID!, $roleIds: [ID!]!) {
     setUserRoles(userId: $userId, roleIds: $roleIds) {
       id
@@ -28,7 +28,7 @@ const setRoles = gql`
   }
 `;
 
-const removeUser = gql`
+const removeMemberMutation = gql`
   mutation($userId: ID!) {
     removeMember(userId: $userId) {
       id
@@ -57,8 +57,8 @@ interface Props {
 
 export function Member(props: Props) {
   const { allRoles, canManageMembers, canModifyRoles, member } = props;
-  const [, setUserRoles] = useMutation(setRoles);
-  const [, removeUserFromOrg] = useMutation(removeUser);
+  const [, setUserRoles] = useMutation(setUserRolesMutation);
+  const [, removeMember] = useMutation(removeMemberMutation);
   const displayError = useDisplayError();
   const confirm = useConfirmation();
 
@@ -146,7 +146,7 @@ export function Member(props: Props) {
                 await confirm(
                   i18n.translate`Are you sure you want to remove this member?`,
                 );
-                const result = await removeUserFromOrg({
+                const result = await removeMember({
                   userId: props.member.id,
                 });
                 if (result.error) {

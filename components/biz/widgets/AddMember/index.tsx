@@ -10,7 +10,7 @@ import { Add, Role } from './Add';
 import styles from './index.module.scss';
 import { Invite, Invites } from './Invites';
 
-const info = gql`
+const infoQuery = gql`
   query {
     me {
       id
@@ -33,10 +33,15 @@ const info = gql`
   }
 `;
 
-const inviteMember = gql`
+const createInviteMutation = gql`
   mutation($email: String!, $roleIds: [ID!]!) {
     inviteUserToOrganization(email: $email, roleIds: $roleIds) {
-      ok
+      id
+      email
+      roles {
+        id
+        name
+      }
     }
   }
 `;
@@ -46,8 +51,8 @@ interface Props {
 }
 
 export function AddMember(props: Props) {
-  const [infoResult, rerunInfo] = useQuery({ query: info });
-  const [, createInvite] = useMutation(inviteMember);
+  const [infoResult] = useQuery({ query: infoQuery });
+  const [, createInvite] = useMutation(createInviteMutation);
   const displayError = useDisplayError();
 
   if (!infoResult.data?.me?.organization) {
@@ -76,8 +81,6 @@ export function AddMember(props: Props) {
             }).then(result => {
               if (result.error) {
                 displayError(i18n.translate`Could not add member`);
-              } else {
-                rerunInfo({ requestPolicy: 'network-only' });
               }
             });
           }}

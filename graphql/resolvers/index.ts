@@ -1,4 +1,5 @@
 export { FlagsResolver } from './flags';
+export { InviteMutationResolver } from './mutations/invite';
 export { InviteResolver } from './invite';
 export { JWTMutationResolver } from './mutations/jwt';
 export { MediaMutationResolver } from './mutations/media';

@@ -14,6 +14,8 @@ import { MediaParentType } from '@/graphql/types/MediaParentType';
 import { Organization } from '@/graphql/types/Organization';
 import { Permission } from '@/graphql/types/Permission';
 import { Property } from '@/graphql/types/Property';
+import { convertFromDBModel as convertFromPropertyDBModel } from '@/lib/modelConversions/property';
+import { removeUndefinedKeys } from '@/lib/removeUndefinedKeys';
 
 @Resolver(of => Property)
 export class PropertyMutationResolver {
@@ -31,7 +33,7 @@ export class PropertyMutationResolver {
   ) {}
 
   @Authorized(Permission.ManageProperties)
-  @Mutation(returns => Organization, {
+  @Mutation(returns => Property, {
     description: 'Create a new property',
   })
   async createProperty(
@@ -61,7 +63,7 @@ export class PropertyMutationResolver {
     const newProperty = this._properties.create({
       organizationId: org.id,
       metropolitanKey,
-      data: rest,
+      data: removeUndefinedKeys(rest),
     });
 
     if (dbSchools.length) {
@@ -78,14 +80,14 @@ export class PropertyMutationResolver {
       }),
     );
 
-    return org;
+    return convertFromPropertyDBModel(newProperty);
   }
 
   @Authorized(Permission.ManageProperties)
-  @Mutation(returns => Organization, {
+  @Mutation(returns => Property, {
     description: 'Removes a property',
   })
-  async removeProperty(
+  async deleteProperty(
     @MyOrganization() org: Organization | null,
     @Arg('id', type => ID) id: string,
   ) {
@@ -99,8 +101,8 @@ export class PropertyMutationResolver {
       throw new errors.DoesNotExist('id', id);
     }
 
+    const propertyModel = convertFromPropertyDBModel(property);
     await this._properties.delete(property.id);
-
-    return org;
+    return propertyModel;
   }
 }

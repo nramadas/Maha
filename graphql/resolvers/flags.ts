@@ -17,7 +17,7 @@ export class FlagsResolver {
   @FieldResolver(type => Boolean, {
     description: 'Returns if a metropolitan is enabled or not',
   })
-  async metropolitanEnabled(
+  async metropolitanIsEnabled(
     @Arg('metropolitan') metropolitan: MetropolitanKey,
   ) {
     return ENABLED_METROPOLITANS.has(metropolitan);

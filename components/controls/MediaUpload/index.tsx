@@ -19,7 +19,7 @@ import styles from './index.module.scss';
 
 type Media = Pick<_Media, 'id' | 'src' | 'type'>;
 
-const remove = gql`
+const deleteMediaMutation = gql`
   mutation($id: ID!) {
     deleteMedia(id: $id) {
       id
@@ -27,9 +27,9 @@ const remove = gql`
   }
 `;
 
-const upload = gql`
+const createMediaMutation = gql`
   mutation($file: Upload!, $type: MediaType!) {
-    uploadMedia(file: $file, type: $type) {
+    createMedia(file: $file, type: $type) {
       id
       src
       type
@@ -47,8 +47,8 @@ export function MediaUpload(props: Props) {
   const displayError = useDisplayError();
   const form = useForm();
   const [media, setMedia] = useState<Media[]>([]);
-  const [, deleteMedia] = useMutation(remove);
-  const [, uploadMedia] = useMutation(upload);
+  const [, deleteMedia] = useMutation(deleteMediaMutation);
+  const [, createMedia] = useMutation(createMediaMutation);
 
   const onDelete = useCallback(
     async (id: string) => {
@@ -75,7 +75,7 @@ export function MediaUpload(props: Props) {
         return;
       }
 
-      const result = await uploadMedia({ file, type });
+      const result = await createMedia({ file, type });
 
       if (result.error) {
         displayError(i18n.translate`Error attaching media`);
@@ -84,9 +84,9 @@ export function MediaUpload(props: Props) {
 
       if (result.data) {
         const newMediaObject: Media = {
-          id: result.data.uploadMedia.id,
-          src: result.data.uploadMedia.src,
-          type: result.data.uploadMedia.type,
+          id: result.data.createMedia.id,
+          src: result.data.createMedia.src,
+          type: result.data.createMedia.type,
         };
 
         const newMedia = props.multiple

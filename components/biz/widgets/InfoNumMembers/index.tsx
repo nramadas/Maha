@@ -9,7 +9,7 @@ import { i18n } from '@/lib/translate';
 
 import styles from './index.module.scss';
 
-const numMembers = gql`
+const numMembersQuery = gql`
   query {
     me {
       id
@@ -28,7 +28,7 @@ interface Props {
 }
 
 export function InfoNumMembers(props: Props) {
-  const [result] = useQuery({ query: numMembers });
+  const [result] = useQuery({ query: numMembersQuery });
 
   if (!result.data?.me?.organization) {
     return null;

@@ -14,7 +14,7 @@ import { MetropolitanKey } from '@/models/MetropolitanKey';
 import { City } from './City';
 import styles from './index.module.scss';
 
-const query = gql`
+const metropolitansQuery = gql`
   query {
     metropolitans {
       enabled
@@ -66,7 +66,7 @@ interface Props {
 }
 
 export function Cities(props: Props) {
-  const [result] = useQuery({ query });
+  const [result] = useQuery({ query: metropolitansQuery });
   const textToString = useTextToString();
 
   if (result.error || !result.data) {

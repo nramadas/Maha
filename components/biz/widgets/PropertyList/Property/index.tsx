@@ -23,13 +23,10 @@ import { Property as BasePropertyModel } from '@/models/Property';
 
 import styles from './index.module.scss';
 
-const deleteProperty = gql`
+const deletePropertyMutation = gql`
   mutation($id: ID!) {
-    removeProperty(id: $id) {
+    deleteProperty(id: $id) {
       id
-      properties {
-        id
-      }
     }
   }
 `;
@@ -57,7 +54,7 @@ interface Props {
 
 export function Property(props: Props) {
   const confirm = useConfirmation();
-  const [, removeProperty] = useMutation(deleteProperty);
+  const [, deleteProperty] = useMutation(deletePropertyMutation);
 
   return (
     <article className={cx(styles.container, props.className)}>
@@ -126,7 +123,7 @@ export function Property(props: Props) {
           onClick={() =>
             confirm(
               i18n.translate`Are you sure you want to delete this property?`,
-            ).then(() => removeProperty({ id: props.property.id }))
+            ).then(() => deleteProperty({ id: props.property.id }))
           }
         >
           <i18n.Translate>Delete</i18n.Translate>

@@ -16,7 +16,7 @@ import { MetropolitanKey } from '@/models/MetropolitanKey';
 
 import styles from './index.module.scss';
 
-const query = gql`
+const metropolitansQuery = gql`
   query {
     metropolitans {
       enabled
@@ -35,7 +35,7 @@ interface Props {
 }
 
 export function Tagline(props: Props) {
-  const [result] = useQuery({ query });
+  const [result] = useQuery({ query: metropolitansQuery });
   const router = useRouter();
 
   if (result.error || !result.data) {

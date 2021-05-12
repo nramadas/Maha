@@ -4,7 +4,7 @@ import { MediaParentType } from '@/models/MediaParentType';
 
 registerEnumType(MediaParentType, {
   name: 'MediaParentType',
-  description: 'What type of entity owns this media',
+  description: 'Type of entity that owns media',
   valuesConfig: {
     Organization: {
       description: 'This media is associated with an Organization',

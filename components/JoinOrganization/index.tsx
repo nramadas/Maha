@@ -6,7 +6,7 @@ import { ErrorType } from '@/lib/errors/type';
 
 import { Form } from './Form';
 
-const joinOrganization = gql`
+const joinOrganizationMutation = gql`
   mutation(
     $orgName: String!
     $firstName: String!
@@ -37,7 +37,7 @@ interface Props {
 
 export function JoinOrganization(props: Props) {
   const { orgName, onComplete } = props;
-  const [result, join] = useMutation(joinOrganization);
+  const [result, join] = useMutation(joinOrganizationMutation);
 
   return (
     <Form

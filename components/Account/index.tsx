@@ -16,7 +16,7 @@ import { i18n } from '@/lib/translate';
 
 import styles from './index.module.scss';
 
-const me = gql`
+const meQuery = gql`
   query {
     me {
       id
@@ -45,7 +45,7 @@ export function Account(props: Props) {
     type: 'click',
   });
 
-  const [result] = useQuery({ query: me });
+  const [result] = useQuery({ query: meQuery });
 
   const colors = theme || 'light';
 

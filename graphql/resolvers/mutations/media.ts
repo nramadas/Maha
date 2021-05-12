@@ -25,22 +25,7 @@ export class MediaMutationResolver {
   @Mutation(returns => Media, {
     description: 'Upload a media file',
   })
-  async deleteMedia(@Arg('id', type => ID) id: string) {
-    const media = await this._media.findOne({ where: { id } });
-
-    if (!media) {
-      throw new errors.DoesNotExist('id', id);
-    }
-
-    await this._media.delete(media.id);
-    return convertFromMediaDBModel(media);
-  }
-
-  @Authorized(Permission.ManageProperties)
-  @Mutation(returns => Media, {
-    description: 'Upload a media file',
-  })
-  async uploadMedia(
+  async createMedia(
     @Arg('file', type => GraphQLUpload) file: FileUpload,
     @Arg('type') type: MediaType,
   ) {
@@ -70,6 +55,21 @@ export class MediaMutationResolver {
 
     const media = this._media.create({ src, type, data: { sizes: {} } });
     await this._media.save(media);
+    return convertFromMediaDBModel(media);
+  }
+
+  @Authorized(Permission.ManageProperties)
+  @Mutation(returns => Media, {
+    description: 'Removes a media file',
+  })
+  async deleteMedia(@Arg('id', type => ID) id: string) {
+    const media = await this._media.findOne({ where: { id } });
+
+    if (!media) {
+      throw new errors.DoesNotExist('id', id);
+    }
+
+    await this._media.delete(media.id);
     return convertFromMediaDBModel(media);
   }
 }

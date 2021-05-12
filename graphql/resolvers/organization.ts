@@ -99,7 +99,8 @@ export class OrganizationResolver {
 
   @Authorized(Permission.ModifyRoles)
   @FieldResolver(type => [Role], {
-    description: 'All the roles that members of this organization can acquire',
+    description:
+      'All the roles that members of this organization can be assigned',
   })
   async roles(@Root() root: Organization) {
     const dbRoles = await this._roles.find({

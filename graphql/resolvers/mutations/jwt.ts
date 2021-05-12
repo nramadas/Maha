@@ -4,12 +4,35 @@ import { InjectRepository } from 'typeorm-typedi-extensions';
 
 import { User as UserEntity } from '@/db/entities/User';
 import * as errors from '@/graphql/errors';
-import { CompleteAuthenticationInput } from '@/graphql/types/CompleteAuthentication';
+import { CompleteAuthentication } from '@/graphql/types/CompleteAuthentication';
 import { JWT } from '@/graphql/types/JWT';
 import { JWTWithRefresh } from '@/graphql/types/JWTWithRefresh';
-import { RefreshAuthenticationInput } from '@/graphql/types/RefreshAuthenticationInput';
-import { submitPasswordlessLogin, refreshSession } from '@/lib/authn/api';
+import {
+  submitPasswordlessLogin,
+  refreshSession,
+  initiatePasswordlessLogin,
+  userExists,
+  createUser,
+} from '@/lib/authn/api';
 import { extractAuthId } from '@/lib/authn/token';
+
+export async function doAuthentication(email: string) {
+  const existingUser = await userExists(email);
+
+  if (!existingUser.ok) {
+    throw new errors.Unauthorized();
+  }
+
+  if (!existingUser.exists) {
+    const createUserResult = await createUser(email);
+
+    if (!createUserResult.ok) {
+      throw new errors.Unauthorized();
+    }
+  }
+
+  await initiatePasswordlessLogin(email);
+}
 
 @Resolver(of => JWT)
 export class JWTMutationResolver {
@@ -22,7 +45,7 @@ export class JWTMutationResolver {
     description: 'Completes user authentication',
   })
   async completeAuthentication(
-    @Arg('credentials') credentials: CompleteAuthenticationInput,
+    @Arg('credentials') credentials: CompleteAuthentication,
   ) {
     const { email, token } = credentials;
 
@@ -59,11 +82,7 @@ export class JWTMutationResolver {
   }
 
   @Mutation(returns => JWT, { description: 'Swap a token for a new one' })
-  async refreshAuthentication(
-    @Arg('credentials') credentials: RefreshAuthenticationInput,
-  ) {
-    const { refreshToken } = credentials;
-
+  async refreshAuthentication(@Arg('refreshToken') refreshToken: string) {
     if (!refreshToken) {
       throw new errors.Unauthorized();
     }

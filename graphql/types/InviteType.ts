@@ -4,7 +4,7 @@ import { InviteType } from '@/models/InviteType';
 
 registerEnumType(InviteType, {
   name: 'InviteType',
-  description: 'An enum of invite types',
+  description: 'Invite types',
   valuesConfig: {
     CreateOrganization: {
       description: 'Invite to create an organization',
