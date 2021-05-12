@@ -1,6 +1,5 @@
 const bundleAnalyzer = require('@next/bundle-analyzer');
 const withPlugins = require('next-compose-plugins');
-const fonts = require('next-fonts');
 const images = require('next-images');
 const offline = require('next-offline');
 
@@ -31,7 +30,6 @@ module.exports = withPlugins([
     },
   ],
   [images],
-  [fonts],
   [
     bundleAnalyzer({
       enabled: process.env.ANALYZE === 'true',
