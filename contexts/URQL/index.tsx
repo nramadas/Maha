@@ -14,11 +14,12 @@ const isServerSide = typeof window === 'undefined';
 const setupClient = (
   ssr: SSRExchange,
   jwt: { current: () => string | undefined },
+  schema?: any,
 ) => {
   const exchanges: any = [];
 
   exchanges.push(dedupExchange);
-  exchanges.push(cacheExchange(config));
+  exchanges.push(cacheExchange({ ...config, schema }));
   exchanges.push(ssr);
 
   if (!isServerSide) {
@@ -46,6 +47,7 @@ const setupClient = (
 interface Props {
   children?: React.ReactNode;
   ssrExchange?: SSRExchange;
+  schema?: any;
   initialState?: any;
 }
 
@@ -64,7 +66,7 @@ export function URQLProvider(props: Props) {
     getJwt.current = () => jwt;
   }, [jwt]);
 
-  const client = useRef(setupClient(ssr, getJwt));
+  const client = useRef(setupClient(ssr, getJwt, props.schema));
 
   return <Provider value={client.current}>{props.children}</Provider>;
 }

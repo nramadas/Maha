@@ -45,6 +45,11 @@ export default class MyApp extends BaseApp {
         ? pageProps.ssrInitialState
         : // @ts-ignore
           window.__INITIAL_STATE__;
+    const schema =
+      typeof window === 'undefined'
+        ? pageProps.schema
+        : // @ts-ignore
+          window.__GQL_SCHEMA__;
 
     return (
       <JWTProvider
@@ -54,8 +59,9 @@ export default class MyApp extends BaseApp {
         preserveAut={aut => Cookies.set('authn', aut, { path: Route.Home })}
       >
         <URQLProvider
-          ssrExchange={pageProps.ssrExchange}
           initialState={ssrInitialState}
+          schema={schema}
+          ssrExchange={pageProps.ssrExchange}
         >
           <JWTRefresh />
           <LanguagePackProvider

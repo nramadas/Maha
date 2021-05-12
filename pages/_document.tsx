@@ -1,4 +1,5 @@
 import 'setimmediate';
+import { IntrospectionQuery } from 'graphql';
 import Document, {
   DocumentContext,
   Head,
@@ -10,10 +11,23 @@ import React from 'react';
 import ssrPrepass from 'react-ssr-prepass';
 import { ssrExchange } from 'urql';
 
+import { introspect } from '@/graphql/introspection';
 import { refreshSession } from '@/lib/authn/api';
 import { parse } from '@/lib/cookies';
 import { Route } from '@/lib/route';
 import { createCssStyles } from '@/lib/theme/createCssStyles';
+
+const getIntrospection = (() => {
+  let cachedValue: IntrospectionQuery | null = null;
+
+  return async () => {
+    if (!cachedValue || process.env.NODE_ENV === 'development') {
+      cachedValue = await introspect();
+    }
+
+    return cachedValue;
+  };
+})();
 
 export default class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
@@ -44,6 +58,8 @@ export default class MyDocument extends Document {
       }
     }
 
+    const schema = await getIntrospection();
+
     const basePageProps = {
       jwt,
       aut,
@@ -64,7 +80,7 @@ export default class MyDocument extends Document {
 
     ssrInitialState = ssr.extractData();
 
-    const pageProps = { ...basePageProps, ssrInitialState };
+    const pageProps = { ...basePageProps, ssrInitialState, schema };
     const originalRenderPage = ctx.renderPage;
 
     ctx.renderPage = () =>
@@ -83,9 +99,10 @@ export default class MyDocument extends Document {
         ...(initialProps.head || []),
         <script
           dangerouslySetInnerHTML={{
-            __html: `window.__INITIAL_STATE__ = ${JSON.stringify(
-              ssrInitialState,
-            )}`,
+            __html: `
+              window.__INITIAL_STATE__ = ${JSON.stringify(ssrInitialState)};
+              window.__GQL_SCHEMA__ = ${JSON.stringify(schema)};
+            `,
           }}
         />,
       ],
