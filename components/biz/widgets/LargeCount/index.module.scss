@@ -2,16 +2,27 @@
   display: grid;
   grid-gap: 8px;
   grid-template-columns: 1fr;
-  text-align: center;
+  justify-items: center;
   text-transform: uppercase;
 
   h1 {
     color: var(--color-navBackground);
     font-size: 8rem;
+    line-height: 1;
   }
 
   h3 {
     color: var(--color-metadata);
     font-size: 2rem;
   }
+}
+
+.loadingCount {
+  height: 8rem;
+  width: 80px;
+}
+
+.loadingLabel {
+  height: 2rem;
+  width: 120px;
 }

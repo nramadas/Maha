@@ -7,7 +7,7 @@ interface Props {
   interval: number;
 }
 
-export function LoadingDots(props: Props) {
+export function Dots(props: Props) {
   const { interval } = props;
   const [numDotsVisible, setNumDotsVisible] = useState(0);
 
@@ -28,6 +28,6 @@ export function LoadingDots(props: Props) {
   );
 }
 
-LoadingDots.defaultProps = {
+Dots.defaultProps = {
   interval: 1000,
 };

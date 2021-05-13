@@ -5,6 +5,7 @@ import { useMutation, useQuery } from 'urql';
 
 import { PickGrow } from '@/components/controls/chips/PickGrow';
 import { Trash } from '@/components/icons/Trash';
+import { Shimmer } from '@/components/loading/Shimmer';
 import { Body1 } from '@/components/typography/Body1';
 import { Body2 } from '@/components/typography/Body2';
 import { H4 } from '@/components/typography/H4';
@@ -82,18 +83,15 @@ interface Props {
 export function Roles(props: Props) {
   const confirm = useConfirmation();
   const displayError = useDisplayError();
-  const [rolesResult] = useQuery({ query: getRolesQuery });
+  const [result] = useQuery({ query: getRolesQuery });
   const [, setRolePermissions] = useMutation(setRolePermissionsMutation);
   const [, deleteRole] = useMutation(deleteRoleMutation);
   const [, createRole] = useMutation(createRoleMutation);
   const textToString = useTextToString();
 
-  if (!rolesResult.data) {
-    return null;
-  }
-
+  const organization = result.data?.me?.organization || {};
   const roles: Pick<Role, 'id' | 'name' | 'description' | 'permissions'>[] =
-    rolesResult.data?.me.organization.roles;
+    organization.roles || [];
 
   return (
     <div className={cx(styles.container, props.className)}>
@@ -189,6 +187,10 @@ export function Roles(props: Props) {
           );
         })}
       </article>
+      {result.fetching &&
+        Array.from({ length: 5 }).map((_, i) => (
+          <Shimmer className={styles.shimmer} key={i} />
+        ))}
       <footer className={styles.addContainer}>
         <Add
           onSubmit={formValues =>

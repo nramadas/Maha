@@ -3,6 +3,7 @@ import cx from 'classnames';
 import React from 'react';
 import { useQuery } from 'urql';
 
+import { Shimmer } from '@/components/loading/Shimmer';
 import { H4 } from '@/components/typography/H4';
 import { Overline } from '@/components/typography/Overline';
 import { i18n } from '@/lib/translate';
@@ -75,14 +76,10 @@ export function Members(props: Props) {
   const canManageMembers = props.permissions.includes(Permission.ManageMembers);
   const [result] = useQuery({ query: getOrganization(canModifyRoles) });
 
-  if (!result.data) {
-    return null;
-  }
-
-  const organization = result.data?.me.organization;
-  const members: MemberModel[] = organization.members;
+  const organization = result.data?.me?.organization || {};
+  const members: MemberModel[] = organization.members || [];
   const allRoles: Pick<Role, 'id' | 'name'>[] = canModifyRoles
-    ? buildRoles(organization.roles)
+    ? buildRoles(organization.roles || [])
     : [];
 
   return (
@@ -135,6 +132,10 @@ export function Members(props: Props) {
           />
         ))}
       </article>
+      {result.fetching &&
+        Array.from({ length: 5 }).map((_, i) => (
+          <Shimmer className={styles.shimmer} key={i} />
+        ))}
     </div>
   );
 }

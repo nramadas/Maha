@@ -1,13 +1,9 @@
 import { gql } from '@urql/core';
-import cx from 'classnames';
 import React from 'react';
 import { useQuery } from 'urql';
 
-import { H1 } from '@/components/typography/H1';
-import { H3 } from '@/components/typography/H3';
+import { LargeCount } from '@/components/biz/widgets/LargeCount';
 import { i18n } from '@/lib/translate';
-
-import styles from './index.module.scss';
 
 const numPropertiesQuery = gql`
   query {
@@ -30,6 +26,10 @@ interface Props {
 export function InfoNumProperties(props: Props) {
   const [result] = useQuery({ query: numPropertiesQuery });
 
+  if (result.fetching) {
+    return <LargeCount loading className={props.className} />;
+  }
+
   if (!result.data?.me?.organization) {
     return null;
   }
@@ -37,11 +37,11 @@ export function InfoNumProperties(props: Props) {
   const num = (result.data.me.organization.properties || []).length;
 
   return (
-    <div className={cx(props.className, styles.container)}>
-      <H1>{num}</H1>
-      <H3>
-        <i18n.Translate>homes</i18n.Translate>
-      </H3>
-    </div>
+    <LargeCount
+      count={num}
+      label={<i18n.Translate>homes</i18n.Translate>}
+      className={props.className}
+      loading={false}
+    />
   );
 }

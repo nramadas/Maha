@@ -2,6 +2,7 @@ import { gql } from '@urql/core';
 import React from 'react';
 import { useMutation, useQuery } from 'urql';
 
+import { Shimmer } from '@/components/loading/Shimmer';
 import { H4 } from '@/components/typography/H4';
 import { useDisplayError } from '@/hooks/useDisplayNotification';
 import { i18n } from '@/lib/translate';
@@ -55,12 +56,9 @@ export function AddMember(props: Props) {
   const [, createInvite] = useMutation(createInviteMutation);
   const displayError = useDisplayError();
 
-  if (!infoResult.data?.me?.organization) {
-    return <div />;
-  }
-
-  const invites: Invite[] = infoResult.data.me.organization.pendingInvites;
-  const roles: Role[] = infoResult.data.me.organization.roles;
+  const organization = infoResult.data?.me?.organization || {};
+  const invites: Invite[] = organization.pendingInvites || [];
+  const roles: Role[] = organization.roles || [];
   const addKey = invites.map(i => i.email).join(',');
 
   return (
@@ -70,22 +68,26 @@ export function AddMember(props: Props) {
           <i18n.Translate>Add member</i18n.Translate>
         </H4>
       </header>
-      <article className={styles.form}>
-        <Add
-          key={addKey}
-          roles={roles}
-          onSubmit={formValues => {
-            createInvite({
-              email: formValues.email,
-              roleIds: formValues.roles.map(r => r.id),
-            }).then(result => {
-              if (result.error) {
-                displayError(i18n.translate`Could not add member`);
-              }
-            });
-          }}
-        />
-      </article>
+      {infoResult.fetching ? (
+        <Shimmer className={styles.shimmer} />
+      ) : (
+        <article className={styles.form}>
+          <Add
+            key={addKey}
+            roles={roles}
+            onSubmit={formValues => {
+              createInvite({
+                email: formValues.email,
+                roleIds: formValues.roles.map(r => r.id),
+              }).then(result => {
+                if (result.error) {
+                  displayError(i18n.translate`Could not add member`);
+                }
+              });
+            }}
+          />
+        </article>
+      )}
       {!!invites.length && (
         <footer className={styles.invites}>
           <Invites invites={invites} />

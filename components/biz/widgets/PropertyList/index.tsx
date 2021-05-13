@@ -5,6 +5,7 @@ import { useQuery } from 'urql';
 
 import { Hollow } from '@/components/controls/links/Hollow';
 import { ArrowRight } from '@/components/icons/ArrowRight';
+import { Shimmer } from '@/components/loading/Shimmer';
 import { H6 } from '@/components/typography/H6';
 import { BizRoute, fullBizRoute } from '@/lib/route';
 import { i18n } from '@/lib/translate';
@@ -52,7 +53,7 @@ export function PropertyList(props: Props) {
     result.data?.me?.organization?.properties || [];
 
   return (
-    <div>
+    <div className={props.className}>
       <Link href={fullBizRoute(BizRoute.AddProperty)}>
         <Hollow className={styles.newProperty}>
           <i18n.Translate>
@@ -69,9 +70,13 @@ export function PropertyList(props: Props) {
         </H6>
       </header>
       <div className={styles.list}>
-        {properties.map(property => (
-          <Property key={property.id} property={property} />
-        ))}
+        {result.fetching
+          ? Array.from({ length: 4 }).map((_, i) => (
+              <Shimmer className={styles.shimmer} key={i} />
+            ))
+          : properties.map(property => (
+              <Property key={property.id} property={property} />
+            ))}
       </div>
     </div>
   );
