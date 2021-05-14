@@ -8,6 +8,7 @@ import { Add } from '@/components/icons/Add';
 import { Image } from '@/components/icons/Image';
 import { Trash } from '@/components/icons/Trash';
 import { Video } from '@/components/icons/Video';
+import { Shimmer } from '@/components/loading/Shimmer';
 import { useDisplayError } from '@/hooks/useDisplayNotification';
 import { useForm } from '@/hooks/useForm';
 import { mediaType } from '@/lib/file/mediaType';
@@ -48,7 +49,7 @@ export function MediaUpload(props: Props) {
   const displayError = useDisplayError();
   const form = useForm();
   const [, deleteMedia] = useMutation(deleteMediaMutation);
-  const [, createMedia] = useMutation(createMediaMutation);
+  const [createMediaResult, createMedia] = useMutation(createMediaMutation);
   const media: Media[] = form.getValue(props.name) || [];
 
   const onDelete = useCallback(
@@ -104,34 +105,50 @@ export function MediaUpload(props: Props) {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (
-    <div className={cx(styles.container, props.className)}>
+    <div className={styles.container}>
       {media.map(m => (
-        <div key={m.id} className={styles.boxOuter}>
-          <div className={styles.box}>
-            <img src={m.src} className={styles.previewImage} />
-            <Trash className={styles.trash} onClick={() => onDelete(m.id)} />
-            {m.type === MediaType.Image ? (
-              <Image className={styles.mimeTypeIcon} />
-            ) : m.type === MediaType.Video ? (
-              <Video className={styles.mimeTypeIcon} />
-            ) : null}
+        <div className={props.className} key={m.id}>
+          <div className={styles.boxOuter}>
+            <div className={styles.box}>
+              <img src={m.src} className={styles.previewImage} />
+              <Trash className={styles.trash} onClick={() => onDelete(m.id)} />
+              {m.type === MediaType.Image ? (
+                <Image className={styles.mimeTypeIcon} />
+              ) : m.type === MediaType.Video ? (
+                <Video className={styles.mimeTypeIcon} />
+              ) : null}
+            </div>
           </div>
         </div>
       ))}
+      {props.multiple && createMediaResult.fetching && (
+        <div className={props.className}>
+          <div className={styles.boxOuter}>
+            <div className={styles.box}>
+              <Shimmer className={styles.loading} />
+            </div>
+          </div>
+        </div>
+      )}
       {(!media.length || props.multiple) && (
-        <div className={styles.boxOuter}>
-          <div className={styles.box}>
-            <label className={styles.uploadArea}>
-              <div
-                className={cx(styles.uploadContainer, {
-                  [styles.dragActive]: isDragActive,
-                })}
-                {...getRootProps()}
-              >
-                <Add className={styles.icon} />
-                <input {...getInputProps()} />
-              </div>
-            </label>
+        <div className={props.className}>
+          <div className={styles.boxOuter}>
+            <div className={styles.box}>
+              <label className={styles.uploadArea}>
+                <div
+                  className={cx(styles.uploadContainer, {
+                    [styles.dragActive]: isDragActive,
+                  })}
+                  {...getRootProps()}
+                >
+                  <Add className={styles.icon} />
+                  <input {...getInputProps()} />
+                </div>
+                {!props.multiple && createMediaResult.fetching && (
+                  <Shimmer className={styles.loading} />
+                )}
+              </label>
+            </div>
           </div>
         </div>
       )}

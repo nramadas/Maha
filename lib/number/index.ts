@@ -1,3 +1,6 @@
+import trimEnd from 'lodash/trimEnd';
+import trimStart from 'lodash/trimStart';
+
 export function makePretty(str: string) {
   const newNum: string[] = [];
 
@@ -18,8 +21,19 @@ export function makePretty(str: string) {
   return newNum.reverse().join('');
 }
 
+function formatDecimal(num: number) {
+  const str = num.toFixed(2);
+  const withoutLeadingZero = trimStart(str, '0');
+  const withoutTrailingZero = trimEnd(withoutLeadingZero, '0');
+  return withoutTrailingZero;
+}
+
 export function toString(num: number) {
-  return makePretty(num.toString());
+  const integer = Math.floor(num);
+  const fractional = num - integer;
+  const str = makePretty(integer.toString());
+  const decimal = fractional ? formatDecimal(fractional) : '';
+  return `${str}${decimal}`;
 }
 
 export function fromString(num: string, float?: boolean) {

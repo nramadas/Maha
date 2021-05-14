@@ -20,7 +20,11 @@ import { PropertyType } from '@/models/PropertyType';
 
 import styles from './index.module.scss';
 
-export function Basic() {
+interface Props {
+  isEditMode?: boolean;
+}
+
+export function Basic(props: Props) {
   return (
     <>
       <p>
@@ -41,6 +45,7 @@ export function Basic() {
       <AddressAutocomplete
         requireLatLng
         className={styles.name}
+        defaultShowLatLng={props.isEditMode}
         name="location"
       />
 

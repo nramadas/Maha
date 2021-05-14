@@ -33,7 +33,9 @@ interface Props {
 
 export function AddProperty(props: Props) {
   const router = useRouter();
-  const [, createProperty] = useMutation(createPropertyMutation);
+  const [createPropertyResult, createProperty] = useMutation(
+    createPropertyMutation,
+  );
   const displayError = useDisplayError();
 
   return (
@@ -44,6 +46,7 @@ export function AddProperty(props: Props) {
         </H6>
       </header>
       <PropertyForm
+        submitting={createPropertyResult.fetching}
         onSubmit={property =>
           createProperty({ property }).then(result => {
             if (result.error) {

@@ -33,6 +33,7 @@ const getLocation = createRequest`
 
 interface Props {
   className?: string;
+  defaultShowLatLng?: boolean;
   name: string;
   requireLatLng?: boolean;
   onSelect?(loc: LocationModel | null): void;
@@ -40,11 +41,13 @@ interface Props {
 
 export function AddressAutocomplete(props: Props) {
   const form = useForm();
-  const [showLatLng, setShowLatLng] = useState(false);
+  const value: Partial<LocationModel> = form.getValue(props.name) || {};
+  const [showLatLng, setShowLatLng] = useState(
+    props.defaultShowLatLng || false,
+  );
 
   const latInput = useRef<HTMLInputElement | null>(null);
   const lngInput = useRef<HTMLInputElement | null>(null);
-  const value: Partial<LocationModel> = form.getValue(props.name) || {};
 
   return (
     <div className={cx(props.className, styles.container)}>

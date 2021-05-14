@@ -55,6 +55,7 @@ const propertyQuery = gql`
         parentId
         parentType
         src
+        type
       }
       metropolitanKey
       name
@@ -97,7 +98,7 @@ interface Props {
 
 export function EditProperty(props: Props) {
   const displayError = useDisplayError();
-  const [, editProperty] = useMutation(editPropertyMutation);
+  const [editPropertyResult, editProperty] = useMutation(editPropertyMutation);
   const router = useRouter();
 
   const [results] = useQuery({
@@ -120,6 +121,7 @@ export function EditProperty(props: Props) {
       </header>
       <PropertyForm
         defaultValues={propertyToForm(property)}
+        submitting={editPropertyResult.fetching}
         onSubmit={property =>
           editProperty({
             property: { id: props.propertyId, ...property },

@@ -1,4 +1,4 @@
-import { GraphQLISODateTime, Field, ObjectType, ID } from 'type-graphql';
+import { Field, ObjectType, ID } from 'type-graphql';
 
 import { AmenityAccess } from '@/graphql/types/AmenityAccess';
 import { LocalizedStrings } from '@/graphql/types/LocalizedStrings';
@@ -111,7 +111,7 @@ export class Property implements PropertyModel {
   propertyCondition!: PropertyCondition;
 
   @Field({
-    description: 'How many of this property are available',
+    description: 'How many units are available',
     nullable: true,
   })
   quantity?: number;
@@ -138,7 +138,7 @@ export class Property implements PropertyModel {
   utilitiesAirConditioning!: UtilityConfiguration;
 
   @Field({
-    description: 'Is the cooking gas integrated or devlivered via canisters?',
+    description: 'Is the cooking gas integrated or delivered via canisters?',
   })
   utilitiesGasType!: UtilityGasType;
 

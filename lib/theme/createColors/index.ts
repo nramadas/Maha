@@ -44,6 +44,8 @@ export function createColors() {
     primaryPressed: mix(0.2, Color.G000, primary),
     primary,
     warning: '#FFEB3B',
+    shimmerLight: '#e2e2e2',
+    shimmerDark: '#eff1f3',
     success: '#4CAF50',
   };
 }

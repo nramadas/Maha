@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-import { Filled } from '@/components/controls/buttons/Filled';
 import { Hollow } from '@/components/controls/buttons/Hollow';
+import { Submit } from '@/components/controls/buttons/Submit';
 import { Form } from '@/components/controls/Form';
 import { i18n } from '@/lib/translate';
 
@@ -20,12 +20,13 @@ import { Utilities } from './Utilities';
 interface Props {
   className?: string;
   defaultValues?: ReturnType<typeof propertyToForm>;
+  submitting?: boolean;
   onCancel?(): void;
   onSubmit?(formValues: ReturnType<typeof propertyToForm>): void;
 }
 
 export function PropertyForm(props: Props) {
-  const [submitDisabled, setSubmitDisabled] = useState(true);
+  const [submitDisabled, setSubmitDisabled] = useState(!props.defaultValues);
 
   const isEditMode = !!props.defaultValues;
 
@@ -38,7 +39,7 @@ export function PropertyForm(props: Props) {
         props.onSubmit?.(formToCreateProperty(formValues))
       }
     >
-      <Basic />
+      <Basic isEditMode={isEditMode} />
       <Media isEditMode={isEditMode} />
       <BedBath />
       <Amenities />
@@ -55,9 +56,9 @@ export function PropertyForm(props: Props) {
         >
           <i18n.Translate>Cancel</i18n.Translate>
         </Hollow>
-        <Filled disabled={submitDisabled}>
+        <Submit disabled={submitDisabled} pending={props.submitting}>
           <i18n.Translate>Submit</i18n.Translate>
-        </Filled>
+        </Submit>
       </footer>
     </Form>
   );

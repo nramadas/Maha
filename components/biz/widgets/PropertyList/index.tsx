@@ -49,8 +49,10 @@ interface Props {
 export function PropertyList(props: Props) {
   const [result] = useQuery({ query: viewPropertiesQuery });
 
-  const properties: PropertyModel[] =
-    result.data?.me?.organization?.properties || [];
+  const properties = ((result.data?.me?.organization?.properties ||
+    []) as PropertyModel[]).sort((a, b) =>
+    a.name.toLocaleLowerCase().localeCompare(b.name.toLocaleLowerCase()),
+  );
 
   return (
     <div className={props.className}>

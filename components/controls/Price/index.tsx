@@ -16,6 +16,7 @@ interface Props
 export function Price(props: Props) {
   const { required, ...rest } = props;
   const form = useForm();
+  const [fractional, setFractional] = useState(false);
   const _value = rest.value || form.getValue(rest.name);
   const value = _value ? toString(_value) : isNil(_value) ? '' : '0';
 
@@ -27,11 +28,14 @@ export function Price(props: Props) {
       __doNotWriteToForm
       icon={<DollarRupee />}
       type="text"
-      value={value ? `₹${value}` : ''}
+      value={value ? `₹${value}${fractional ? '.' : ''}` : ''}
       onInput={e => {
         const val = e.currentTarget.value;
+        const hasDot = val.includes('.');
+        const [, decimal] = val.split('.');
         const withoutSymbol = val.replaceAll('₹', '');
         const number = fromString(withoutSymbol, true);
+        setFractional(hasDot && !decimal);
         form.setValue(rest.name, number);
       }}
       onValidate={required ? text => (text ? '' : emptyError) : undefined}
