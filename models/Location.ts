@@ -1,5 +1,5 @@
-export interface Location {
+import { MapPoint } from '@/models/MapPoint';
+
+export interface Location extends Partial<MapPoint> {
   address: string;
-  lat?: number;
-  lng?: number;
 }

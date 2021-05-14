@@ -1,0 +1,58 @@
+$leftPaneWidth: 240px;
+$leftRailSize: 60px;
+$rightPaneWidth: 360px;
+
+.centerPane {
+  bottom: 0;
+  left: $leftPaneWidth + $leftRailSize;
+  position: absolute;
+  right: $rightPaneWidth;
+  top: 0;
+}
+
+.container {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.leftPane {
+  bottom: 0;
+  box-shadow: var(--elevation-3);
+  left: $leftRailSize;
+  position: absolute;
+  top: 0;
+  width: $leftPaneWidth;
+  z-index: 1;
+}
+
+.leftRail {
+  background-color: var(--color-navBackground);
+  bottom: 0;
+  left: 0;
+  padding: 12px 0;
+  position: absolute;
+  top: 0;
+  width: $leftRailSize;
+  z-index: 2;
+}
+
+.leftRailContent {
+  align-items: center;
+  display: grid;
+  grid-gap: 12px;
+  grid-template-columns: 1fr;
+  justify-items: center;
+}
+
+.rightPane {
+  bottom: 0;
+  box-shadow: var(--elevation-3);
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: $rightPaneWidth;
+  z-index: 1;
+}

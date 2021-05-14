@@ -57,3 +57,26 @@ function metropolitanSubRoute(metro: MetropolitanKey): string {
 export function metropolitanRoute(metro: MetropolitanKey) {
   return `${Route.Explore}${metropolitanSubRoute(metro)}`;
 }
+
+export function fromMetropolitanSubRouteText(route: string) {
+  switch (route) {
+    case 'ahmedabad':
+      return MetropolitanKey.Ahmedabad;
+    case 'bengaluru':
+      return MetropolitanKey.Bengaluru;
+    case 'chennai':
+      return MetropolitanKey.Chennai;
+    case 'delhi':
+      return MetropolitanKey.Delhi;
+    case 'hyderabad':
+      return MetropolitanKey.Hyderabad;
+    case 'kolkata':
+      return MetropolitanKey.Kolkata;
+    case 'mumbai':
+      return MetropolitanKey.Mumbai;
+    case 'thiruvananthapuram':
+      return MetropolitanKey.Thiruvananthapuram;
+    case 'visakhapatnam':
+      return MetropolitanKey.Visakhapatnam;
+  }
+}

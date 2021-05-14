@@ -19,6 +19,7 @@ import { Place } from '@/graphql/types/Place';
 import { PlaceSearchType } from '@/graphql/types/PlaceSearchType';
 import { Property } from '@/graphql/types/Property';
 import { User } from '@/graphql/types/User';
+import { convertFromEnum } from '@/lib/modelConversions/metropolitan';
 import { convertFromDBModel as convertFromOrganizationDBModel } from '@/lib/modelConversions/organization';
 import { convertFromDBModel as convertFromPropertyDBModel } from '@/lib/modelConversions/property';
 import { buildQuery } from '@/lib/url/buildQuery';
@@ -54,7 +55,7 @@ export class QueryResolver {
     let url = 'https://maps.googleapis.com/maps/api/place/details/json';
     url += buildQuery({
       fields: 'formatted_address,geometry',
-      key: process.env.GOOGLE_API_KEY!,
+      key: process.env.GOOGLE_PLACES_API_KEY!,
       place_id: googleId,
     });
 
@@ -75,14 +76,14 @@ export class QueryResolver {
     description: 'A list of metropolitan areas',
   })
   async metropolitan(@Arg('key') key: MetropolitanKey) {
-    return { key };
+    return convertFromEnum(key);
   }
 
   @Query(returns => [Metropolitan], {
     description: 'A list of metropolitan areas',
   })
   async metropolitans() {
-    return Object.values(MetropolitanKey).map(key => ({ key }));
+    return Object.values(MetropolitanKey).map(convertFromEnum);
   }
 
   @Query(returns => Organization, {
@@ -123,7 +124,7 @@ export class QueryResolver {
     let url = 'https://maps.googleapis.com/maps/api/place/textsearch/json';
     url += buildQuery({
       input: text,
-      key: process.env.GOOGLE_API_KEY!,
+      key: process.env.GOOGLE_PLACES_API_KEY!,
       type,
     });
 
@@ -148,7 +149,7 @@ export class QueryResolver {
     url += buildQuery({
       components: 'country:in',
       input: address,
-      key: process.env.GOOGLE_API_KEY!,
+      key: process.env.GOOGLE_PLACES_API_KEY!,
     });
 
     const results = await fetch(url).then(res => res.json());

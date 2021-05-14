@@ -26,6 +26,7 @@
     "node_modules"
   ],
   "include": [
+    "extra-types.d.ts",
     "next-env.d.ts",
     "styled.d.ts",
     "**/*.ts",

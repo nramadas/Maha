@@ -36,6 +36,18 @@ export function toString(num: number) {
   return `${str}${decimal}`;
 }
 
+export function toShortString(num: number) {
+  if (num < 100000) {
+    return `${(num / 1000).toFixed(1)}k`;
+  }
+
+  if (num < 10000000) {
+    return `${(num / 100000).toFixed(1)}lkh`;
+  }
+
+  return `${(num / 10000000).toFixed(1)}cr`;
+}
+
 export function fromString(num: string, float?: boolean) {
   const withoutCommas = num.replaceAll(',', '');
   const value = float ? parseFloat(withoutCommas) : parseInt(withoutCommas, 10);

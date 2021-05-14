@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^12.0.4",
+    "@googlemaps/js-api-loader": "^1.11.4",
     "@keratin/authn-node": "0.2.2",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/bottom-tabs": "^5.11.9",
@@ -108,6 +109,7 @@
     "@testing-library/react": "11.2.6",
     "@testing-library/user-event": "13.1.1",
     "@types/classnames": "2.2.11",
+    "@types/google.maps": "^3.44.4",
     "@types/graphql-upload": "^8.0.4",
     "@types/inquirer": "^7.3.1",
     "@types/jest": "26.0.22",
