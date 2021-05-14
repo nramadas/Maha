@@ -46,6 +46,38 @@ export class QueryResolver {
     return {};
   }
 
+  @Query(returns => Location, {
+    description: "Convert a place's googleId into a location",
+    nullable: true,
+  })
+  async googleIdToLocation(@Arg('googleId') googleId: string) {
+    let url = 'https://maps.googleapis.com/maps/api/place/details/json';
+    url += buildQuery({
+      fields: 'formatted_address,geometry',
+      key: process.env.GOOGLE_API_KEY!,
+      place_id: googleId,
+    });
+
+    const results = await fetch(url).then(res => res.json());
+
+    if (results.result) {
+      return {
+        address: results.result.formatted_address,
+        lat: results.result.geometry?.location?.lat,
+        lng: results.result.geometry?.location?.lng,
+      };
+    }
+
+    return null;
+  }
+
+  @Query(returns => Metropolitan, {
+    description: 'A list of metropolitan areas',
+  })
+  async metropolitan(@Arg('key') key: MetropolitanKey) {
+    return { key };
+  }
+
   @Query(returns => [Metropolitan], {
     description: 'A list of metropolitan areas',
   })
@@ -125,31 +157,6 @@ export class QueryResolver {
       address: p.description,
       googleId: p.place_id,
     }));
-  }
-
-  @Query(returns => Location, {
-    description: "Convert a place's googleId into a location",
-    nullable: true,
-  })
-  async googleIdToLocation(@Arg('googleId') googleId: string) {
-    let url = 'https://maps.googleapis.com/maps/api/place/details/json';
-    url += buildQuery({
-      fields: 'formatted_address,geometry',
-      key: process.env.GOOGLE_API_KEY!,
-      place_id: googleId,
-    });
-
-    const results = await fetch(url).then(res => res.json());
-
-    if (results.result) {
-      return {
-        address: results.result.formatted_address,
-        lat: results.result.geometry?.location?.lat,
-        lng: results.result.geometry?.location?.lng,
-      };
-    }
-
-    return null;
   }
 
   @Query(returns => User, { description: 'Get info for self', nullable: true })
