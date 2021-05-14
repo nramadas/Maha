@@ -22,8 +22,8 @@ export function toString(num: number) {
   return makePretty(num.toString());
 }
 
-export function fromString(num: string) {
+export function fromString(num: string, float?: boolean) {
   const withoutCommas = num.replaceAll(',', '');
-  const value = parseInt(withoutCommas, 10);
+  const value = float ? parseFloat(withoutCommas) : parseInt(withoutCommas, 10);
   return Number.isNaN(value) ? null : value;
 }

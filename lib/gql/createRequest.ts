@@ -12,7 +12,7 @@ export function createRequest(strings: TemplateStringsArray) {
   return (args: Args = {}) => {
     const { variables = {} } = args;
 
-    return fetch('/api/graphql', {
+    return fetch(process.env.NEXT_PUBLIC_GQL_ADDRESS!, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

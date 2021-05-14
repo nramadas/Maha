@@ -1,14 +1,15 @@
-const colors = require('colors/safe');
-const inquirer = require('inquirer');
-const f = require('node-fetch');
+import colors from 'colors/safe';
+import inquirer from 'inquirer';
+import fetch from 'node-fetch';
 
-const { connectToDb } = require('@/db');
-const repos = require('@/db/repositories').default;
-const { createUser, initiatePasswordlessLogin } = require('@/lib/authn/api');
-const { extractAuthId } = require('@/lib/authn/token');
-const { CommonRoleType } = require('@/models/CommonRoleType');
+import { connectToDb } from '@/db';
+import repos from '@/db/repositories';
+import { createUser, initiatePasswordlessLogin } from '@/lib/authn/api';
+import { extractAuthId } from '@/lib/authn/token';
+import { CommonRoleType } from '@/models/CommonRoleType';
 
-globalThis.fetch = f;
+// @ts-ignore
+globalThis.fetch = fetch;
 
 async function makeUser(email: string, firstName?: string, lastName?: string) {
   const _users = repos.User();
@@ -91,23 +92,23 @@ async function main() {
   const answers = await inquirer.prompt([
     {
       name: 'adminEmail',
-      message: "What's your email?",
+      message: 'Your email',
     },
     {
       name: 'testOrg',
-      message: "What's the name of the test organization?",
+      message: 'Test organization name',
     },
     {
       name: 'ownerEmail',
-      message: "What's the email for the organization's owner?",
+      message: "Test organization owner's email",
     },
     {
       name: 'ownerFirstName',
-      message: "What's the owner's first name?",
+      message: "Owner's first name",
     },
     {
       name: 'ownerLastName',
-      message: "What's the owner's last name?",
+      message: "Owner's last name",
     },
   ]);
 
@@ -135,5 +136,3 @@ async function main() {
 }
 
 main();
-
-export {};

@@ -31,7 +31,7 @@ export function Price(props: Props) {
       onInput={e => {
         const val = e.currentTarget.value;
         const withoutSymbol = val.replaceAll('₹', '');
-        const number = fromString(withoutSymbol);
+        const number = fromString(withoutSymbol, true);
         form.setValue(rest.name, number);
       }}
       onValidate={required ? text => (text ? '' : emptyError) : undefined}
