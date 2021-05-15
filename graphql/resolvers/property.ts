@@ -9,6 +9,7 @@ import { School as SchoolEntity } from '@/db/entities/School';
 import * as errors from '@/graphql/errors';
 import { Media } from '@/graphql/types/Media';
 import { MediaParentType } from '@/graphql/types/MediaParentType';
+import { MediaType } from '@/graphql/types/MediaType';
 import { Organization } from '@/graphql/types/Organization';
 import { Permission } from '@/graphql/types/Permission';
 import { Property } from '@/graphql/types/Property';
@@ -34,9 +35,12 @@ export class PropertyResolver {
   @FieldResolver(type => [Media], {
     description: 'All the media for this property',
   })
-  async media(@Root() root: Property) {
+  async media(
+    @Root() root: Property,
+    @Arg('type', { nullable: true }) type?: MediaType,
+  ) {
     const dbMedia = await this._media.find({
-      where: { parentId: root.id, parentType: MediaParentType.Property },
+      where: { type, parentId: root.id, parentType: MediaParentType.Property },
     });
 
     return dbMedia.map(convertFromMediaDBModel);

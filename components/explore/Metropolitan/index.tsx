@@ -1,5 +1,5 @@
 import { gql } from '@urql/core';
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from 'urql';
 
 import {
@@ -11,7 +11,6 @@ import {
 import { Filters } from '@/components/explore/Filters';
 import { PropertyMarker } from '@/components/explore/PropertyMarker';
 import { Map } from '@/components/maps/Map';
-import { Marker } from '@/components/maps/Marker';
 import { enumToText } from '@/lib/enumToText/metropolitan';
 import { MetropolitanKey } from '@/models/MetropolitanKey';
 
@@ -30,12 +29,14 @@ const metropolitanQuery = gql`
           lat
           lng
         }
-        media {
+        media(type: Image) {
           id
           src
-          type
         }
         name
+        numBedrooms
+        numBathrooms
+        numBathroomsHalf
         price
         sqft
       }
@@ -48,6 +49,7 @@ interface Props {
 }
 
 export function Metropolitan(props: Props) {
+  const [hovered, setHovered] = useState<string | null>(null);
   const [result] = useQuery({
     query: metropolitanQuery,
     variables: { key: props.metropolitanKey },
@@ -64,7 +66,18 @@ export function Metropolitan(props: Props) {
       <CenterPane>
         <Map center={center}>
           {properties.map((property: any) => (
-            <PropertyMarker key={property.id} property={property} />
+            <PropertyMarker
+              hovered={hovered === property.id}
+              key={property.id}
+              property={property}
+              onHoverChange={h => {
+                if (h) {
+                  setHovered(property.id);
+                } else if (hovered === property.id) {
+                  setHovered(null);
+                }
+              }}
+            />
           ))}
         </Map>
       </CenterPane>

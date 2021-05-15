@@ -1,29 +1,105 @@
 .container {
+  filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.1));
+  margin-top: -10px;
   position: relative;
-  transform: translateX(-50%) translateY(-10px);
+  transform: translateX(-50%) translateY(-100%);
   transition: filter 0.15s;
+}
+
+.extraInfo {
+  align-items: center;
+  background-color: var(--color-background);
+  border-radius: 4px;
+  bottom: 0;
+  color: var(--color-onBackground);
+  display: grid;
+  grid-template-columns: max-content min-content;
+  left: 50%;
+  opacity: 0;
+  padding: 8px;
+  position: absolute;
+  transform: scale(0) translateX(-125%);
+  transition: transform 0.15s, bottom 0.15s, opacity 0.15s;
+}
+
+.extraInfoGrid {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  margin-top: 4px;
+  opacity: 0.5;
 
   > * {
-    background-color: var(--color-primary);
+    margin-left: 8px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+}
+
+.hovered {
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.3));
+  z-index: 10;
+
+  .pin,
+  .text {
+    background-color: var(--color-primaryHovered);
   }
 
-  &:hover {
-    filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.5));
-    z-index: 10;
-
-    > * {
-      background-color: var(--color-primaryHovered);
-    }
+  .extraInfo {
+    bottom: 110%;
+    opacity: 1;
+    transform: scale(1) translateX(-50%);
   }
 
   &:active {
-    > * {
+    .pin,
+    .text {
       background-color: var(--color-primaryPressed);
     }
   }
 }
 
+.icon {
+  fill: var(--color-primary);
+  height: 0.875rem;
+  margin-right: 2px;
+}
+
+.image {
+  flex-shrink: 0;
+  height: 40px;
+  margin-right: 4px;
+  position: relative;
+  width: 40px;
+}
+
+.infoRow {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+}
+
+.metadata {
+  flex-grow: 0;
+  flex-shrink: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.name {
+  display: block;
+  font-weight: 700;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .pin {
+  background-color: var(--color-primary);
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
   top: 100%;
@@ -35,7 +111,34 @@
   width: 3px;
 }
 
+.previewImage {
+  border: 1px solid var(--color-fieldBorder);
+  border-radius: 3px;
+  box-sizing: border-box;
+  display: block;
+  height: 0px;
+  inset: 0px;
+  margin: auto;
+  max-height: 100%;
+  max-width: 100%;
+  min-height: 100%;
+  min-width: 100%;
+  object-fit: cover;
+  object-position: center center;
+  padding: 0px;
+  position: absolute;
+  width: 0px;
+}
+
+.sqft {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  white-space: nowrap;
+}
+
 .text {
+  background-color: var(--color-primary);
   border-radius: 4px;
   color: var(--color-background);
   cursor: pointer;
