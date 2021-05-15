@@ -3,3 +3,28 @@
   position: relative;
   width: 100%;
 }
+
+.cluster {
+  align-items: center;
+  background-color: var(--color-primary);
+  border-radius: 4px;
+  color: var(--color-onBackground);
+  cursor: pointer;
+  display: flex;
+  filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.1));
+  flex-direction: row;
+  font-size: 0.875rem;
+  font-weight: 700;
+  justify-content: center;
+  overflow: hidden;
+  transition: background-color 0.15s, filter 0.15s;
+
+  &:hover {
+    background-color: var(--color-primaryHovered);
+    filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.3));
+  }
+
+  &:active {
+    background-color: var(--color-primaryPressed);
+  }
+}
