@@ -1,6 +1,6 @@
 import cx from 'classnames';
 import isEqual from 'lodash/isEqual';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { ChevronDown } from '@/components/icons/ChevronDown';
 import { Body2 } from '@/components/typography';
@@ -70,6 +70,12 @@ export function Select<V, E = any>(props: Props<V, E>) {
 
   const render = (option: Option<V, E>) =>
     props.children({ ...option, text: textToString(option.text) });
+
+  useEffect(() => {
+    if (selected) {
+      form.setValue(props.name, selected);
+    }
+  }, []);
 
   return (
     <div>
