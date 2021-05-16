@@ -8,8 +8,11 @@ import {
   CenterPane,
   Explore,
 } from '@/components/chrome/Explore';
-import { Filters } from '@/components/explore/Filters';
-import { PropertyMarker } from '@/components/explore/PropertyMarker';
+import { AppliedFilters, Filters } from '@/components/explore/Filters';
+import {
+  PropertyMarker,
+  MarkerModel,
+} from '@/components/explore/PropertyMarker';
 import { Map } from '@/components/maps/Map';
 import { enumToText } from '@/lib/enumToText/metropolitan';
 import { MetropolitanKey } from '@/models/MetropolitanKey';
@@ -44,6 +47,32 @@ const metropolitanQuery = gql`
   }
 `;
 
+const applyFilters = (filters: Partial<AppliedFilters>) => (
+  property: MarkerModel,
+) => {
+  for (const [name, value] of Object.entries(filters)) {
+    if (value) {
+      for (const prefix of ['min', 'max']) {
+        if (name.startsWith(prefix)) {
+          const [, _prop] = name.split(prefix);
+          const prop = (_prop[0].toLowerCase() +
+            _prop.slice(1)) as keyof MarkerModel;
+
+          if (prefix === 'min' && property[prop] < value) {
+            return false;
+          }
+
+          if (prefix === 'max' && property[prop] > value) {
+            return false;
+          }
+        }
+      }
+    }
+  }
+
+  return true;
+};
+
 interface Props {
   metropolitanKey: MetropolitanKey;
 }
@@ -54,6 +83,7 @@ export function Metropolitan(props: Props) {
     query: metropolitanQuery,
     variables: { key: props.metropolitanKey },
   });
+  const [filters, setFilters] = useState<Partial<AppliedFilters>>({});
 
   const center = result.data?.metropolitan?.center;
   const properties = result.data?.metropolitan?.properties || [];
@@ -61,11 +91,14 @@ export function Metropolitan(props: Props) {
   return (
     <Explore>
       <LeftPane>
-        <Filters title={enumToText(props.metropolitanKey)} />
+        <Filters
+          title={enumToText(props.metropolitanKey)}
+          onFilterChange={setFilters}
+        />
       </LeftPane>
       <CenterPane>
         <Map center={center}>
-          {properties.map((property: any) => (
+          {properties.filter(applyFilters(filters)).map((property: any) => (
             <PropertyMarker
               hovered={hovered === property.id}
               key={property.id}

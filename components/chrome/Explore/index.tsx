@@ -79,9 +79,7 @@ export function Explore(props: Props) {
           </div>
         </DomContainerProvider>
       </nav>
-      <div className={styles.leftPane}>
-        <DomContainerProvider>{leftPane}</DomContainerProvider>
-      </div>
+      <div className={styles.leftPane}>{leftPane}</div>
       <div className={styles.centerPane}>{centerPane}</div>
       <div className={styles.rightPane}>
         <DomContainerProvider>{rightPane}</DomContainerProvider>

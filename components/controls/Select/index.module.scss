@@ -1,3 +1,4 @@
+
 .icon {
   fill: var(--color-primary);
   margin-left: 16px;
@@ -24,6 +25,10 @@
 
   &:hover {
     background-color: var(--color-field);
+  }
+
+  &.disabled {
+    cursor: not-allowed;
   }
 }
 

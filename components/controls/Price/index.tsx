@@ -11,10 +11,12 @@ interface Props
   extends Omit<
     React.ComponentProps<typeof InputWithValidation>,
     'icon' | 'type' | '__doNotWriteForm'
-  > {}
+  > {
+  noIcon?: boolean;
+}
 
 export function Price(props: Props) {
-  const { required, ...rest } = props;
+  const { noIcon, required, ...rest } = props;
   const form = useForm();
   const [fractional, setFractional] = useState(false);
   const _value = rest.value || form.getValue(rest.name);
@@ -26,7 +28,7 @@ export function Price(props: Props) {
     <InputWithValidation
       {...rest}
       __doNotWriteToForm
-      icon={<DollarRupee />}
+      icon={noIcon ? undefined : <DollarRupee />}
       type="text"
       value={value ? `₹${value}${fractional ? '.' : ''}` : ''}
       onInput={e => {

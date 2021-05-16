@@ -94,6 +94,12 @@ export function Marker(props: Props) {
       } else {
         setReady(false);
       }
+
+      return () => {
+        if (markerRef.current) {
+          markerRef.current.remove();
+        }
+      };
     },
     [map],
   );
@@ -102,6 +108,12 @@ export function Marker(props: Props) {
     if (map && clusterer && markerRef.current) {
       clusterer.addMarker(markerRef.current as any);
     }
+
+    return () => {
+      if (map && clusterer && markerRef.current) {
+        clusterer.removeMarker(markerRef.current as any);
+      }
+    };
   }, [map, clusterer, ready]);
 
   if (ready && markerRef.current && markerRef.current.div) {

@@ -1,5 +1,5 @@
 import { Loader } from '@googlemaps/js-api-loader';
-import { useEffect, DependencyList } from 'react';
+import { useEffect, useRef, DependencyList } from 'react';
 
 const loader = new Loader({
   apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
@@ -29,13 +29,21 @@ export function useGoogleMapsSDK(
   cb: (sdk: typeof google.maps) => void,
   deps?: DependencyList,
 ) {
+  const deconstructRef = useRef<any>(null);
+
   useEffect(() => {
     const sdkLoad = load();
 
     if (sdkLoad) {
       sdkLoad.then(mapsSdk => {
-        cb(mapsSdk);
+        deconstructRef.current = cb(mapsSdk);
       });
     }
+
+    return () => {
+      if (deconstructRef.current) {
+        return deconstructRef.current();
+      }
+    };
   }, deps || []);
 }

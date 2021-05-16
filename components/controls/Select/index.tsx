@@ -118,7 +118,9 @@ export function Select<V, E = any>(props: Props<V, E>) {
         <div className={styles.optionsList}>
           {sortedOptions.map(option => (
             <div
-              className={cx(styles.option, styles.size)}
+              className={cx(styles.option, styles.size, {
+                [styles.disabled]: !!option.disabled,
+              })}
               key={textToString(option.text)}
               onClick={() => {
                 if (!option.disabled) {

@@ -14,20 +14,22 @@ import { Property } from '@/models/Property';
 
 import styles from './index.module.scss';
 
+export type MarkerModel = Pick<
+  Property,
+  | 'location'
+  | 'name'
+  | 'numBathrooms'
+  | 'numBathroomsHalf'
+  | 'numBedrooms'
+  | 'price'
+  | 'sqft'
+> & {
+  media: Pick<Media, 'src'>[];
+};
+
 interface Props {
   hovered?: boolean;
-  property: Pick<
-    Property,
-    | 'location'
-    | 'name'
-    | 'numBathrooms'
-    | 'numBathroomsHalf'
-    | 'numBedrooms'
-    | 'price'
-    | 'sqft'
-  > & {
-    media: Pick<Media, 'src'>[];
-  };
+  property: MarkerModel;
   onHoverChange?(hovered: boolean): void;
 }
 
