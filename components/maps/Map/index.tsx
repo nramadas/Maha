@@ -23,7 +23,8 @@ export function Map(props: Props) {
     sdk => {
       if (
         containerRef.current &&
-        containerRef.current !== prevContainerRef.current
+        containerRef.current !== prevContainerRef.current &&
+        props.center
       ) {
         const map = new sdk.Map(containerRef.current, {
           center: props.center ? new sdk.LatLng(props.center) : undefined,
@@ -38,20 +39,18 @@ export function Map(props: Props) {
         clustererRef.current = new MarkerClusterer(map, [], {
           gridSize: 40,
           zIndex: 9,
-          styles: [
-            {
-              className: styles.cluster,
-              height: 30,
-              width: 30,
-              textColor: 'var(--color-background)',
-            },
-          ],
+          styles: [28, 32, 36, 40, 44, 48, 52].map(size => ({
+            className: styles.cluster,
+            height: size,
+            width: size,
+            textColor: 'var(--color-background)',
+          })),
         });
 
         setMap(map);
       }
     },
-    [containerRef.current],
+    [containerRef.current, props.center?.lat, props.center?.lng],
   );
 
   return (
