@@ -5,6 +5,7 @@ import { MapPropertyModel } from '@/components/explore/MapPropertyModel';
 import { PreviewMediaCarousel } from '@/components/PreviewMediaCarousel';
 
 import styles from './index.module.scss';
+import { Info } from './Info';
 
 interface Props {
   className?: string;
@@ -25,6 +26,7 @@ export function PropertyListItem(props: Props) {
       onMouseLeave={() => props.onHoverChange?.(false)}
     >
       <PreviewMediaCarousel media={props.property.media} />
+      <Info className={styles.info} property={props.property} />
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { TransitionMotion, spring } from 'react-motion';
 
 import { ChevronLeft } from '@/components/icons/ChevronLeft';
 import { ChevronRight } from '@/components/icons/ChevronRight';
+import { Overline } from '@/components/typography/Overline';
 import { load as preloadImage } from '@/lib/imagePreloader';
 import { Media as _Media } from '@/models/Media';
 
@@ -35,34 +36,25 @@ interface Props {
 
 export function PreviewMediaCarousel(props: Props) {
   const [visible, setVisible] = useState<Media>(props.media[0]);
-  const [transitioning, setTransitioning] = useState(false);
   const direction = useRef<'left' | 'right'>('left');
+  const curIdx = props.media.findIndex(m => m.id === visible.id);
 
   const slide = useCallback(
     (d: 'left' | 'right') => {
-      const currentIdx = props.media.findIndex(m => m.id === visible.id);
       const nextIdx = getNextIdx(
-        currentIdx,
-        d === 'left' ? -1 : 1,
+        curIdx,
+        d === 'left' ? 1 : -1,
         props.media.length,
       );
 
       const next = props.media[nextIdx];
       direction.current = d;
-      setTransitioning(true);
 
       preloadImage(next.src).then(() => {
         setVisible(next);
       });
     },
-    [
-      direction,
-      props.media,
-      transitioning,
-      visible,
-      setTransitioning,
-      setVisible,
-    ],
+    [curIdx, direction, props.media, visible, setVisible],
   );
 
   if (!props.media.length) {
@@ -71,7 +63,6 @@ export function PreviewMediaCarousel(props: Props) {
 
   return (
     <TransitionMotion
-      didLeave={() => setTransitioning(false)}
       styles={[visible].map(m => ({
         key: m.id,
         data: m,
@@ -98,6 +89,11 @@ export function PreviewMediaCarousel(props: Props) {
               <img className={styles.image} src={item.data.src} />
             </div>
           ))}
+          <div className={styles.countContainer}>
+            <Overline>
+              {curIdx + 1} / {props.media.length}
+            </Overline>
+          </div>
           <div
             className={styles.leftContainer}
             onClick={e => {

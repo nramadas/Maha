@@ -1,4 +1,4 @@
-$size: 270px;
+$size: 300px;
 
 .container {
   border-radius: 8px;
@@ -14,4 +14,15 @@ $size: 270px;
     box-shadow: var(--elevation-3);
     transform: scale(1.02);
   }
+}
+
+.info {
+  background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.8) 80%);
+  bottom: 0;
+  box-sizing: border-box;
+  height: 60%;
+  left: 0;
+  padding: 8px;
+  position: absolute;
+  right: 0;
 }

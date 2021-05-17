@@ -4,11 +4,25 @@
   width: 100%;
 
   &:hover {
+    .countContainer,
     .leftContainer,
     .rightContainer {
       opacity: 1;
     }
   }
+}
+
+.countContainer {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  color: var(--color-background);
+  left: 50%;
+  opacity: 0;
+  padding: 0 8px 4px;
+  position: absolute;
+  top: 8px;
+  transform: translateX(-50%);
+  transition: opacity 0.15s;
 }
 
 .icon {
