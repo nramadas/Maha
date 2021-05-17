@@ -1,0 +1,62 @@
+.container {
+  height: 100%;
+  position: relative;
+  width: 100%;
+
+  &:hover {
+    .leftContainer,
+    .rightContainer {
+      opacity: 1;
+    }
+  }
+}
+
+.icon {
+  fill: var(--color-background);
+  height: 24px;
+}
+
+.image {
+  background-color: black;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  width: 100%;
+}
+
+.item {
+  height: 100%;
+  position: absolute;
+  width: 100%;
+}
+
+.leftContainer,
+.rightContainer {
+  $size: 40px;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  height: $size;
+  justify-content: center;
+  margin-top: -($size / 2);
+  opacity: 0;
+  padding: 4px;
+  position: absolute;
+  top: 50%;
+  transition: background-color 0.15s, opacity 0.15s;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+}
+
+.leftContainer {
+  left: 8px;
+}
+
+.rightContainer {
+  right: 8px;
+}

@@ -23,7 +23,7 @@ export const applySort = (bounds: MapBounds) => (
   const aPoint = locationToMapPoint(a.location);
   const bPoint = locationToMapPoint(b.location);
 
-  // 1. Priorities properties with explicit lat/lng
+  // 1. Prioritize properties with explicit lat/lng
   if (aPoint && !bPoint) {
     return -1;
   }
@@ -32,7 +32,7 @@ export const applySort = (bounds: MapBounds) => (
     return 1;
   }
 
-  // 2. Priorities properties that are in the viewport
+  // 2. Prioritize properties that are in the viewport
   if (aPoint && bPoint) {
     if (inBounds(aPoint, bounds) && !inBounds(bPoint, bounds)) {
       return -1;

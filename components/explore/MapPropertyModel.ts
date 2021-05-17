@@ -33,7 +33,7 @@ export type MapPropertyModel = Pick<
   | 'utilitiesHeating'
   | 'utilitiesWaterFilter'
 > & {
-  media: Pick<Media, 'src'>[];
+  media: Pick<Media, 'id' | 'src'>[];
   organizationName: string;
   schools: Pick<School, 'id' | 'location'>[];
 };

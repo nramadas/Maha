@@ -2,6 +2,7 @@ import cx from 'classnames';
 import React from 'react';
 
 import { MapPropertyModel } from '@/components/explore/MapPropertyModel';
+import { PreviewMediaCarousel } from '@/components/PreviewMediaCarousel';
 
 import styles from './index.module.scss';
 
@@ -22,6 +23,8 @@ export function PropertyListItem(props: Props) {
       onClick={() => props.onClick?.()}
       onMouseEnter={() => props.onHoverChange?.(true)}
       onMouseLeave={() => props.onHoverChange?.(false)}
-    />
+    >
+      <PreviewMediaCarousel media={props.property.media} />
+    </div>
   );
 }
