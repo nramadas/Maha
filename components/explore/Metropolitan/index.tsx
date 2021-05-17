@@ -11,6 +11,7 @@ import { Map } from '@/components/maps/Map';
 import { locationToMapPoint } from '@/lib/map';
 import { MapPoint } from '@/models/MapPoint';
 import { MetropolitanKey } from '@/models/MetropolitanKey';
+import { SortType } from '@/models/SortType';
 
 import { applyFilters } from './applyFilters';
 import { applySort } from './applySort';
@@ -99,6 +100,7 @@ export function Metropolitan(props: Props) {
     ne: undefined,
     sw: undefined,
   });
+  const [sort, setSort] = useState<SortType>(SortType.Relevance);
 
   const properties = result.data?.metropolitan?.properties || [];
   const filteredProperties = properties.filter(applyFilters(filters));
@@ -152,7 +154,9 @@ export function Metropolitan(props: Props) {
         <InfoPanel
           hovered={hovered}
           metropolitanKey={props.metropolitanKey}
-          properties={filteredProperties.sort(applySort(mapBounds))}
+          properties={filteredProperties.sort(applySort(sort, mapBounds))}
+          sort={sort}
+          onChangeSort={setSort}
           onHoverChange={setHovered}
           onSelectProperty={selectProperty}
         />

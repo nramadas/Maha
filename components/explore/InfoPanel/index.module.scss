@@ -10,12 +10,30 @@
 }
 
 .header {
-  color: var(--color-metadata);
+  align-items: center;
+  display: flex;
+  flex-direction: row;
   flex-shrink: 0;
-  padding: 10.5px;
+  height: 80px;
+  justify-content: space-between;
+  padding: 14px;
+  position: relative;
+}
+
+.headerCenter {
+  color: var(--color-metadata);
+  left: 50%;
+  max-width: 320px;
+  position: absolute;
   text-align: center;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
 }
 
 .title {
   color: var(--color-primary);
+  overflow: hidden;
+  padding-bottom: 4px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
