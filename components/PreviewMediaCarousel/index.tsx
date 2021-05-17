@@ -6,8 +6,6 @@ import { TransitionMotion, spring } from 'react-motion';
 import { ChevronLeft } from '@/components/icons/ChevronLeft';
 import { ChevronRight } from '@/components/icons/ChevronRight';
 import { Overline } from '@/components/typography/Overline';
-import { wait } from '@/lib/delay';
-import { load as preloadImage } from '@/lib/imagePreloader';
 import { Media as _Media } from '@/models/Media';
 
 import styles from './index.module.scss';
@@ -51,10 +49,7 @@ export function PreviewMediaCarousel(props: Props) {
 
       const next = props.media[nextIdx];
       direction.current = d;
-
-      Promise.race([preloadImage(next.src), wait(250)]).then(() => {
-        setVisible(next);
-      });
+      setVisible(next);
     },
     [curIdx, direction, props.media, visible, setVisible],
   );

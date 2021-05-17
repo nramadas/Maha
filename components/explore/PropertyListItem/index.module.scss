@@ -11,7 +11,7 @@ $size: 300px;
   width: $size;
 
   &.hovered {
-    box-shadow: var(--elevation-3);
+    box-shadow: var(--elevation-4);
     transform: scale(1.02);
   }
 }
