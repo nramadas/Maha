@@ -17,6 +17,7 @@ interface Props {
   hovered?: boolean;
   property: MapPropertyModel;
   onHoverChange?(hovered: boolean): void;
+  onClick?(): void;
 }
 
 export function PropertyMarker(props: Props) {
@@ -30,11 +31,12 @@ export function PropertyMarker(props: Props) {
   const media = property.media[0];
 
   return (
-    <Marker point={{ lat, lng }}>
+    <Marker excludeFromCluster={props.hovered} point={{ lat, lng }}>
       <div
         className={cx(styles.container, {
           [styles.hovered]: !!props.hovered,
         })}
+        onClick={() => props.onClick?.()}
         onMouseEnter={() => props.onHoverChange?.(true)}
         onMouseLeave={() => props.onHoverChange?.(false)}
       >
@@ -43,7 +45,7 @@ export function PropertyMarker(props: Props) {
             {media && <img className={styles.previewImage} src={media.src} />}
           </div>
           <div className={styles.metadata}>
-            <Body2 className={styles.name}>{property.name}</Body2>
+            <Body2 className={styles.name}>{property.location.address}</Body2>
             <div className={styles.extraInfoGrid}>
               {!!property.sqft && (
                 <div className={styles.infoRow}>

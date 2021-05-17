@@ -1,3 +1,5 @@
+$highlightSize: 40px;
+
 .container {
   height: 100%;
   position: relative;
@@ -27,4 +29,40 @@
   &:active {
     background-color: var(--color-primaryPressed);
   }
+}
+
+.highlightEast {
+  background: linear-gradient(to right, transparent, var(--color-primary) 200%);;
+  bottom: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: $highlightSize;
+}
+
+.highlightNorth {
+  background: linear-gradient(to top, transparent, var(--color-primary) 200%);;
+  height: $highlightSize;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.highlightSouth {
+  background: linear-gradient(to bottom, transparent, var(--color-primary) 200%);;
+  bottom: 0;
+  height: $highlightSize;
+  left: 0;
+  position: absolute;
+  right: 0;
+}
+
+.highlightWest {
+  background: linear-gradient(to left, transparent, var(--color-primary) 200%);
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: $highlightSize;
 }

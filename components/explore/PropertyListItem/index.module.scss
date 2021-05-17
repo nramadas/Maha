@@ -1,0 +1,17 @@
+$size: 270px;
+
+.container {
+  border-radius: 8px;
+  box-shadow: var(--elevation-1);
+  cursor: pointer;
+  height: .75 * $size;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.15s, box-shadow 0.15s;
+  width: $size;
+
+  &.hovered {
+    box-shadow: var(--elevation-3);
+    transform: scale(1.02);
+  }
+}

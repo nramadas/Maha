@@ -1,5 +1,5 @@
 import { gql } from '@urql/core';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useQuery } from 'urql';
 
 import { LeftPane, RightPane, Explore } from '@/components/chrome/Explore';
@@ -8,6 +8,7 @@ import { InfoPanel } from '@/components/explore/InfoPanel';
 import { MapPropertyModel } from '@/components/explore/MapPropertyModel';
 import { PropertyMarker } from '@/components/explore/PropertyMarker';
 import { Map } from '@/components/maps/Map';
+import { MapPoint } from '@/models/MapPoint';
 import { MetropolitanKey } from '@/models/MetropolitanKey';
 
 const metropolitanQuery = gql`
@@ -110,31 +111,55 @@ interface Props {
 }
 
 export function Metropolitan(props: Props) {
-  const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [hovered, setHovered] = useState<MapPropertyModel | null>(null);
   const [result] = useQuery({
     query: metropolitanQuery,
     variables: { key: props.metropolitanKey },
   });
   const [filters, setFilters] = useState<Partial<AppliedFilters>>({});
+  const [focusPoint, setFocusPoint] = useState<MapPoint | undefined>();
 
-  const center = result.data?.metropolitan?.center;
   const properties = result.data?.metropolitan?.properties || [];
   const filteredProperties = properties.filter(applyFilters(filters));
+  const initialCenter = result.data?.metropolitan?.center;
+
+  const selectProperty = useCallback(
+    (property: MapPropertyModel) => {
+      const { lat, lng } = property.location;
+
+      if (lat && lng) {
+        setFocusPoint({ lat, lng });
+      }
+    },
+    [setFocusPoint],
+  );
 
   return (
     <Explore>
       <LeftPane>
-        <Map center={center}>
+        <Map
+          initialCenter={initialCenter}
+          focusPoint={focusPoint}
+          hoverPoint={
+            hovered?.location.lat && hovered?.location.lng
+              ? {
+                  lat: hovered.location.lat,
+                  lng: hovered.location.lng,
+                }
+              : undefined
+          }
+        >
           {filteredProperties.map((property: any) => (
             <PropertyMarker
-              hovered={hoveredId === property.id}
+              hovered={hovered?.id === property.id}
               key={property.id}
               property={property}
+              onClick={() => selectProperty(property)}
               onHoverChange={h => {
                 if (h) {
-                  setHoveredId(property.id);
-                } else if (hoveredId === property.id) {
-                  setHoveredId(null);
+                  setHovered(property);
+                } else if (hovered?.id === property.id) {
+                  setHovered(null);
                 }
               }}
             />
@@ -143,10 +168,11 @@ export function Metropolitan(props: Props) {
       </LeftPane>
       <RightPane>
         <InfoPanel
-          hoveredId={hoveredId}
+          hovered={hovered}
           metropolitanKey={props.metropolitanKey}
           properties={filteredProperties}
-          onHoverChange={setHoveredId}
+          onHoverChange={setHovered}
+          onSelectProperty={selectProperty}
         />
       </RightPane>
     </Explore>

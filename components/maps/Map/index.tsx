@@ -1,5 +1,5 @@
 import MarkerClusterer from '@googlemaps/markerclustererplus';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { GoogleMapContext } from '@/contexts/GoogleMap';
 import { useGoogleMapsSDK } from '@/hooks/useGoogleMapsSDK';
@@ -7,10 +7,44 @@ import { MapPoint } from '@/models/MapPoint';
 
 import styles from './index.module.scss';
 
+function calculateEdgeHighlights(
+  map?: google.maps.Map | null,
+  hoverPoint?: MapPoint,
+) {
+  if (map && hoverPoint) {
+    const lat = hoverPoint?.lat;
+    const lng = hoverPoint?.lng;
+
+    const bounds = map?.getBounds();
+    const ne = bounds?.getNorthEast();
+    const sw = bounds?.getSouthWest();
+
+    if (lat && lng && ne && sw) {
+      return {
+        isEast: lng > ne.lng(),
+        isNorth: lat > ne.lat(),
+        isSouth: lat < sw.lat(),
+        isWest: lng < sw.lng(),
+      };
+    }
+  }
+
+  return {
+    isEast: false,
+    isNorth: false,
+    isSouth: false,
+    isWest: false,
+  };
+}
+
+type EdgeHighlights = ReturnType<typeof calculateEdgeHighlights>;
+
 interface Props {
-  center?: MapPoint;
   children?: React.ReactNode;
   className?: string;
+  focusPoint?: MapPoint;
+  hoverPoint?: MapPoint;
+  initialCenter?: MapPoint;
 }
 
 export function Map(props: Props) {
@@ -18,16 +52,21 @@ export function Map(props: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const clustererRef = useRef<MarkerClusterer | null>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
+  const [edgeHighlights, setEdgeHighlights] = useState<EdgeHighlights>(
+    calculateEdgeHighlights(),
+  );
 
   useGoogleMapsSDK(
     sdk => {
       if (
         containerRef.current &&
         containerRef.current !== prevContainerRef.current &&
-        props.center
+        props.initialCenter
       ) {
         const map = new sdk.Map(containerRef.current, {
-          center: props.center ? new sdk.LatLng(props.center) : undefined,
+          center: props.initialCenter
+            ? new sdk.LatLng(props.initialCenter)
+            : undefined,
           clickableIcons: false,
           disableDefaultUI: true,
           draggableCursor: 'grab',
@@ -50,8 +89,30 @@ export function Map(props: Props) {
         setMap(map);
       }
     },
-    [containerRef.current, props.center?.lat, props.center?.lng],
+    [containerRef.current, props.initialCenter?.lat, props.initialCenter?.lng],
   );
+
+  useEffect(() => {
+    if (map && props.focusPoint?.lat && props.focusPoint?.lng) {
+      map.panTo({ lat: props.focusPoint.lat, lng: props.focusPoint.lng });
+
+      // setting the zoom when it is already at the correct zoom level
+      // causes the pan animation to not work
+      if (map.getZoom() !== 13) {
+        map.setZoom(13);
+      }
+    }
+  }, [map, props.focusPoint?.lat, props.focusPoint?.lng]);
+
+  useEffect(() => {
+    setEdgeHighlights(calculateEdgeHighlights(map, props.hoverPoint));
+
+    const listener = map?.addListener('bounds_changed', () => {
+      setEdgeHighlights(calculateEdgeHighlights(map, props.hoverPoint));
+    });
+
+    return () => listener && google.maps.event.removeListener(listener);
+  }, [map, props.hoverPoint?.lat, props.hoverPoint?.lng]);
 
   return (
     <div className={styles.container} ref={containerRef}>
@@ -60,6 +121,10 @@ export function Map(props: Props) {
       >
         {props.children}
       </GoogleMapContext.Provider>
+      {edgeHighlights.isEast && <div className={styles.highlightEast} />}
+      {edgeHighlights.isNorth && <div className={styles.highlightNorth} />}
+      {edgeHighlights.isSouth && <div className={styles.highlightSouth} />}
+      {edgeHighlights.isWest && <div className={styles.highlightWest} />}
     </div>
   );
 }

@@ -71,6 +71,7 @@ type RawMaker = ReturnType<typeof createMarker>;
 
 interface Props {
   children?: React.ReactNode;
+  excludeFromCluster?: boolean;
   point: MapPoint;
 }
 
@@ -106,7 +107,12 @@ export function Marker(props: Props) {
 
   useEffect(() => {
     if (map && clusterer && markerRef.current) {
-      clusterer.addMarker(markerRef.current as any);
+      if (props.excludeFromCluster) {
+        clusterer.removeMarker(markerRef.current as any);
+        markerRef.current.setMap(map);
+      } else {
+        clusterer.addMarker(markerRef.current as any);
+      }
     }
 
     return () => {
@@ -114,7 +120,7 @@ export function Marker(props: Props) {
         clusterer.removeMarker(markerRef.current as any);
       }
     };
-  }, [map, clusterer, ready]);
+  }, [map, clusterer, ready, props.excludeFromCluster]);
 
   if (ready && markerRef.current && markerRef.current.div) {
     return createPortal(props.children, markerRef.current.div);

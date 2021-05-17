@@ -1,11 +1,11 @@
 .container {
   border-radius: 8px;
   box-shadow: var(--elevation-1);
-  width: 300px;
   overflow: hidden;
+  padding-top: 75%;
   position: relative;
   transition: transform 0.15s, box-shadow 0.15s;
-  padding-top: 75%;
+  width: 300px;
 
   &:hover {
     box-shadow: var(--elevation-8);

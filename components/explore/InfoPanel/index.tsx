@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { MapPropertyModel } from '@/components/explore/MapPropertyModel';
+import { PropertyList } from '@/components/explore/PropertyList';
 import { H4 } from '@/components/typography/H4';
 import { Overline } from '@/components/typography/Overline';
 import { useTextToString } from '@/hooks/useTextToString';
@@ -12,10 +13,11 @@ import styles from './index.module.scss';
 
 interface Props {
   className?: string;
-  hoveredId?: MapPropertyModel['id'] | null;
+  hovered?: MapPropertyModel | null;
   metropolitanKey: MetropolitanKey;
   properties: MapPropertyModel[];
-  onHoverChange?(hoveredId: string | null): void;
+  onHoverChange?(hovered: MapPropertyModel | null): void;
+  onSelectProperty?(property: MapPropertyModel): void;
 }
 
 export function InfoPanel(props: Props) {
@@ -38,7 +40,14 @@ export function InfoPanel(props: Props) {
           </i18n.Translate>
         </Overline>
       </header>
-      <article className={styles.content} />
+      <article className={styles.content}>
+        <PropertyList
+          hovered={props.hovered}
+          properties={props.properties}
+          onHoverChange={props.onHoverChange}
+          onSelectProperty={props.onSelectProperty}
+        />
+      </article>
     </div>
   );
 }
