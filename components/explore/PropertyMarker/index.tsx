@@ -1,6 +1,7 @@
 import cx from 'classnames';
 import React from 'react';
 
+import { MapPropertyModel } from '@/components/explore/MapPropertyModel';
 import { Bed } from '@/components/icons/Bed';
 import { Drop } from '@/components/icons/Drop';
 import { DropEmpty } from '@/components/icons/DropEmpty';
@@ -9,27 +10,12 @@ import { Marker } from '@/components/maps/Marker';
 import { Body2 } from '@/components/typography/Body2';
 import { Caption } from '@/components/typography/Caption';
 import { toShortString } from '@/lib/number';
-import { Media } from '@/models/Media';
-import { Property } from '@/models/Property';
 
 import styles from './index.module.scss';
 
-export type MarkerModel = Pick<
-  Property,
-  | 'location'
-  | 'name'
-  | 'numBathrooms'
-  | 'numBathroomsHalf'
-  | 'numBedrooms'
-  | 'price'
-  | 'sqft'
-> & {
-  media: Pick<Media, 'src'>[];
-};
-
 interface Props {
   hovered?: boolean;
-  property: MarkerModel;
+  property: MapPropertyModel;
   onHoverChange?(hovered: boolean): void;
 }
 

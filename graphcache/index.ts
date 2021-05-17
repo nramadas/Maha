@@ -5,6 +5,7 @@ type Config = Parameters<typeof cacheExchange>[0];
 
 export const config: Config = {
   keys: {
+    LocalizedStrings: data => null,
     Location: data => String(data.address),
     MapPoint: data => null,
     Metropolitan: data => String(data.key),

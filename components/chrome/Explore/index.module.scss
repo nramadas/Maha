@@ -1,14 +1,5 @@
-$leftPaneWidth: 240px;
 $leftRailSize: 60px;
-$rightPaneWidth: 360px;
-
-.centerPane {
-  bottom: 0;
-  left: $leftPaneWidth + $leftRailSize;
-  position: absolute;
-  right: $rightPaneWidth;
-  top: 0;
-}
+$rightPaneWidth: 40%;
 
 .container {
   bottom: 0;
@@ -20,17 +11,16 @@ $rightPaneWidth: 360px;
 
 .leftPane {
   bottom: 0;
-  box-shadow: var(--elevation-3);
   left: $leftRailSize;
   position: absolute;
+  right: $rightPaneWidth;
   top: 0;
-  width: $leftPaneWidth;
-  z-index: 1;
 }
 
 .leftRail {
   background-color: var(--color-navBackground);
   bottom: 0;
+  box-shadow: var(--elevation-6);
   left: 0;
   padding: 12px 0;
   position: absolute;
@@ -49,7 +39,7 @@ $rightPaneWidth: 360px;
 
 .rightPane {
   bottom: 0;
-  box-shadow: var(--elevation-3);
+  box-shadow: var(--elevation-6);
   position: absolute;
   right: 0;
   top: 0;

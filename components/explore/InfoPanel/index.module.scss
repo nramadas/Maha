@@ -1,0 +1,21 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.content {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.header {
+  color: var(--color-metadata);
+  flex-shrink: 0;
+  padding: 10.5px;
+  text-align: center;
+}
+
+.title {
+  color: var(--color-primary);
+}
