@@ -47,3 +47,17 @@
   flex-direction: row;
   justify-content: space-between;
 }
+
+.price {
+  align-items: flex-end;
+  display: flex;
+  flex-direction: row;
+}
+
+.priceRupee {
+  margin-right: 4px;
+}
+
+.priceSymbol {
+  opacity: 0.65;
+}
