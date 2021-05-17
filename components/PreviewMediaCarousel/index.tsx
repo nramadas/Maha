@@ -1,4 +1,5 @@
 import cx from 'classnames';
+import Image from 'next/image';
 import React, { useCallback, useRef, useState } from 'react';
 import { TransitionMotion, spring } from 'react-motion';
 
@@ -87,7 +88,14 @@ export function PreviewMediaCarousel(props: Props) {
               key={item.key}
               style={{ left: `${item.style.left}%` }}
             >
-              <img className={styles.image} src={item.data.src} />
+              <Image
+                className={styles.image}
+                src={item.data.src}
+                loader={({ src }) => src}
+                layout="fill"
+                objectFit="cover"
+                objectPosition="center center"
+              />
             </div>
           ))}
           <div className={styles.countContainer}>
