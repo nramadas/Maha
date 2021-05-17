@@ -5,6 +5,7 @@ import { TransitionMotion, spring } from 'react-motion';
 import { ChevronLeft } from '@/components/icons/ChevronLeft';
 import { ChevronRight } from '@/components/icons/ChevronRight';
 import { Overline } from '@/components/typography/Overline';
+import { wait } from '@/lib/delay';
 import { load as preloadImage } from '@/lib/imagePreloader';
 import { Media as _Media } from '@/models/Media';
 
@@ -50,7 +51,7 @@ export function PreviewMediaCarousel(props: Props) {
       const next = props.media[nextIdx];
       direction.current = d;
 
-      preloadImage(next.src).then(() => {
+      Promise.race([preloadImage(next.src), wait(250)]).then(() => {
         setVisible(next);
       });
     },
