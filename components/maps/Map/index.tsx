@@ -39,12 +39,18 @@ function calculateEdgeHighlights(
 
 type EdgeHighlights = ReturnType<typeof calculateEdgeHighlights>;
 
+interface Bounds {
+  ne?: MapPoint;
+  sw?: MapPoint;
+}
+
 interface Props {
   children?: React.ReactNode;
   className?: string;
   focusPoint?: MapPoint;
   hoverPoint?: MapPoint;
   initialCenter?: MapPoint;
+  onBoundsChange?(bounds: Bounds): void;
 }
 
 export function Map(props: Props) {
@@ -87,6 +93,31 @@ export function Map(props: Props) {
         });
 
         setMap(map);
+
+        const boundsListener = map.addListener('bounds_changed', () => {
+          if (props.onBoundsChange) {
+            const rawBounds = map.getBounds();
+            const ne = rawBounds?.getNorthEast();
+            const sw = rawBounds?.getSouthWest();
+
+            props.onBoundsChange({
+              ne: ne
+                ? {
+                    lat: ne.lat(),
+                    lng: ne.lng(),
+                  }
+                : undefined,
+              sw: sw
+                ? {
+                    lat: sw.lat(),
+                    lng: sw.lng(),
+                  }
+                : undefined,
+            });
+          }
+        });
+
+        return () => sdk.event.removeListener(boundsListener);
       }
     },
     [containerRef.current, props.initialCenter?.lat, props.initialCenter?.lng],

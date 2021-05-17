@@ -1,5 +1,5 @@
 import { gql } from '@urql/core';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useQuery } from 'urql';
 
 import { LeftPane, RightPane, Explore } from '@/components/chrome/Explore';
@@ -8,8 +8,12 @@ import { InfoPanel } from '@/components/explore/InfoPanel';
 import { MapPropertyModel } from '@/components/explore/MapPropertyModel';
 import { PropertyMarker } from '@/components/explore/PropertyMarker';
 import { Map } from '@/components/maps/Map';
+import { locationToMapPoint } from '@/lib/map';
 import { MapPoint } from '@/models/MapPoint';
 import { MetropolitanKey } from '@/models/MetropolitanKey';
+
+import { applyFilters } from './applyFilters';
+import { applySort } from './applySort';
 
 const metropolitanQuery = gql`
   query($key: MetropolitanKey!) {
@@ -74,37 +78,10 @@ const metropolitanQuery = gql`
   }
 `;
 
-const applyFilters = (filters: Partial<AppliedFilters>) => (
-  property: MapPropertyModel,
-) => {
-  for (const [name, value] of Object.entries(filters)) {
-    if (value) {
-      for (const prefix of ['min', 'max']) {
-        if (name.startsWith(prefix)) {
-          const [, _prop] = name.split(prefix);
-          const prop = (_prop[0].toLowerCase() +
-            _prop.slice(1)) as keyof MapPropertyModel;
-
-          const propValue = property[prop];
-
-          if (!propValue) {
-            continue;
-          }
-
-          if (prefix === 'min' && propValue < value) {
-            return false;
-          }
-
-          if (prefix === 'max' && propValue > value) {
-            return false;
-          }
-        }
-      }
-    }
-  }
-
-  return true;
-};
+interface MapBounds {
+  ne?: MapPoint;
+  sw?: MapPoint;
+}
 
 interface Props {
   metropolitanKey: MetropolitanKey;
@@ -118,6 +95,10 @@ export function Metropolitan(props: Props) {
   });
   const [filters, setFilters] = useState<Partial<AppliedFilters>>({});
   const [focusPoint, setFocusPoint] = useState<MapPoint | undefined>();
+  const [mapBounds, setMapBounds] = useState<MapBounds>({
+    ne: undefined,
+    sw: undefined,
+  });
 
   const properties = result.data?.metropolitan?.properties || [];
   const filteredProperties = properties.filter(applyFilters(filters));
@@ -125,10 +106,10 @@ export function Metropolitan(props: Props) {
 
   const selectProperty = useCallback(
     (property: MapPropertyModel) => {
-      const { lat, lng } = property.location;
+      const mapPoint = locationToMapPoint(property.location);
 
-      if (lat && lng) {
-        setFocusPoint({ lat, lng });
+      if (mapPoint) {
+        setFocusPoint(mapPoint);
       }
     },
     [setFocusPoint],
@@ -148,6 +129,7 @@ export function Metropolitan(props: Props) {
                 }
               : undefined
           }
+          onBoundsChange={setMapBounds}
         >
           {filteredProperties.map((property: any) => (
             <PropertyMarker
@@ -170,7 +152,7 @@ export function Metropolitan(props: Props) {
         <InfoPanel
           hovered={hovered}
           metropolitanKey={props.metropolitanKey}
-          properties={filteredProperties}
+          properties={filteredProperties.sort(applySort(mapBounds))}
           onHoverChange={setHovered}
           onSelectProperty={selectProperty}
         />
