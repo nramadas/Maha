@@ -8,24 +8,23 @@ import { H6 } from '@/components/typography/H6';
 import { DomContainerProvider } from '@/contexts/DomContainer';
 import { useTextToString } from '@/hooks/useTextToString';
 import { i18n } from '@/lib/translate';
+import { AppliedFilters } from '@/models/AppliedFilters';
 import { Text } from '@/models/Text';
 
 import { Footer } from './Footer';
 import styles from './index.module.scss';
 import { Section } from './Section';
 
-function formToFilters(formValues: any) {
+function formToFilters(formValues: any): AppliedFilters {
   return {
-    maxPrice: (formValues.maxPrice as number) || undefined,
-    minPrice: (formValues.minPrice as number) || undefined,
-    maxSqft: (formValues.maxSqft as number) || undefined,
-    minSqft: (formValues.minSqft as number) || undefined,
-    minNumBedrooms: (formValues.minNumBedrooms as number) || undefined,
-    minNumBathrooms: (formValues.minNumBathrooms as number) || undefined,
-  } as const;
+    maxPrice: (formValues.maxPrice as number) || null,
+    minPrice: (formValues.minPrice as number) || null,
+    maxSqft: (formValues.maxSqft as number) || null,
+    minSqft: (formValues.minSqft as number) || null,
+    minNumBedrooms: (formValues.minNumBedrooms as number) || null,
+    minNumBathrooms: (formValues.minNumBathrooms as number) || null,
+  };
 }
-
-export type AppliedFilters = ReturnType<typeof formToFilters>;
 
 interface Props {
   className?: string;

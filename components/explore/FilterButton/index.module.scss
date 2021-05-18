@@ -1,0 +1,42 @@
+.add {
+  color: var(--color-primary);
+  margin-left: 4px;
+}
+
+.container {
+  align-items: center;
+  background-color: var(--color-background);
+  border-radius: 2px;
+  border: 1px solid var(--color-fieldBorder);
+  color: var(--color-onBackground);
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  padding: 8px 16px;
+  transition: border-color 0.15s;
+
+  &:hover {
+    background-color: var(--color-field);
+    border-color: var(--color-primaryHovered);
+  }
+}
+
+.count {
+  color: var(--color-primary);
+  margin-left: 4px;
+}
+
+.remove {
+  background-color: var(--color-primary);
+  border-radius: 14px;
+  fill: var(--color-background);
+  height: 14px;
+  margin-left: 4px;
+  padding: 4px;
+  transition: background-color 0.15s;
+  width: 14px;
+
+  &:hover {
+    background-color: var(--color-error);
+  }
+}

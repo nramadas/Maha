@@ -5,7 +5,7 @@ import { applySort } from '@/components/explore/applySort';
 import { MapPropertyModel } from '@/components/explore/MapPropertyModel';
 import { PropertyListItem } from '@/components/explore/PropertyListItem';
 import {
-  useAppliedFilters,
+  useFilters,
   useMapBounds,
   useSortType,
   useSelectedProperty,
@@ -19,13 +19,13 @@ interface Props {
 }
 
 export const PropertyList = memo(function PropertyList(props: Props) {
-  const { appliedFilters } = useAppliedFilters();
+  const { filters } = useFilters();
   const { mapBounds } = useMapBounds();
   const { sortType } = useSortType();
   const { setSelectedProperty } = useSelectedProperty();
 
   const relevantProperties = props.properties
-    .filter(applyFilters(appliedFilters))
+    .filter(applyFilters(filters))
     .sort(applySort(sortType, mapBounds));
 
   return (

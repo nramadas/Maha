@@ -1,5 +1,6 @@
 import React, { memo } from 'react';
 
+import { FilterButton } from '@/components/explore/FilterButton';
 import { MapPropertyModel } from '@/components/explore/MapPropertyModel';
 import { PropertyList } from '@/components/explore/PropertyList';
 import { Sort } from '@/components/explore/Sort';
@@ -24,7 +25,7 @@ export const InfoPanel = memo(function InfoPanel(props: Props) {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <div />
+        <FilterButton />
         <div className={styles.headerCenter}>
           <H4 className={styles.title}>
             <i18n.Translate>

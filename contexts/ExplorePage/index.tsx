@@ -1,17 +1,22 @@
+import isNil from 'lodash/isNil';
 import React, { createContext, useState } from 'react';
 
 import { AppliedFilters, DEFAULT_DATA } from '@/models/AppliedFilters';
 import { MapBounds } from '@/models/MapBounds';
 import { SortType } from '@/models/SortType';
 
-export interface AppliedFiltersDetails {
-  appliedFilters: AppliedFilters;
-  setAppliedFilters(appliedFilters: AppliedFilters): void;
+export interface FiltersDetails {
+  filters: AppliedFilters;
+  filterPageOpen: boolean;
+  toggleFilterPage(force?: boolean): void;
+  setFilters(filters: AppliedFilters): void;
 }
 
-export const AppliedFiltersContext = createContext<AppliedFiltersDetails>({
-  appliedFilters: DEFAULT_DATA,
-  setAppliedFilters: () => {},
+export const FiltersContext = createContext<FiltersDetails>({
+  filters: DEFAULT_DATA,
+  filterPageOpen: false,
+  toggleFilterPage: () => {},
+  setFilters: () => {},
 });
 
 export interface HoveredPropertyDetails<P> {
@@ -63,7 +68,8 @@ interface Props {
 }
 
 export function ExplorePageProvider<P>(props: Props) {
-  const [appliedFilters, setAppliedFilters] = useState(DEFAULT_DATA);
+  const [filters, setFilters] = useState(DEFAULT_DATA);
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [sortType, setSortType] = useState(SortType.Relevance);
   const [hoveredProperty, setHoveredProperty] = useState<P | null>(null);
   const [selectedProperty, setSelectedProperty] = useState<P | null>(null);
@@ -73,8 +79,19 @@ export function ExplorePageProvider<P>(props: Props) {
   });
 
   return (
-    <AppliedFiltersContext.Provider
-      value={{ appliedFilters, setAppliedFilters }}
+    <FiltersContext.Provider
+      value={{
+        filters,
+        setFilters,
+        filterPageOpen: filtersOpen,
+        toggleFilterPage: force => {
+          if (!isNil(force)) {
+            setFiltersOpen(force);
+          } else {
+            setFiltersOpen(!filtersOpen);
+          }
+        },
+      }}
     >
       <HoveredPropertyContext.Provider
         value={{ hoveredProperty, setHoveredProperty }}
@@ -102,6 +119,6 @@ export function ExplorePageProvider<P>(props: Props) {
           </SelectedPropertyContext.Provider>
         </MapBoundsContext.Provider>
       </HoveredPropertyContext.Provider>
-    </AppliedFiltersContext.Provider>
+    </FiltersContext.Provider>
   );
 }

@@ -1,3 +1,4 @@
+import cx from 'classnames';
 import React, { memo } from 'react';
 
 import { Caption } from '@/components/typography/Caption';
@@ -26,7 +27,7 @@ export const Sort = memo(function Sort(props: Props) {
 
   return (
     <>
-      <div className={styles.container}>
+      <div className={cx(styles.container, props.className)}>
         <Target>
           <div className={styles.target}>
             <button className={styles.option}>

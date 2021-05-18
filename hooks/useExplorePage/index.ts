@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 
 import {
-  AppliedFiltersContext,
+  FiltersContext,
   HoveredPropertyContext,
   HoveredPropertyDetails,
   MapBoundsContext,
@@ -10,8 +10,8 @@ import {
   SortTypeContext,
 } from '@/contexts/ExplorePage';
 
-export function useAppliedFilters() {
-  return useContext(AppliedFiltersContext);
+export function useFilters() {
+  return useContext(FiltersContext);
 }
 
 export function useHoveredProperty<P>() {

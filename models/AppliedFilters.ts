@@ -4,7 +4,7 @@ export interface AppliedFilters {
   maxSqft: number | null;
   minSqft: number | null;
   minNumBedrooms: number | null;
-  nimNumBathrooms: number | null;
+  minNumBathrooms: number | null;
 }
 
 export const DEFAULT_DATA: AppliedFilters = {
@@ -13,5 +13,5 @@ export const DEFAULT_DATA: AppliedFilters = {
   maxSqft: null,
   minSqft: null,
   minNumBedrooms: null,
-  nimNumBathrooms: null,
+  minNumBathrooms: null,
 };
