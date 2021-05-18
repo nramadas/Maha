@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 import { Caption } from '@/components/typography/Caption';
+import { useSortType } from '@/hooks/useExplorePage';
 import { useTextToString } from '@/hooks/useTextToString';
 import { useTooltip } from '@/hooks/useTooltip';
 import { enumToText } from '@/lib/enumToText/sortType';
@@ -11,11 +12,10 @@ import styles from './index.module.scss';
 
 interface Props {
   className?: string;
-  sort: SortType;
-  onChange?(newSort: SortType): void;
 }
 
-export function Sort(props: Props) {
+export const Sort = memo(function Sort(props: Props) {
+  const { sortType, setSortType } = useSortType();
   const textToString = useTextToString();
   const [Target, Tooltip] = useTooltip({
     alignment: 'right',
@@ -33,7 +33,7 @@ export function Sort(props: Props) {
               <Caption className={styles.label}>
                 <i18n.Translate>Sort:</i18n.Translate>
               </Caption>
-              <Caption>{textToString(enumToText(props.sort))}</Caption>
+              <Caption>{textToString(enumToText(sortType))}</Caption>
             </button>
           </div>
         </Target>
@@ -49,12 +49,12 @@ export function Sort(props: Props) {
             SortType.PricePerSqft,
             SortType.Bedrooms,
           ]
-            .filter(s => s !== props.sort)
+            .filter(s => s !== sortType)
             .map(sortType => (
               <button
                 className={styles.option}
                 key={sortType}
-                onClick={() => props.onChange?.(sortType)}
+                onClick={() => setSortType(sortType)}
               >
                 <Caption className={styles.hidden}>
                   <i18n.Translate>Sort:</i18n.Translate>
@@ -68,4 +68,4 @@ export function Sort(props: Props) {
       </Tooltip>
     </>
   );
-}
+});

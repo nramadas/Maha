@@ -1,32 +1,38 @@
 import cx from 'classnames';
-import React from 'react';
+import React, { memo } from 'react';
 
 import { MapPropertyModel } from '@/components/explore/MapPropertyModel';
 import { PreviewMediaCarousel } from '@/components/PreviewMediaCarousel';
+import { useHoveredProperty } from '@/hooks/useExplorePage';
 
 import styles from './index.module.scss';
 import { Info } from './Info';
 
 interface Props {
   className?: string;
-  hovered?: boolean;
   property: MapPropertyModel;
   onClick?(): void;
-  onHoverChange?(hovered: boolean): void;
 }
 
-export function PropertyListItem(props: Props) {
+export const PropertyListItem = memo(function PropertyListItem(props: Props) {
+  const {
+    hoveredProperty,
+    setHoveredProperty,
+  } = useHoveredProperty<MapPropertyModel>();
+
   return (
     <div
       className={cx(styles.container, props.className, {
-        [styles.hovered]: !!props.hovered,
+        [styles.hovered]: hoveredProperty?.id === props.property.id,
       })}
       onClick={() => props.onClick?.()}
-      onMouseEnter={() => props.onHoverChange?.(true)}
-      onMouseLeave={() => props.onHoverChange?.(false)}
+      onMouseEnter={() => setHoveredProperty(props.property)}
+      onMouseLeave={() =>
+        hoveredProperty?.id === props.property.id && setHoveredProperty(null)
+      }
     >
       <PreviewMediaCarousel media={props.property.media} />
       <Info className={styles.info} property={props.property} />
     </div>
   );
-}
+});

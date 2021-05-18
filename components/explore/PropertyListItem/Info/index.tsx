@@ -1,5 +1,6 @@
 import cx from 'classnames';
-import React from 'react';
+import isEqual from 'lodash/isEqual';
+import React, { memo } from 'react';
 
 import { MapPropertyModel } from '@/components/explore/MapPropertyModel';
 import { Caption } from '@/components/typography/Caption';
@@ -16,8 +17,25 @@ interface Props {
   property: MapPropertyModel;
 }
 
-export function Info(props: Props) {
-  const priceStr = toString(props.property.price);
+function pick(property: MapPropertyModel) {
+  return {
+    address: property.location.address,
+    numBathrooms: property.numBathrooms,
+    numBedrooms: property.numBedrooms,
+    price: property.price,
+    sqft: property.sqft,
+  };
+}
+
+function areEqual(prevProps: Props, nextProps: Props) {
+  return isEqual(pick(prevProps.property), pick(nextProps.property));
+}
+
+export const Info = memo(function Info(props: Props) {
+  const { address, numBathrooms, numBedrooms, price, sqft } = pick(
+    props.property,
+  );
+  const priceStr = toString(price);
   const [whole, fractional] = priceStr.split('.');
   const priceParts = whole.split(',');
 
@@ -41,12 +59,12 @@ export function Info(props: Props) {
       </div>
       <div className={styles.metadata}>
         <div className={styles.address}>
-          <Caption>{cleanAddress(props.property.location.address)}</Caption>
+          <Caption>{cleanAddress(address)}</Caption>
         </div>
         <div className={styles.extra}>
           <div className={styles.extraCol}>
             <div>
-              <Caption>{props.property.numBedrooms}</Caption>
+              <Caption>{numBedrooms}</Caption>
             </div>
             <div>
               <Overline>
@@ -56,7 +74,7 @@ export function Info(props: Props) {
           </div>
           <div className={styles.extraCol}>
             <div>
-              <Caption>{props.property.numBathrooms}</Caption>
+              <Caption>{numBathrooms}</Caption>
             </div>
             <div>
               <Overline>
@@ -66,7 +84,7 @@ export function Info(props: Props) {
           </div>
           <div className={styles.extraCol}>
             <div>
-              <Caption>{toString(props.property.sqft)}</Caption>
+              <Caption>{toString(sqft)}</Caption>
             </div>
             <div>
               <Overline>
@@ -78,4 +96,4 @@ export function Info(props: Props) {
       </div>
     </footer>
   );
-}
+}, areEqual);

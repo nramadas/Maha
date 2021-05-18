@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 import { MapPropertyModel } from '@/components/explore/MapPropertyModel';
 import { PropertyList } from '@/components/explore/PropertyList';
@@ -9,22 +9,16 @@ import { useTextToString } from '@/hooks/useTextToString';
 import { enumToText } from '@/lib/enumToText/metropolitan';
 import { i18n } from '@/lib/translate';
 import { MetropolitanKey } from '@/models/MetropolitanKey';
-import { SortType } from '@/models/SortType';
 
 import styles from './index.module.scss';
 
 interface Props {
   className?: string;
-  hovered?: MapPropertyModel | null;
   metropolitanKey: MetropolitanKey;
   properties: MapPropertyModel[];
-  sort: SortType;
-  onChangeSort?(newSort: SortType): void;
-  onHoverChange?(hovered: MapPropertyModel | null): void;
-  onSelectProperty?(property: MapPropertyModel): void;
 }
 
-export function InfoPanel(props: Props) {
+export const InfoPanel = memo(function InfoPanel(props: Props) {
   const textToString = useTextToString();
 
   return (
@@ -46,16 +40,11 @@ export function InfoPanel(props: Props) {
             </i18n.Translate>
           </Overline>
         </div>
-        <Sort sort={props.sort} onChange={props.onChangeSort} />
+        <Sort />
       </header>
       <article className={styles.content}>
-        <PropertyList
-          hovered={props.hovered}
-          properties={props.properties}
-          onHoverChange={props.onHoverChange}
-          onSelectProperty={props.onSelectProperty}
-        />
+        <PropertyList properties={props.properties} />
       </article>
     </div>
   );
-}
+});

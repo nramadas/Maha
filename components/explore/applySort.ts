@@ -1,12 +1,8 @@
 import { MapPropertyModel } from '@/components/explore/MapPropertyModel';
 import { inBounds as _inBounds, locationToMapPoint } from '@/lib/map';
+import { MapBounds } from '@/models/MapBounds';
 import { MapPoint } from '@/models/MapPoint';
 import { SortType } from '@/models/SortType';
-
-interface MapBounds {
-  ne?: MapPoint;
-  sw?: MapPoint;
-}
 
 function inBounds(point: MapPoint, bounds: MapBounds) {
   if (!(bounds.ne && bounds.sw)) {

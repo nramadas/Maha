@@ -1,37 +1,43 @@
-import React from 'react';
+import React, { memo } from 'react';
 
+import { applyFilters } from '@/components/explore/applyFilters';
+import { applySort } from '@/components/explore/applySort';
 import { MapPropertyModel } from '@/components/explore/MapPropertyModel';
 import { PropertyListItem } from '@/components/explore/PropertyListItem';
+import {
+  useAppliedFilters,
+  useMapBounds,
+  useSortType,
+  useSelectedProperty,
+} from '@/hooks/useExplorePage';
 
 import styles from './index.module.scss';
 
 interface Props {
   className?: string;
-  hovered?: MapPropertyModel | null;
   properties: MapPropertyModel[];
-  onHoverChange?(hoveredId: MapPropertyModel | null): void;
-  onSelectProperty?(property: MapPropertyModel): void;
 }
 
-export function PropertyList(props: Props) {
+export const PropertyList = memo(function PropertyList(props: Props) {
+  const { appliedFilters } = useAppliedFilters();
+  const { mapBounds } = useMapBounds();
+  const { sortType } = useSortType();
+  const { setSelectedProperty } = useSelectedProperty();
+
+  const relevantProperties = props.properties
+    .filter(applyFilters(appliedFilters))
+    .sort(applySort(sortType, mapBounds));
+
   return (
     <div className={styles.container}>
-      {props.properties.map(property => (
+      {relevantProperties.map(property => (
         <PropertyListItem
           className={styles.property}
-          hovered={props.hovered?.id === property.id}
           key={property.id}
           property={property}
-          onClick={() => props.onSelectProperty?.(property)}
-          onHoverChange={h => {
-            if (h) {
-              props.onHoverChange?.(property);
-            } else if (props.hovered?.id === property.id) {
-              props.onHoverChange?.(null);
-            }
-          }}
+          onClick={() => setSelectedProperty(property)}
         />
       ))}
     </div>
   );
-}
+});

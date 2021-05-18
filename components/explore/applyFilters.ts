@@ -1,7 +1,7 @@
-import { AppliedFilters } from '@/components/explore/Filters';
 import { MapPropertyModel } from '@/components/explore/MapPropertyModel';
+import { AppliedFilters } from '@/models/AppliedFilters';
 
-export const applyFilters = (filters: Partial<AppliedFilters>) => (
+export const applyFilters = (filters: AppliedFilters) => (
   property: MapPropertyModel,
 ) => {
   for (const [name, value] of Object.entries(filters)) {

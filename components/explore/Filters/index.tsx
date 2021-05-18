@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { memo } from 'react';
 
-import { Empty } from '@/components/controls/buttons/Empty';
 import { Form } from '@/components/controls/Form';
 import { Number } from '@/components/controls/Number';
 import { Price } from '@/components/controls/Price';
@@ -34,7 +33,7 @@ interface Props {
   onFilterChange?(newFilters: AppliedFilters): void;
 }
 
-export function Filters(props: Props) {
+export const Filters = memo(function Filters(props: Props) {
   const textToString = useTextToString();
 
   return (
@@ -92,4 +91,4 @@ export function Filters(props: Props) {
       </Form>
     </div>
   );
-}
+});

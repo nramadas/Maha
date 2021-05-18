@@ -1,5 +1,6 @@
 import cx from 'classnames';
-import React from 'react';
+import isEqual from 'lodash/isEqual';
+import React, { memo } from 'react';
 
 import { MapPropertyModel } from '@/components/explore/MapPropertyModel';
 import { Bed } from '@/components/icons/Bed';
@@ -9,76 +10,113 @@ import { House } from '@/components/icons/House';
 import { Marker } from '@/components/maps/Marker';
 import { Body2 } from '@/components/typography/Body2';
 import { Caption } from '@/components/typography/Caption';
+import { useHoveredProperty } from '@/hooks/useExplorePage';
 import { toShortString } from '@/lib/number';
 
 import styles from './index.module.scss';
 
 interface Props {
-  hovered?: boolean;
   property: MapPropertyModel;
-  onHoverChange?(hovered: boolean): void;
   onClick?(): void;
 }
 
-export function PropertyMarker(props: Props) {
+function pick(property: MapPropertyModel) {
+  return {
+    address: property.location.address,
+    id: property.id,
+    image: property.media[0]?.src,
+    lat: property.location.lat,
+    lng: property.location.lng,
+    numBathrooms: property.numBathrooms,
+    numBathroomsHalf: property.numBathroomsHalf,
+    numBedrooms: property.numBedrooms,
+    price: property.price,
+    sqft: property.sqft,
+  };
+}
+
+function areEqual(prevProps: Props, nextProps: Props) {
+  return isEqual(pick(prevProps.property), pick(nextProps.property));
+}
+
+export const PropertyMarker = memo(function PropertyMarker(props: Props) {
+  const {
+    hoveredProperty,
+    setHoveredProperty,
+  } = useHoveredProperty<MapPropertyModel>();
+
   const { property } = props;
-  const { lat, lng } = property.location;
+
+  const {
+    address,
+    id,
+    image,
+    lat,
+    lng,
+    numBathrooms,
+    numBathroomsHalf,
+    numBedrooms,
+    price,
+    sqft,
+  } = pick(property);
+
+  const hovered = hoveredProperty?.id === id;
 
   if (!(lat && lng)) {
     return null;
   }
 
-  const media = property.media[0];
-
   return (
-    <Marker excludeFromCluster={props.hovered} point={{ lat, lng }}>
+    <Marker excludeFromCluster={hovered} point={{ lat, lng }}>
       <div
         className={cx(styles.container, {
-          [styles.hovered]: !!props.hovered,
+          [styles.hovered]: !!hovered,
         })}
         onClick={() => props.onClick?.()}
-        onMouseEnter={() => props.onHoverChange?.(true)}
-        onMouseLeave={() => props.onHoverChange?.(false)}
+        onMouseEnter={() => setHoveredProperty(property)}
+        onMouseLeave={() =>
+          hoveredProperty?.id === id && setHoveredProperty(null)
+        }
       >
         <div className={styles.extraInfo}>
           <div className={styles.image}>
-            {media && <img className={styles.previewImage} src={media.src} />}
+            {image && <img className={styles.previewImage} src={image} />}
           </div>
           <div className={styles.metadata}>
-            <Body2 className={styles.name}>{property.location.address}</Body2>
+            <Body2 className={styles.name}>{address}</Body2>
             <div className={styles.extraInfoGrid}>
-              {!!property.sqft && (
+              {!!sqft && (
                 <div className={styles.infoRow}>
                   <House className={styles.icon} />
-                  <Caption>{property.sqft} sqft</Caption>
+                  <Caption>{sqft} sqft</Caption>
                 </div>
               )}
-              {!!property.numBedrooms && (
+              {!!numBedrooms && (
                 <div className={styles.infoRow}>
                   <Bed className={styles.icon} />
-                  <Caption>{property.numBedrooms}</Caption>
+                  <Caption>{numBedrooms}</Caption>
                 </div>
               )}
-              {!!property.numBathrooms && (
+              {!!numBathrooms && (
                 <div className={styles.infoRow}>
                   <Drop className={styles.icon} />
-                  <Caption>{property.numBathrooms}</Caption>
+                  <Caption>{numBathrooms}</Caption>
                 </div>
               )}
-              {!!property.numBathroomsHalf && (
+              {!!numBathroomsHalf && (
                 <div className={styles.infoRow}>
                   <DropEmpty className={styles.icon} />
-                  <Caption>{property.numBathroomsHalf}</Caption>
+                  <Caption>{numBathroomsHalf}</Caption>
                 </div>
               )}
             </div>
           </div>
         </div>
         <div className={styles.text}>
-          <Body2>₹{toShortString(property.price)}</Body2>
+          <Body2>₹{toShortString(price)}</Body2>
         </div>
         <div className={styles.pin} />
       </div>
     </Marker>
   );
-}
+}, areEqual);

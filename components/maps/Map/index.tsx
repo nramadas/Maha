@@ -1,15 +1,22 @@
 import MarkerClusterer from '@googlemaps/markerclustererplus';
 import React, { useEffect, useRef, useState } from 'react';
 
+import { MapPropertyModel } from '@/components/explore/MapPropertyModel';
 import { GoogleMapContext } from '@/contexts/GoogleMap';
+import {
+  useHoveredProperty,
+  useMapBounds,
+  useSelectedProperty,
+} from '@/hooks/useExplorePage';
 import { useGoogleMapsSDK } from '@/hooks/useGoogleMapsSDK';
+import { locationToMapPoint } from '@/lib/map';
 import { MapPoint } from '@/models/MapPoint';
 
 import styles from './index.module.scss';
 
 function calculateEdgeHighlights(
   map?: google.maps.Map | null,
-  hoverPoint?: MapPoint,
+  hoverPoint?: MapPoint | null,
 ) {
   if (map && hoverPoint) {
     const lat = hoverPoint?.lat;
@@ -39,18 +46,10 @@ function calculateEdgeHighlights(
 
 type EdgeHighlights = ReturnType<typeof calculateEdgeHighlights>;
 
-interface Bounds {
-  ne?: MapPoint;
-  sw?: MapPoint;
-}
-
 interface Props {
   children?: React.ReactNode;
   className?: string;
-  focusPoint?: MapPoint;
-  hoverPoint?: MapPoint;
   initialCenter?: MapPoint;
-  onBoundsChange?(bounds: Bounds): void;
 }
 
 export function Map(props: Props) {
@@ -61,6 +60,18 @@ export function Map(props: Props) {
   const [edgeHighlights, setEdgeHighlights] = useState<EdgeHighlights>(
     calculateEdgeHighlights(),
   );
+
+  const { hoveredProperty } = useHoveredProperty<MapPropertyModel>();
+  const { setMapBounds } = useMapBounds();
+  const { selectedProperty } = useSelectedProperty<MapPropertyModel>();
+
+  const hoverPoint = hoveredProperty
+    ? locationToMapPoint(hoveredProperty.location)
+    : null;
+
+  const focusPoint = selectedProperty
+    ? locationToMapPoint(selectedProperty.location)
+    : null;
 
   useGoogleMapsSDK(
     sdk => {
@@ -95,26 +106,24 @@ export function Map(props: Props) {
         setMap(map);
 
         const boundsListener = map.addListener('bounds_changed', () => {
-          if (props.onBoundsChange) {
-            const rawBounds = map.getBounds();
-            const ne = rawBounds?.getNorthEast();
-            const sw = rawBounds?.getSouthWest();
+          const rawBounds = map.getBounds();
+          const ne = rawBounds?.getNorthEast();
+          const sw = rawBounds?.getSouthWest();
 
-            props.onBoundsChange({
-              ne: ne
-                ? {
-                    lat: ne.lat(),
-                    lng: ne.lng(),
-                  }
-                : undefined,
-              sw: sw
-                ? {
-                    lat: sw.lat(),
-                    lng: sw.lng(),
-                  }
-                : undefined,
-            });
-          }
+          setMapBounds({
+            ne: ne
+              ? {
+                  lat: ne.lat(),
+                  lng: ne.lng(),
+                }
+              : undefined,
+            sw: sw
+              ? {
+                  lat: sw.lat(),
+                  lng: sw.lng(),
+                }
+              : undefined,
+          });
         });
 
         return () => sdk.event.removeListener(boundsListener);
@@ -124,8 +133,8 @@ export function Map(props: Props) {
   );
 
   useEffect(() => {
-    if (map && props.focusPoint?.lat && props.focusPoint?.lng) {
-      map.panTo({ lat: props.focusPoint.lat, lng: props.focusPoint.lng });
+    if (map && focusPoint?.lat && focusPoint?.lng) {
+      map.panTo({ lat: focusPoint.lat, lng: focusPoint.lng });
 
       // setting the zoom when it is already at the correct zoom level
       // causes the pan animation to not work
@@ -133,17 +142,17 @@ export function Map(props: Props) {
         map.setZoom(13);
       }
     }
-  }, [map, props.focusPoint?.lat, props.focusPoint?.lng]);
+  }, [map, focusPoint?.lat, focusPoint?.lng]);
 
   useEffect(() => {
-    setEdgeHighlights(calculateEdgeHighlights(map, props.hoverPoint));
+    setEdgeHighlights(calculateEdgeHighlights(map, hoverPoint));
 
     const listener = map?.addListener('bounds_changed', () => {
-      setEdgeHighlights(calculateEdgeHighlights(map, props.hoverPoint));
+      setEdgeHighlights(calculateEdgeHighlights(map, hoverPoint));
     });
 
     return () => listener && google.maps.event.removeListener(listener);
-  }, [map, props.hoverPoint?.lat, props.hoverPoint?.lng]);
+  }, [map, hoverPoint?.lat, hoverPoint?.lng]);
 
   return (
     <div className={styles.container} ref={containerRef}>
