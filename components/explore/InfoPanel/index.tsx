@@ -18,6 +18,7 @@ import styles from './index.module.scss';
 interface Props {
   className?: string;
   metropolitanKey: MetropolitanKey;
+  propertiesPending?: boolean;
   properties: MapPropertyModel[];
 }
 
@@ -46,7 +47,10 @@ export const InfoPanel = memo(function InfoPanel(props: Props) {
         <Sort />
       </header>
       <article className={styles.content}>
-        <PropertyList properties={props.properties} />
+        <PropertyList
+          pending={props.propertiesPending}
+          properties={props.properties}
+        />
       </article>
       <Filters />
     </BottomSheetContainer>

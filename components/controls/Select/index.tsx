@@ -99,7 +99,7 @@ export function Select<V, E = any>(props: Props<V, E>) {
             ) : (
               <div>{render(props.options[0])}</div>
             )}
-            {selected ? (
+            {selected && props.placeholder ? (
               <Close
                 className={styles.close}
                 onClick={e => {

@@ -6,6 +6,7 @@ import { applyFilters } from '@/components/explore/applyFilters';
 import { applySort } from '@/components/explore/applySort';
 import { MapPropertyModel } from '@/components/explore/MapPropertyModel';
 import { PropertyListItem } from '@/components/explore/PropertyListItem';
+import { Shimmer } from '@/components/loading/Shimmer';
 import { H4 } from '@/components/typography/H4';
 import {
   useFilters,
@@ -18,8 +19,17 @@ import { DEFAULT_DATA as DEFAULT_FILTERS } from '@/models/AppliedFilters';
 
 import styles from './index.module.scss';
 
+function numPlaceholders() {
+  if (typeof window === 'undefined') {
+    return 0;
+  } else {
+    return 2 * ((window.innerHeight || 0) / 225);
+  }
+}
+
 interface Props {
   className?: string;
+  pending?: boolean;
   properties: MapPropertyModel[];
 }
 
@@ -57,6 +67,10 @@ export const PropertyList = memo(function PropertyList(props: Props) {
           </Empty>
         </div>
       )}
+      {props.pending &&
+        Array.from({ length: numPlaceholders() }).map((_, i) => (
+          <Shimmer className={styles.shimmer} />
+        ))}
     </div>
   );
 });

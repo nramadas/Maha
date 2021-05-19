@@ -20,3 +20,11 @@
 .reset {
   margin-top: 16px;
 }
+
+.shimmer {
+  border-radius: 4px;
+  box-shadow: var(--elevation-1);
+  height: 225px;
+  margin: 6px;
+  width: 300px;
+}

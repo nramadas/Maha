@@ -100,6 +100,7 @@ export function Metropolitan(props: Props) {
             <InfoPanel
               metropolitanKey={props.metropolitanKey}
               properties={properties}
+              propertiesPending={result.fetching}
             />
           </RightPane>
         </Explore>
