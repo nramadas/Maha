@@ -216,7 +216,7 @@ const _Filters = memo(function _Filters() {
               <Section title={i18n.translate`appliances`}>
                 <div className={styles.col_2_tall}>
                   <Body2>
-                    <i18n.Translate>Diswasher</i18n.Translate>
+                    <i18n.Translate>Dishwasher</i18n.Translate>
                   </Body2>
                   <Switch name="equalsAppliancesDishwasher" />
                   <Body2>
