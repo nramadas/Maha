@@ -3,6 +3,7 @@ import isEqual from 'lodash/isEqual';
 import React, { useEffect } from 'react';
 
 import { ChevronDown } from '@/components/icons/ChevronDown';
+import { Close } from '@/components/icons/Close';
 import { Body2 } from '@/components/typography';
 import { useForm } from '@/hooks/useForm';
 import { useTextToString } from '@/hooks/useTextToString';
@@ -42,7 +43,7 @@ interface Props<V, E> {
    * Callback, fired when a new option is selected. Has the signature
    * `<O extends Option>(option: O) => void`
    */
-  onChange?: (option: Option<V, E>) => void;
+  onChange?: (option: Option<V, E> | null) => void;
 }
 
 /**
@@ -92,13 +93,24 @@ export function Select<V, E = any>(props: Props<V, E>) {
         >
           <div className={cx(styles.size, styles.sizeValue)}>
             {selected ? (
-              <div>{render(selected)}</div>
+              <div className={styles.textOverflow}>{render(selected)}</div>
             ) : props.placeholder ? (
               <Body2>{textToString(props.placeholder)}</Body2>
             ) : (
               <div>{render(props.options[0])}</div>
             )}
-            <ChevronDown className={styles.icon} />
+            {selected ? (
+              <Close
+                className={styles.close}
+                onClick={e => {
+                  e.stopPropagation();
+                  form.setValue(props.name, null);
+                  props.onChange?.(null);
+                }}
+              />
+            ) : (
+              <ChevronDown className={styles.icon} />
+            )}
           </div>
           {props.placeholder && (
             <div className={styles.size}>

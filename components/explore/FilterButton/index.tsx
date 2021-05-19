@@ -4,6 +4,7 @@ import React, { memo } from 'react';
 
 import { Close } from '@/components/icons/Close';
 import { Caption } from '@/components/typography/Caption';
+import { useBottomSheet } from '@/hooks/useBottomSheet';
 import { useFilters } from '@/hooks/useExplorePage';
 import { i18n } from '@/lib/translate';
 import { DEFAULT_DATA as DEFAULT_FILTERS } from '@/models/AppliedFilters';
@@ -15,13 +16,14 @@ interface Props {
 }
 
 export const FilterButton = memo(function FilterButton(props: Props) {
-  const { filters, setFilters, toggleFilterPage } = useFilters();
+  const { filters, setFilters } = useFilters();
+  const [open] = useBottomSheet('filters');
   const numFilters = Object.values(filters).filter(v => !isNil(v)).length;
 
   return (
     <div
       className={cx(styles.container, props.className)}
-      onClick={() => toggleFilterPage(true)}
+      onClick={() => open()}
     >
       <Caption>
         <i18n.Translate>Filters:</i18n.Translate>
@@ -43,7 +45,10 @@ export const FilterButton = memo(function FilterButton(props: Props) {
       {!!numFilters && (
         <Close
           className={styles.remove}
-          onClick={() => setFilters(DEFAULT_FILTERS)}
+          onClick={e => {
+            e.stopPropagation();
+            setFilters(DEFAULT_FILTERS);
+          }}
         />
       )}
     </div>

@@ -1,11 +1,13 @@
 import React, { memo } from 'react';
 
 import { FilterButton } from '@/components/explore/FilterButton';
+import { Filters } from '@/components/explore/Filters';
 import { MapPropertyModel } from '@/components/explore/MapPropertyModel';
 import { PropertyList } from '@/components/explore/PropertyList';
 import { Sort } from '@/components/explore/Sort';
 import { H4 } from '@/components/typography/H4';
 import { Overline } from '@/components/typography/Overline';
+import { BottomSheetContainer } from '@/contexts/BottomSheet';
 import { useTextToString } from '@/hooks/useTextToString';
 import { enumToText } from '@/lib/enumToText/metropolitan';
 import { i18n } from '@/lib/translate';
@@ -23,7 +25,7 @@ export const InfoPanel = memo(function InfoPanel(props: Props) {
   const textToString = useTextToString();
 
   return (
-    <div className={styles.container}>
+    <BottomSheetContainer className={styles.container}>
       <header className={styles.header}>
         <FilterButton />
         <div className={styles.headerCenter}>
@@ -46,6 +48,7 @@ export const InfoPanel = memo(function InfoPanel(props: Props) {
       <article className={styles.content}>
         <PropertyList properties={props.properties} />
       </article>
-    </div>
+      <Filters />
+    </BottomSheetContainer>
   );
 });

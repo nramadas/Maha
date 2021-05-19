@@ -3,6 +3,7 @@ import { Pressable, View } from 'react-native';
 import styled, { css, useTheme } from 'styled-components/native';
 
 import { ChevronDown } from '@/components/icons/ChevronDown/index.native';
+import { Close } from '@/components/icons/Close';
 import { Body1 } from '@/components/typography';
 import { useForm } from '@/hooks/useForm';
 import { useTextToString } from '@/hooks/useTextToString';
@@ -22,7 +23,7 @@ interface Props<V, E> {
   name: string;
   options: Option<V, E>[];
   placeholder?: Text;
-  onChange?(option: Option<V, E>): void;
+  onChange?(option: Option<V, E> | null): void;
 }
 
 const Container = styled.View<{ open?: boolean }>`
@@ -45,6 +46,10 @@ const Icon = styled(ChevronDown)<{ isOpen?: boolean }>`
     css`
       transform: rotate(180deg);
     `}
+`;
+
+const CloseIcon = styled(Close)`
+  margin-left: 8px;
 `;
 
 const SelectOption = styled.View<{ notFirst?: boolean; pressed?: boolean }>`
@@ -103,7 +108,23 @@ export function Select<V, E = any>(props: Props<V, E>) {
                 render(sortedOptions[0])
               )}
             </View>
-            <Icon fill={theme.primary} height={32} isOpen={isOpen} width={32} />
+            {selected ? (
+              <Pressable
+                onPress={() => {
+                  form.setValue(props.name, null);
+                  props.onChange?.(null);
+                }}
+              >
+                <CloseIcon />
+              </Pressable>
+            ) : (
+              <Icon
+                fill={theme.primary}
+                height={32}
+                isOpen={isOpen}
+                width={32}
+              />
+            )}
           </SelectOption>
         )}
       </Pressable>

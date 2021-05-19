@@ -7,8 +7,8 @@ import { InfoPanel } from '@/components/explore/InfoPanel';
 import { MapPropertyModel } from '@/components/explore/MapPropertyModel';
 import { PropertyMarkers } from '@/components/explore/PropertyMarkers';
 import { Map } from '@/components/maps/Map';
+import { BottomSheetProvider } from '@/contexts/BottomSheet';
 import { ExplorePageProvider } from '@/contexts/ExplorePage';
-import { MapPoint } from '@/models/MapPoint';
 import { MetropolitanKey } from '@/models/MetropolitanKey';
 
 const metropolitanQuery = gql`
@@ -89,19 +89,21 @@ export function Metropolitan(props: Props) {
 
   return (
     <ExplorePageProvider<MapPropertyModel>>
-      <Explore>
-        <LeftPane>
-          <Map initialCenter={initialCenter}>
-            <PropertyMarkers properties={properties} />
-          </Map>
-        </LeftPane>
-        <RightPane>
-          <InfoPanel
-            metropolitanKey={props.metropolitanKey}
-            properties={properties}
-          />
-        </RightPane>
-      </Explore>
+      <BottomSheetProvider>
+        <Explore>
+          <LeftPane>
+            <Map initialCenter={initialCenter}>
+              <PropertyMarkers properties={properties} />
+            </Map>
+          </LeftPane>
+          <RightPane>
+            <InfoPanel
+              metropolitanKey={props.metropolitanKey}
+              properties={properties}
+            />
+          </RightPane>
+        </Explore>
+      </BottomSheetProvider>
     </ExplorePageProvider>
   );
 }

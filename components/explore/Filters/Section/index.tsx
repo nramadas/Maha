@@ -1,7 +1,7 @@
 import cx from 'classnames';
 import React from 'react';
 
-import { Overline } from '@/components/typography/Overline';
+import { Body2 } from '@/components/typography/Body2';
 import { useTextToString } from '@/hooks/useTextToString';
 import { Text } from '@/models/Text';
 
@@ -18,7 +18,7 @@ export function Section(props: Props) {
 
   return (
     <div className={cx(styles.container, props.className)}>
-      <Overline>{textToString(props.title)}</Overline>
+      <Body2 className={styles.label}>{textToString(props.title)}</Body2>
       <div className={styles.content}>{props.children}</div>
     </div>
   );

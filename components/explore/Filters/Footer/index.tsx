@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import isNil from 'lodash/isNil';
+import React from 'react';
 
 import { Empty } from '@/components/controls/buttons/Empty';
-import { useForm } from '@/hooks/useForm';
-import { removeNilKeys } from '@/lib/removeNilKeys';
+import { useFilters } from '@/hooks/useExplorePage';
 import { i18n } from '@/lib/translate';
+import { DEFAULT_DATA as DEFAULT_FILTERS } from '@/models/AppliedFilters';
 
 import styles from './index.module.scss';
 
@@ -12,27 +13,12 @@ interface Props {
 }
 
 export function Footer(props: Props) {
-  const form = useForm();
-  const [disabled, setDisabled] = useState(true);
-
-  const change = useCallback(
-    formValues => setDisabled(!Object.keys(removeNilKeys(formValues)).length),
-    [form, setDisabled],
-  );
-
-  const reset = useCallback(() => {
-    form.setFormValues({});
-    setDisabled(true);
-  }, [form, setDisabled]);
-
-  useEffect(() => {
-    form.onFormChange(change);
-    return () => form.removeFormChange(change);
-  }, [form, change]);
+  const { filters, setFilters } = useFilters();
+  const numFilters = Object.values(filters).filter(v => !isNil(v)).length;
 
   return (
     <footer className={styles.footer}>
-      <Empty disabled={disabled} onClick={reset}>
+      <Empty disabled={!numFilters} onClick={() => setFilters(DEFAULT_FILTERS)}>
         <i18n.Translate>Reset filters</i18n.Translate>
       </Empty>
     </footer>

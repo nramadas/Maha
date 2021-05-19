@@ -1,0 +1,18 @@
+.cover {
+  background-color: rgba(0, 0, 0, 0.3);
+  bottom: 0;
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.sheet {
+  height: 100%;
+  left: 0;
+  padding-top: 24px;
+  position: absolute;
+  right: 0;
+  top: 100%;
+}

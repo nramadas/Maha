@@ -7,15 +7,11 @@ import { SortType } from '@/models/SortType';
 
 export interface FiltersDetails {
   filters: AppliedFilters;
-  filterPageOpen: boolean;
-  toggleFilterPage(force?: boolean): void;
   setFilters(filters: AppliedFilters): void;
 }
 
 export const FiltersContext = createContext<FiltersDetails>({
   filters: DEFAULT_DATA,
-  filterPageOpen: false,
-  toggleFilterPage: () => {},
   setFilters: () => {},
 });
 
@@ -69,7 +65,6 @@ interface Props {
 
 export function ExplorePageProvider<P>(props: Props) {
   const [filters, setFilters] = useState(DEFAULT_DATA);
-  const [filtersOpen, setFiltersOpen] = useState(false);
   const [sortType, setSortType] = useState(SortType.Relevance);
   const [hoveredProperty, setHoveredProperty] = useState<P | null>(null);
   const [selectedProperty, setSelectedProperty] = useState<P | null>(null);
@@ -83,14 +78,6 @@ export function ExplorePageProvider<P>(props: Props) {
       value={{
         filters,
         setFilters,
-        filterPageOpen: filtersOpen,
-        toggleFilterPage: force => {
-          if (!isNil(force)) {
-            setFiltersOpen(force);
-          } else {
-            setFiltersOpen(!filtersOpen);
-          }
-        },
       }}
     >
       <HoveredPropertyContext.Provider
