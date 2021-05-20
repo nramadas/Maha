@@ -1,0 +1,50 @@
+.address {
+  margin-top: 16px;
+  color: var(--color-metadata);
+}
+
+.close {
+  cursor: pointer;
+  fill: var(--color-metadata);
+  height: 32px;
+  padding: 4px;
+  transition: fill 0.15s;
+  width: 36px;
+
+  &:hover {
+    fill: var(--color-primary);
+  }
+}
+
+.header {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  flex-shrink: 0;
+  justify-content: space-between;
+  padding: 24px 0 12px;
+}
+
+.label {
+  color: var(--color-primary);
+  display: block;
+  margin-bottom: 2px;
+}
+
+.price {
+  margin-top: 24px;
+}
+
+.priceFractional {
+  padding-bottom: 4px;
+}
+
+.priceLine {
+  align-items: flex-end;
+  display: flex;
+  flex-direction: row;
+}
+
+.priceRupee {
+  margin-right: 8px;
+}

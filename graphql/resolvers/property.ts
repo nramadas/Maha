@@ -18,6 +18,7 @@ import { SchoolType } from '@/graphql/types/SchoolType';
 import { convertFromDBModel as convertFromMediaDBModel } from '@/lib/modelConversions/media';
 import { convertFromDBModel as convertFromOrganizationDBModel } from '@/lib/modelConversions/organization';
 import { convertFromDBModel as convertFromSchoolDBModel } from '@/lib/modelConversions/school';
+import { removeNilKeys } from '@/lib/removeNilKeys';
 
 @Resolver(of => Property)
 export class PropertyResolver {
@@ -40,7 +41,11 @@ export class PropertyResolver {
     @Arg('type', { nullable: true }) type?: MediaType,
   ) {
     const dbMedia = await this._media.find({
-      where: { type, parentId: root.id, parentType: MediaParentType.Property },
+      where: removeNilKeys({
+        type,
+        parentId: root.id,
+        parentType: MediaParentType.Property,
+      }),
     });
 
     return dbMedia.map(convertFromMediaDBModel);

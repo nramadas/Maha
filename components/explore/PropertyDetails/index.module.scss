@@ -1,0 +1,10 @@
+.container {
+  background-color: var(--color-background);
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  box-shadow: var(--elevation-5);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 16px 23px;
+}

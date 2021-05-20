@@ -16,7 +16,6 @@ import { MetropolitanKey } from '@/models/MetropolitanKey';
 import styles from './index.module.scss';
 
 interface Props {
-  className?: string;
   metropolitanKey: MetropolitanKey;
   propertiesPending?: boolean;
   properties: MapPropertyModel[];

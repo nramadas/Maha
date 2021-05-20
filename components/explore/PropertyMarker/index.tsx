@@ -10,14 +10,17 @@ import { House } from '@/components/icons/House';
 import { Marker } from '@/components/maps/Marker';
 import { Body2 } from '@/components/typography/Body2';
 import { Caption } from '@/components/typography/Caption';
-import { useHoveredProperty } from '@/hooks/useExplorePage';
+import { useBottomSheet } from '@/hooks/useBottomSheet';
+import {
+  useHoveredProperty,
+  useSelectedProperty,
+} from '@/hooks/useExplorePage';
 import { toShortString } from '@/lib/number';
 
 import styles from './index.module.scss';
 
 interface Props {
   property: MapPropertyModel;
-  onClick?(): void;
 }
 
 function pick(property: MapPropertyModel) {
@@ -44,6 +47,8 @@ export const PropertyMarker = memo(function PropertyMarker(props: Props) {
     hoveredProperty,
     setHoveredProperty,
   } = useHoveredProperty<MapPropertyModel>();
+  const { setSelectedProperty } = useSelectedProperty<MapPropertyModel>();
+  const [openDetails] = useBottomSheet(props.property.id);
 
   const { property } = props;
 
@@ -72,7 +77,10 @@ export const PropertyMarker = memo(function PropertyMarker(props: Props) {
         className={cx(styles.container, {
           [styles.hovered]: !!hovered,
         })}
-        onClick={() => props.onClick?.()}
+        onClick={() => {
+          setSelectedProperty(property);
+          openDetails();
+        }}
         onMouseEnter={() => setHoveredProperty(property)}
         onMouseLeave={() =>
           hoveredProperty?.id === id && setHoveredProperty(null)

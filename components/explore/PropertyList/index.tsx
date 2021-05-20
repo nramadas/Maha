@@ -5,15 +5,11 @@ import { Empty } from '@/components/controls/buttons/Empty';
 import { applyFilters } from '@/components/explore/applyFilters';
 import { applySort } from '@/components/explore/applySort';
 import { MapPropertyModel } from '@/components/explore/MapPropertyModel';
+import { PropertyDetailsList } from '@/components/explore/PropertyDetailsList';
 import { PropertyListItem } from '@/components/explore/PropertyListItem';
 import { Shimmer } from '@/components/loading/Shimmer';
 import { H4 } from '@/components/typography/H4';
-import {
-  useFilters,
-  useMapBounds,
-  useSortType,
-  useSelectedProperty,
-} from '@/hooks/useExplorePage';
+import { useFilters, useMapBounds, useSortType } from '@/hooks/useExplorePage';
 import { i18n } from '@/lib/translate';
 import { DEFAULT_DATA as DEFAULT_FILTERS } from '@/models/AppliedFilters';
 
@@ -37,7 +33,6 @@ export const PropertyList = memo(function PropertyList(props: Props) {
   const { filters, setFilters } = useFilters();
   const { mapBounds } = useMapBounds();
   const { sortType } = useSortType();
-  const { setSelectedProperty } = useSelectedProperty();
   const numFilters = Object.values(filters).filter(v => !isNil(v)).length;
 
   const relevantProperties = props.properties
@@ -51,7 +46,6 @@ export const PropertyList = memo(function PropertyList(props: Props) {
           className={styles.property}
           key={property.id}
           property={property}
-          onClick={() => setSelectedProperty(property)}
         />
       ))}
       {!relevantProperties.length && !!numFilters && (
@@ -71,6 +65,9 @@ export const PropertyList = memo(function PropertyList(props: Props) {
         Array.from({ length: numPlaceholders() }).map((_, i) => (
           <Shimmer className={styles.shimmer} />
         ))}
+      {props.properties.length && !props.pending && (
+        <PropertyDetailsList propertyIds={props.properties.map(p => p.id)} />
+      )}
     </div>
   );
 });

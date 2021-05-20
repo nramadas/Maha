@@ -1,0 +1,51 @@
+.address {
+  height: 0.875rem;
+  width: 50%;
+}
+
+.addressContainer {
+  margin-top: 16px;
+}
+
+.close {
+  cursor: pointer;
+  fill: var(--color-metadata);
+  height: 32px;
+  padding: 4px;
+  transition: fill 0.15s;
+  width: 36px;
+
+  &:hover {
+    fill: var(--color-primary);
+  }
+}
+
+.header {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  flex-shrink: 0;
+  justify-content: space-between;
+  padding: 24px 7px 12px;
+}
+
+.label {
+  height: 0.625rem;
+  margin-bottom: 2px;
+  width: 75px;
+}
+
+.name {
+  border-radius: 2px;
+  height: 2.125rem;
+  width: 200px;
+}
+
+.price {
+  height: 3.75rem;
+  width: 400px;
+}
+
+.priceContainer {
+  margin-top: 24px;
+}
