@@ -14,5 +14,7 @@ export function introspect() {
     }),
   })
     .then(r => r.json())
-    .then(({ data }) => minifyIntrospectionQuery(getIntrospectedSchema(data)));
+    .then(({ data }) =>
+      data ? minifyIntrospectionQuery(getIntrospectedSchema(data)) : null,
+    );
 }
