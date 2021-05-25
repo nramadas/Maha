@@ -1,7 +1,4 @@
-.address {
-  margin-top: 16px;
-  color: var(--color-metadata);
-}
+$imageHeight: 250px;
 
 .close {
   cursor: pointer;
@@ -16,13 +13,37 @@
   }
 }
 
+.content {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
 .header {
   align-items: center;
+  color: var(--color-metadata);
   display: flex;
   flex-direction: row;
   flex-shrink: 0;
   justify-content: space-between;
   padding: 24px 0 12px;
+}
+
+.infoCenter {
+  margin-left: 16px;
+  padding-left: 16px;
+  text-align: center;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: 1fr repeat(var(--num-extra), max-content);
+}
+
+.image {
+  background-color: black;
+  height: $imageHeight;
+  width: $imageHeight * 3 / 2;
+  border-right: 8px solid var(--color-background);
 }
 
 .label {
@@ -31,8 +52,16 @@
   margin-bottom: 2px;
 }
 
+.media {
+  height: $imageHeight;
+  margin: 32px 0 16px;
+  overflow: hidden;
+  width: 100%;
+  border-radius: 12px;
+}
+
 .price {
-  margin-top: 24px;
+  color: var(--color-onBackground);
 }
 
 .priceFractional {
@@ -47,4 +76,9 @@
 
 .priceRupee {
   margin-right: 8px;
+}
+
+.section {
+  color: var(--color-metadata);
+  margin-top: 18px;
 }

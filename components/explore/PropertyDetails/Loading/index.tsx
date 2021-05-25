@@ -20,12 +20,16 @@ export const Loading = memo(function Loading(props: Props) {
         <Close className={styles.close} onClick={closeDetails} />
       </header>
       <div className={styles.priceContainer}>
-        <Shimmer className={styles.label} />
         <Shimmer className={styles.price} />
       </div>
-      <div className={styles.addressContainer}>
+      <Shimmer className={styles.media} />
+      <div className={styles.infoContainer}>
         <Shimmer className={styles.label} />
-        <Shimmer className={styles.address} />
+        <Shimmer className={styles.info} />
+      </div>
+      <div className={styles.infoContainer}>
+        <Shimmer className={styles.label} />
+        <Shimmer className={styles.info} />
       </div>
     </>
   );

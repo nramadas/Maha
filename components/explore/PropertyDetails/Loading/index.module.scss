@@ -1,12 +1,3 @@
-.address {
-  height: 0.875rem;
-  width: 50%;
-}
-
-.addressContainer {
-  margin-top: 16px;
-}
-
 .close {
   cursor: pointer;
   fill: var(--color-metadata);
@@ -26,13 +17,32 @@
   flex-direction: row;
   flex-shrink: 0;
   justify-content: space-between;
-  padding: 24px 7px 12px;
+  padding: 24px 0 12px;
+}
+
+.info {
+  height: 0.875rem;
+  width: 50%;
+}
+
+.infoContainer {
+  margin-top: 16px;
 }
 
 .label {
   height: 0.625rem;
   margin-bottom: 2px;
   width: 75px;
+}
+
+.media {
+  $imageHeight: 250px;
+  border-radius: 12px;
+  height: $imageHeight;
+  margin: 32px 0 16px;
+  overflow: hidden;
+  width: $imageHeight * 3 / 2;
+  width: 100%;
 }
 
 .name {
@@ -44,8 +54,4 @@
 .price {
   height: 3.75rem;
   width: 400px;
-}
-
-.priceContainer {
-  margin-top: 24px;
 }
