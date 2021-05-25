@@ -6,6 +6,7 @@ import { applyFilters } from '@/components/explore/applyFilters';
 import { applySort } from '@/components/explore/applySort';
 import { MapPropertyModel } from '@/components/explore/MapPropertyModel';
 import { PropertyDetailsList } from '@/components/explore/PropertyDetailsList';
+import { PropertyListEmpty } from '@/components/explore/PropertyListEmpty';
 import { PropertyListItem } from '@/components/explore/PropertyListItem';
 import { Shimmer } from '@/components/loading/Shimmer';
 import { H4 } from '@/components/typography/H4';
@@ -63,11 +64,12 @@ export const PropertyList = memo(function PropertyList(props: Props) {
       )}
       {props.pending &&
         Array.from({ length: numPlaceholders() }).map((_, i) => (
-          <Shimmer className={styles.shimmer} />
+          <Shimmer className={styles.shimmer} key={i} />
         ))}
-      {props.properties.length && !props.pending && (
+      {!!props.properties.length && !props.pending && (
         <PropertyDetailsList propertyIds={props.properties.map(p => p.id)} />
       )}
+      {!props.properties.length && !props.pending && <PropertyListEmpty />}
     </div>
   );
 });
