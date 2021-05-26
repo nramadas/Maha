@@ -60,6 +60,7 @@ export function Map(props: Props) {
   const [edgeHighlights, setEdgeHighlights] = useState<EdgeHighlights>(
     calculateEdgeHighlights(),
   );
+  const sdkRef = useRef<typeof google.maps | null>(null);
 
   const { hoveredProperty } = useHoveredProperty<MapPropertyModel>();
   const { setMapBounds } = useMapBounds();
@@ -104,33 +105,40 @@ export function Map(props: Props) {
         });
 
         setMap(map);
-
-        const boundsListener = map.addListener('bounds_changed', () => {
-          const rawBounds = map.getBounds();
-          const ne = rawBounds?.getNorthEast();
-          const sw = rawBounds?.getSouthWest();
-
-          setMapBounds({
-            ne: ne
-              ? {
-                  lat: ne.lat(),
-                  lng: ne.lng(),
-                }
-              : undefined,
-            sw: sw
-              ? {
-                  lat: sw.lat(),
-                  lng: sw.lng(),
-                }
-              : undefined,
-          });
-        });
-
-        return () => sdk.event.removeListener(boundsListener);
+        sdkRef.current = sdk;
       }
     },
     [containerRef.current, props.initialCenter?.lat, props.initialCenter?.lng],
   );
+
+  useEffect(() => {
+    if (!map) {
+      return;
+    }
+
+    const boundsListener = map.addListener('bounds_changed', () => {
+      const rawBounds = map.getBounds();
+      const ne = rawBounds?.getNorthEast();
+      const sw = rawBounds?.getSouthWest();
+
+      setMapBounds({
+        ne: ne
+          ? {
+              lat: ne.lat(),
+              lng: ne.lng(),
+            }
+          : undefined,
+        sw: sw
+          ? {
+              lat: sw.lat(),
+              lng: sw.lng(),
+            }
+          : undefined,
+      });
+    });
+
+    return () => sdkRef.current?.event.removeListener(boundsListener);
+  }, [map, sdkRef.current, setMapBounds]);
 
   useEffect(() => {
     if (map && focusPoint?.lat && focusPoint?.lng) {

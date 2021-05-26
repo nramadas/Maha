@@ -4,6 +4,7 @@ import { useQuery } from 'urql';
 
 import { LeftPane, RightPane, Explore } from '@/components/chrome/Explore';
 import { InfoPanel } from '@/components/explore/InfoPanel';
+import { MapControls } from '@/components/explore/MapControls';
 import { MapPropertyModel } from '@/components/explore/MapPropertyModel';
 import { PropertyMarkers } from '@/components/explore/PropertyMarkers';
 import { Map } from '@/components/maps/Map';
@@ -92,9 +93,12 @@ export function Metropolitan(props: Props) {
       <BottomSheetProvider>
         <Explore>
           <LeftPane>
-            <Map initialCenter={initialCenter}>
-              <PropertyMarkers properties={properties} />
-            </Map>
+            <>
+              <Map initialCenter={initialCenter}>
+                <PropertyMarkers properties={properties} />
+              </Map>
+              <MapControls />
+            </>
           </LeftPane>
           <RightPane>
             <InfoPanel

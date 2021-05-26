@@ -32,13 +32,13 @@ interface Props {
 
 export const PropertyList = memo(function PropertyList(props: Props) {
   const { filters, setFilters } = useFilters();
-  const { mapBounds } = useMapBounds();
+  const { applicableMapBounds } = useMapBounds();
   const { sortType } = useSortType();
   const numFilters = Object.values(filters).filter(v => !isNil(v)).length;
 
   const relevantProperties = props.properties
     .filter(applyFilters(filters))
-    .sort(applySort(sortType, mapBounds));
+    .sort(applySort(sortType, applicableMapBounds));
 
   return (
     <div className={styles.container}>

@@ -1,4 +1,3 @@
-import isNil from 'lodash/isNil';
 import React, { createContext, useState } from 'react';
 
 import { AppliedFilters, DEFAULT_DATA } from '@/models/AppliedFilters';
@@ -28,13 +27,17 @@ export const HoveredPropertyContext = createContext<
 });
 
 export interface MapBoundsDetails {
+  applicableMapBounds: MapBounds;
   mapBounds: MapBounds;
   setMapBounds(bounds: MapBounds): void;
+  syncApplicableMapBounds(): void;
 }
 
 export const MapBoundsContext = createContext<MapBoundsDetails>({
+  applicableMapBounds: { ne: undefined, sw: undefined },
   mapBounds: { ne: undefined, sw: undefined },
   setMapBounds: () => {},
+  syncApplicableMapBounds: () => {},
 });
 
 export interface SelectedPropertyDetails<P> {
@@ -72,6 +75,10 @@ export function ExplorePageProvider<P>(props: Props) {
     ne: undefined,
     sw: undefined,
   });
+  const [applicableMapBounds, setApplicableMapBounds] = useState<MapBounds>({
+    ne: undefined,
+    sw: undefined,
+  });
 
   return (
     <FiltersContext.Provider
@@ -85,8 +92,16 @@ export function ExplorePageProvider<P>(props: Props) {
       >
         <MapBoundsContext.Provider
           value={{
+            applicableMapBounds,
             mapBounds,
-            setMapBounds,
+            setMapBounds: (bounds: MapBounds) => {
+              setMapBounds(bounds);
+
+              if (!applicableMapBounds.ne || !applicableMapBounds.sw) {
+                setApplicableMapBounds(() => bounds);
+              }
+            },
+            syncApplicableMapBounds: () => setApplicableMapBounds(mapBounds),
           }}
         >
           <SelectedPropertyContext.Provider
