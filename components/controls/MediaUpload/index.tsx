@@ -12,6 +12,7 @@ import { Shimmer } from '@/components/loading/Shimmer';
 import { useDisplayError } from '@/hooks/useDisplayNotification';
 import { useForm } from '@/hooks/useForm';
 import { mediaType } from '@/lib/file/mediaType';
+import { src } from '@/lib/media/src';
 import { i18n } from '@/lib/translate';
 import { Media as _Media } from '@/models/Media';
 import { MediaType } from '@/models/MediaType';
@@ -110,7 +111,7 @@ export function MediaUpload(props: Props) {
         <div className={props.className} key={m.id}>
           <div className={styles.boxOuter}>
             <div className={styles.box}>
-              <img src={m.src} className={styles.previewImage} />
+              <img src={src(m)} className={styles.previewImage} />
               <Trash className={styles.trash} onClick={() => onDelete(m.id)} />
               {m.type === MediaType.Image ? (
                 <Image className={styles.mimeTypeIcon} />

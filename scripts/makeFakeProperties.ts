@@ -228,7 +228,7 @@ const uploadFile = (file: string) =>
         return rej(err);
       }
 
-      return res(data.Location);
+      return res(`media.maha.com/${fileName}`);
     });
   });
 

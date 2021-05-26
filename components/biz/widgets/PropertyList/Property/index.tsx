@@ -15,6 +15,7 @@ import { Body1 } from '@/components/typography/Body1';
 import { Body2 } from '@/components/typography/Body2';
 import { H6 } from '@/components/typography/H6';
 import { useConfirmation } from '@/hooks/useConfirmation';
+import { src } from '@/lib/media/src';
 import { toString } from '@/lib/number';
 import { BizRoute, fullBizRoute } from '@/lib/route';
 import { i18n } from '@/lib/translate';
@@ -60,7 +61,7 @@ export function Property(props: Props) {
     <article className={cx(styles.container, props.className)}>
       <div className={styles.thumbnail}>
         {props.property.media?.length ? (
-          <img className={styles.image} src={props.property.media[0].src} />
+          <img className={styles.image} src={src(props.property.media[0])} />
         ) : (
           <ImageIcon className={styles.imageIcon} />
         )}

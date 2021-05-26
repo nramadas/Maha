@@ -5,6 +5,7 @@ import { TransitionMotion, spring } from 'react-motion';
 
 import { ChevronLeft } from '@/components/icons/ChevronLeft';
 import { ChevronRight } from '@/components/icons/ChevronRight';
+import { src } from '@/lib/media/src';
 import { Media } from '@/models/Media';
 
 import styles from './index.module.scss';
@@ -83,7 +84,7 @@ export function DetailedMediaCarousel<
             >
               <Image
                 className={styles.image}
-                src={item.data.src}
+                src={src(item.data)}
                 loader={({ src }) => src}
                 layout="fill"
                 objectFit="cover"

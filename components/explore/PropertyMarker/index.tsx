@@ -15,6 +15,7 @@ import {
   useHoveredProperty,
   useSelectedProperty,
 } from '@/hooks/useExplorePage';
+import { src } from '@/lib/media/src';
 import { toShortString } from '@/lib/number';
 
 import styles from './index.module.scss';
@@ -27,7 +28,7 @@ function pick(property: MapPropertyModel) {
   return {
     address: property.location.address,
     id: property.id,
-    image: property.media[0]?.src,
+    image: property.media[0] ? src(property.media[0]) : undefined,
     lat: property.location.lat,
     lng: property.location.lng,
     numBathrooms: property.numBathrooms,

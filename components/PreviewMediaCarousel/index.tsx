@@ -6,6 +6,7 @@ import { TransitionMotion, spring } from 'react-motion';
 import { ChevronLeft } from '@/components/icons/ChevronLeft';
 import { ChevronRight } from '@/components/icons/ChevronRight';
 import { Overline } from '@/components/typography/Overline';
+import { src } from '@/lib/media/src';
 import { Media as _Media } from '@/models/Media';
 
 import styles from './index.module.scss';
@@ -85,7 +86,7 @@ export function PreviewMediaCarousel(props: Props) {
             >
               <Image
                 className={styles.image}
-                src={item.data.src}
+                src={src(item.data)}
                 loader={({ src }) => src}
                 layout="fill"
                 objectFit="cover"

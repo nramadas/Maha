@@ -1,11 +1,11 @@
 version: '3.1'
 services:
   redis:
-    container_name: redis
+    container_name: maha-redis
     image: 'redis'
     ports: ['6379:6379']
   db:
-    container_name: db
+    container_name: maha-db
     env_file:
       - ./.env.local
     image: 'postgres'
@@ -13,7 +13,7 @@ services:
     restart: always
   authn-migrate:
     command: './authn migrate'
-    container_name: authn-migrate
+    container_name: maha-authn-migrate
     env_file:
       - ./.env.local
     image: 'keratin/authn-server:1.10.4'
@@ -21,7 +21,7 @@ services:
       - redis
       - db
   authn:
-    container_name: authn
+    container_name: maha-authn
     env_file:
       - ./.env.local
     image: 'keratin/authn-server:1.10.4'

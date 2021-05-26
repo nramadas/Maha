@@ -37,7 +37,7 @@ module.exports = withPlugins([
   ],
   {
     images: {
-      domains: ['s3.ap-south-1.amazonaws.com'],
+      domains: ['media.maha.com'],
     },
   },
 ]);
