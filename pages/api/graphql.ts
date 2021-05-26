@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import { RedisCache } from 'apollo-server-cache-redis';
 import { ApolloServer } from 'apollo-server-micro';
 import { processRequest } from 'graphql-upload';
+import Cors from 'micro-cors';
 import { buildSchema } from 'type-graphql';
 import { Container } from 'typedi';
 import { useContainer } from 'typeorm';
@@ -10,6 +11,10 @@ import { connectToDb } from '@/db';
 import { authChecker } from '@/graphql/helpers/authChecker';
 import * as resolvers from '@/graphql/resolvers';
 import { contextFromHeaders } from '@/lib/authn/contextFromHeaders';
+
+const cors = Cors({
+  allowMethods: ['GET', 'POST', 'OPTIONS'],
+});
 
 // eslint-disable-next-line
 useContainer(Container);
@@ -49,7 +54,11 @@ export const config = {
 
 const handler = setup();
 
-export default async function graphql(req: any, res: any) {
+export default cors(async function graphql(req: any, res: any) {
+  if (req.method === 'OPTIONS') {
+    return res.end();
+  }
+
   const contentType = req.headers['content-type'];
 
   if (contentType && contentType.startsWith('multipart/form-data')) {
@@ -59,4 +68,4 @@ export default async function graphql(req: any, res: any) {
   const h = await handler;
 
   return h(req, res);
-}
+});

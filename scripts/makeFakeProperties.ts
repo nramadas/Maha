@@ -196,7 +196,7 @@ const createSchool = (data: typeof SCHOOLS[number]) => {
 const readBucket = () =>
   new Promise<string[]>((res, rej) => {
     const params = {
-      Bucket: 'maha.media',
+      Bucket: 'media.maha.homes',
     };
 
     S3.listObjects(params, (err: any, data: any) => {
@@ -205,7 +205,7 @@ const readBucket = () =>
       }
 
       const filenames = data.Contents.map(
-        (c: any) => `https://s3.ap-south-1.amazonaws.com/maha.media/${c.Key}`,
+        (c: any) => `media.maha.homes/${c.Key}`,
       );
       res(filenames);
     });
@@ -219,7 +219,7 @@ const uploadFile = (file: string) =>
     const params = {
       ACL: 'public-read',
       Body: fileStream,
-      Bucket: 'maha.media',
+      Bucket: 'media.maha.homes',
       Key: fileName,
     };
 

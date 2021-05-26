@@ -40,7 +40,7 @@ export class MediaMutationResolver {
       const params = {
         ACL: 'public-read',
         Body: fileStream,
-        Bucket: 'maha.media',
+        Bucket: 'media.maha.homes',
         Key: fileName,
       };
 
