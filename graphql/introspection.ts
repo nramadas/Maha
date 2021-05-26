@@ -16,5 +16,6 @@ export function introspect() {
     .then(r => r.json())
     .then(({ data }) =>
       data ? minifyIntrospectionQuery(getIntrospectedSchema(data)) : null,
-    );
+    )
+    .catch(() => null);
 }
