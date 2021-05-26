@@ -10,11 +10,17 @@ import { H4 } from '@/components/typography/H4';
 import { H5 } from '@/components/typography/H5';
 import { Overline } from '@/components/typography/Overline';
 import { useBottomSheet } from '@/hooks/useBottomSheet';
+import { useSelectedProperty } from '@/hooks/useExplorePage';
 import { toString } from '@/lib/number';
 import { i18n } from '@/lib/translate';
 
+import { Amenities } from './Amenities';
+import { Details } from './Details';
 import styles from './index.module.scss';
+import { Other } from './Other';
+import { Parking } from './Parking';
 import { Section } from './Section';
+import { Utilities } from './Utilities';
 
 interface Props {
   property: PropertyDetailsModel;
@@ -24,6 +30,7 @@ export const Property = memo(function Property(props: Props) {
   const { property } = props;
 
   const [, closeDetails] = useBottomSheet(property.id);
+  const { setSelectedProperty } = useSelectedProperty();
 
   const priceStr = toString(property.price);
   const [wholePrice, fractionalPrice] = priceStr.split('.');
@@ -32,7 +39,13 @@ export const Property = memo(function Property(props: Props) {
     <>
       <header className={styles.header}>
         <H4>{property.name}</H4>
-        <Close className={styles.close} onClick={closeDetails} />
+        <Close
+          className={styles.close}
+          onClick={() => {
+            closeDetails();
+            setSelectedProperty(null);
+          }}
+        />
       </header>
       <div className={styles.content}>
         <div className={styles.price}>
@@ -87,6 +100,24 @@ export const Property = memo(function Property(props: Props) {
             </Body2>
           )}
         </div>
+        <Section title={i18n.translate`property details`}>
+          <Details className={styles.details} property={property} />
+        </Section>
+        <Section title={i18n.translate`amenities`}>
+          <Amenities className={styles.details} property={property} />
+        </Section>
+        <Section title={i18n.translate`parking`}>
+          <Parking className={styles.details} property={property} />
+        </Section>
+        <Section title={i18n.translate`utilities`}>
+          <Utilities className={styles.details} property={property} />
+        </Section>
+        {(property.constructionMaterials?.en ||
+          property.securityFeatures?.en) && (
+          <Section title={i18n.translate`other features`}>
+            <Other className={styles.details} property={property} />
+          </Section>
+        )}
       </div>
     </>
   );

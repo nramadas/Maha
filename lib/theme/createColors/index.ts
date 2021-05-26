@@ -18,8 +18,11 @@ enum Color {
 
 export function createColors() {
   const primary = '#FFA000';
+  const secondary = '#0277BD';
 
   return {
+    accentGreen: '#2E7D32',
+    accentPurple: '#7E57C2',
     background: Color.G950,
     disabled: Color.G700,
     error: Color.ERROR,
@@ -37,15 +40,22 @@ export function createColors() {
     onDisabled: Color.G600,
     onError: Color.G050,
     onPrimary: Color.G950,
+    onSecondary: Color.G950,
+    primary,
     primaryDragged: mix(0.16, Color.G000, primary),
     primaryFaded: mix(0.5, Color.G950, primary),
     primaryFocused: mix(0.1, Color.G000, primary),
     primaryHovered: mix(0.08, Color.G000, primary),
     primaryPressed: mix(0.2, Color.G000, primary),
-    primary,
-    warning: '#FFEB3B',
-    shimmerLight: '#e2e2e2',
+    secondary,
+    secondaryDragged: mix(0.16, Color.G000, secondary),
+    secondaryFaded: mix(0.5, Color.G950, secondary),
+    secondaryFocused: mix(0.1, Color.G000, secondary),
+    secondaryHovered: mix(0.08, Color.G000, secondary),
+    secondaryPressed: mix(0.2, Color.G000, secondary),
     shimmerDark: '#eff1f3',
+    shimmerLight: '#e2e2e2',
     success: '#4CAF50',
+    warning: '#FFEB3B',
   };
 }

@@ -1,0 +1,9 @@
+.container {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 132px 1fr;
+
+  :nth-child(2n-1) {
+    color: var(--color-onBackground);
+  }
+}

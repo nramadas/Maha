@@ -18,6 +18,10 @@ $imageHeight: 250px;
   overflow-y: auto;
 }
 
+.details {
+  margin-top: 8px;
+}
+
 .header {
   align-items: center;
   color: var(--color-metadata);
@@ -36,6 +40,7 @@ $imageHeight: 250px;
 
 .infoGrid {
   display: grid;
+  gap: 4px 0;
   grid-template-columns: 1fr repeat(var(--num-extra), max-content);
 }
 

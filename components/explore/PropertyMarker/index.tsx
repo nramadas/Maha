@@ -48,7 +48,10 @@ export const PropertyMarker = memo(function PropertyMarker(props: Props) {
     hoveredProperty,
     setHoveredProperty,
   } = useHoveredProperty<MapPropertyModel>();
-  const { setSelectedProperty } = useSelectedProperty<MapPropertyModel>();
+  const {
+    selectedProperty,
+    setSelectedProperty,
+  } = useSelectedProperty<MapPropertyModel>();
   const [openDetails] = useBottomSheet(props.property.id);
 
   const { property } = props;
@@ -67,16 +70,18 @@ export const PropertyMarker = memo(function PropertyMarker(props: Props) {
   } = pick(property);
 
   const hovered = hoveredProperty?.id === id;
+  const selected = selectedProperty?.id === id;
 
   if (!(lat && lng)) {
     return null;
   }
 
   return (
-    <Marker excludeFromCluster={hovered} point={{ lat, lng }}>
+    <Marker excludeFromCluster={hovered || selected} point={{ lat, lng }}>
       <div
         className={cx(styles.container, {
-          [styles.hovered]: !!hovered,
+          [styles.hovered]: hovered,
+          [styles.selected]: selected,
         })}
         onClick={() => {
           setSelectedProperty(property);
