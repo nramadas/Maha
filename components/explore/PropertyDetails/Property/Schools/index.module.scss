@@ -1,0 +1,20 @@
+.school {
+  background-color: var(--color-background);
+  cursor: help;
+  padding: 8px 12px;
+  transition: background-color 0.15s;
+  border: 1px solid var(--color-fieldBorder);
+  border-radius: 4px;
+
+  &:hover {
+    background-color: var(--color-field);
+  }
+
+  & ~ & {
+    margin-top: 8px;
+  }
+}
+
+.schoolName {
+  color: var(--color-onBackground);
+}

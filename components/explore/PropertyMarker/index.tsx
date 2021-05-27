@@ -12,6 +12,7 @@ import { Body2 } from '@/components/typography/Body2';
 import { Caption } from '@/components/typography/Caption';
 import { useBottomSheet } from '@/hooks/useBottomSheet';
 import {
+  useHighlightedLandmark,
   useHoveredProperty,
   useSelectedProperty,
 } from '@/hooks/useExplorePage';
@@ -19,6 +20,8 @@ import { src } from '@/lib/media/src';
 import { toShortString } from '@/lib/number';
 
 import styles from './index.module.scss';
+
+type School = MapPropertyModel['schools'][number];
 
 interface Props {
   property: MapPropertyModel;
@@ -52,6 +55,7 @@ export const PropertyMarker = memo(function PropertyMarker(props: Props) {
     selectedProperty,
     setSelectedProperty,
   } = useSelectedProperty<MapPropertyModel>();
+  const { highlightedLandmark } = useHighlightedLandmark<School>();
   const [openDetails] = useBottomSheet(props.property.id);
 
   const { property } = props;
@@ -82,6 +86,7 @@ export const PropertyMarker = memo(function PropertyMarker(props: Props) {
         className={cx(styles.container, {
           [styles.hovered]: hovered,
           [styles.selected]: selected,
+          [styles.faded]: !selected && !!highlightedLandmark,
         })}
         onClick={() => {
           setSelectedProperty(property);

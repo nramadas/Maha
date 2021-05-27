@@ -1,6 +1,7 @@
 import React, { createContext, useState } from 'react';
 
 import { AppliedFilters, DEFAULT_DATA } from '@/models/AppliedFilters';
+import { Landmark } from '@/models/Landmark';
 import { MapBounds } from '@/models/MapBounds';
 import { SortType } from '@/models/SortType';
 
@@ -24,6 +25,18 @@ export const HoveredPropertyContext = createContext<
 >({
   hoveredProperty: null,
   setHoveredProperty: () => {},
+});
+
+export interface HighlightedLandmarkDetails<S> {
+  highlightedLandmark: Landmark<S> | null;
+  setHighlightedLandmark(landmark: Landmark<S> | null): void;
+}
+
+export const HighlightedLandmarkContext = createContext<
+  HighlightedLandmarkDetails<any>
+>({
+  highlightedLandmark: null,
+  setHighlightedLandmark: () => {},
 });
 
 export interface MapBoundsDetails {
@@ -66,7 +79,7 @@ interface Props {
   children?: React.ReactNode;
 }
 
-export function ExplorePageProvider<P>(props: Props) {
+export function ExplorePageProvider<P, S>(props: Props) {
   const [filters, setFilters] = useState(DEFAULT_DATA);
   const [sortType, setSortType] = useState(SortType.Relevance);
   const [hoveredProperty, setHoveredProperty] = useState<P | null>(null);
@@ -79,6 +92,10 @@ export function ExplorePageProvider<P>(props: Props) {
     ne: undefined,
     sw: undefined,
   });
+  const [
+    highlightedLandmark,
+    setHighlightedLandmark,
+  ] = useState<Landmark<S> | null>(null);
 
   return (
     <FiltersContext.Provider
@@ -116,7 +133,14 @@ export function ExplorePageProvider<P>(props: Props) {
                 setSortType,
               }}
             >
-              {props.children}
+              <HighlightedLandmarkContext.Provider
+                value={{
+                  highlightedLandmark,
+                  setHighlightedLandmark,
+                }}
+              >
+                {props.children}
+              </HighlightedLandmarkContext.Provider>
             </SortTypeContext.Provider>
           </SelectedPropertyContext.Provider>
         </MapBoundsContext.Provider>

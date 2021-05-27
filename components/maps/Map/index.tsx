@@ -1,9 +1,11 @@
 import MarkerClusterer from '@googlemaps/markerclustererplus';
+import cx from 'classnames';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { MapPropertyModel } from '@/components/explore/MapPropertyModel';
 import { GoogleMapContext } from '@/contexts/GoogleMap';
 import {
+  useHighlightedLandmark,
   useHoveredProperty,
   useMapBounds,
   useSelectedProperty,
@@ -44,7 +46,29 @@ function calculateEdgeHighlights(
   };
 }
 
+function renderDirections(
+  map: google.maps.Map,
+  line: google.maps.Polyline,
+  directions: google.maps.DirectionsResult | null,
+) {
+  if (directions) {
+    const route = directions.routes[0];
+    const points = route.overview_path;
+    line.setPath(points);
+    line.setMap(map);
+    map.panToBounds(route.bounds);
+  } else {
+    line.setMap(null);
+  }
+}
+
+const cachedDirections = new globalThis.Map<
+  string,
+  google.maps.DirectionsResult
+>();
+
 type EdgeHighlights = ReturnType<typeof calculateEdgeHighlights>;
+type School = MapPropertyModel['schools'][number];
 
 interface Props {
   children?: React.ReactNode;
@@ -61,10 +85,12 @@ export function Map(props: Props) {
     calculateEdgeHighlights(),
   );
   const sdkRef = useRef<typeof google.maps | null>(null);
+  const directionsRendererRef = useRef<google.maps.Polyline | null>(null);
 
   const { hoveredProperty } = useHoveredProperty<MapPropertyModel>();
   const { setMapBounds } = useMapBounds();
   const { selectedProperty } = useSelectedProperty<MapPropertyModel>();
+  const { highlightedLandmark } = useHighlightedLandmark<School>();
 
   const hoverPoint = hoveredProperty
     ? locationToMapPoint(hoveredProperty.location)
@@ -106,6 +132,11 @@ export function Map(props: Props) {
 
         setMap(map);
         sdkRef.current = sdk;
+        directionsRendererRef.current = new sdk.Polyline({
+          clickable: false,
+          strokeColor: '#7E57C2',
+        });
+        return () => directionsRendererRef.current?.unbindAll();
       }
     },
     [containerRef.current, props.initialCenter?.lat, props.initialCenter?.lng],
@@ -162,8 +193,76 @@ export function Map(props: Props) {
     return () => listener && google.maps.event.removeListener(listener);
   }, [map, hoverPoint?.lat, hoverPoint?.lng]);
 
+  useEffect(() => {
+    if (
+      sdkRef.current &&
+      selectedProperty &&
+      highlightedLandmark &&
+      map &&
+      directionsRendererRef.current
+    ) {
+      const startPoint = selectedProperty.location;
+      const endPoint = highlightedLandmark.model.location;
+
+      if (startPoint.lat && startPoint.lng && endPoint.lat && endPoint.lng) {
+        const key = `${startPoint.lat}-${startPoint.lng}-${endPoint.lat}-${endPoint.lng}`;
+        const result = cachedDirections.get(key);
+
+        if (result && directionsRendererRef.current) {
+          renderDirections(map, directionsRendererRef.current, result);
+          return;
+        }
+
+        const directions = new sdkRef.current.DirectionsService();
+        directions.route(
+          {
+            origin: {
+              lat: startPoint.lat,
+              lng: startPoint.lng,
+            },
+            destination: {
+              lat: endPoint.lat,
+              lng: endPoint.lng,
+            },
+            travelMode: sdkRef.current.TravelMode.DRIVING,
+          },
+          (result, status: google.maps.DirectionsStatus) => {
+            if (
+              status === 'OK' &&
+              result &&
+              map &&
+              directionsRendererRef.current
+            ) {
+              cachedDirections.set(key, result);
+              renderDirections(map, directionsRendererRef.current, result);
+            }
+          },
+        );
+      }
+    } else if (map && directionsRendererRef.current) {
+      renderDirections(map, directionsRendererRef.current, null);
+    }
+
+    return () => {
+      if (map && directionsRendererRef.current) {
+        renderDirections(map, directionsRendererRef.current, null);
+      }
+    };
+  }, [
+    map,
+    sdkRef.current,
+    selectedProperty,
+    highlightedLandmark,
+    directionsRendererRef.current,
+  ]);
+
   return (
-    <div className={styles.container} ref={containerRef}>
+    <div
+      className={cx(styles.container, {
+        [styles.landmarkHighlighted]: !!highlightedLandmark,
+      })}
+      ref={containerRef}
+    >
       <GoogleMapContext.Provider
         value={{ clusterer: clustererRef.current, map }}
       >

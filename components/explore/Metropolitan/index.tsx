@@ -4,6 +4,7 @@ import { useQuery } from 'urql';
 
 import { LeftPane, RightPane, Explore } from '@/components/chrome/Explore';
 import { InfoPanel } from '@/components/explore/InfoPanel';
+import { LandmarkMarkers } from '@/components/explore/LandmarkMarkers';
 import { MapControls } from '@/components/explore/MapControls';
 import { MapPropertyModel } from '@/components/explore/MapPropertyModel';
 import { PropertyMarkers } from '@/components/explore/PropertyMarkers';
@@ -11,6 +12,8 @@ import { Map } from '@/components/maps/Map';
 import { BottomSheetProvider } from '@/contexts/BottomSheet';
 import { ExplorePageProvider } from '@/contexts/ExplorePage';
 import { MetropolitanKey } from '@/models/MetropolitanKey';
+
+type School = MapPropertyModel['schools'][number];
 
 const metropolitanQuery = gql`
   query($key: MetropolitanKey!) {
@@ -89,13 +92,14 @@ export function Metropolitan(props: Props) {
   const initialCenter = result.data?.metropolitan?.center;
 
   return (
-    <ExplorePageProvider<MapPropertyModel>>
+    <ExplorePageProvider<MapPropertyModel, School>>
       <BottomSheetProvider>
         <Explore>
           <LeftPane>
             <>
               <Map initialCenter={initialCenter}>
                 <PropertyMarkers properties={properties} />
+                <LandmarkMarkers />
               </Map>
               <MapControls />
             </>

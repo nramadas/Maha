@@ -11,6 +11,7 @@ import { H5 } from '@/components/typography/H5';
 import { Overline } from '@/components/typography/Overline';
 import { useBottomSheet } from '@/hooks/useBottomSheet';
 import { useSelectedProperty } from '@/hooks/useExplorePage';
+import { cleanAddress } from '@/lib/cleanAddress';
 import { toString } from '@/lib/number';
 import { i18n } from '@/lib/translate';
 
@@ -19,6 +20,7 @@ import { Details } from './Details';
 import styles from './index.module.scss';
 import { Other } from './Other';
 import { Parking } from './Parking';
+import { Schools } from './Schools';
 import { Section } from './Section';
 import { Utilities } from './Utilities';
 
@@ -90,7 +92,7 @@ export const Property = memo(function Property(props: Props) {
               <i18n.Translate>½ bath</i18n.Translate>
             </Overline>
           )}
-          <Body2>{property.location.address}</Body2>
+          <Body2>{cleanAddress(property.location.address)}</Body2>
           <Body2 className={styles.infoCenter}>{toString(property.sqft)}</Body2>
           <Body2 className={styles.infoCenter}>{property.numBedrooms}</Body2>
           <Body2 className={styles.infoCenter}>{property.numBathrooms}</Body2>
@@ -105,6 +107,9 @@ export const Property = memo(function Property(props: Props) {
         </Section>
         <Section title={i18n.translate`amenities`}>
           <Amenities className={styles.details} property={property} />
+        </Section>
+        <Section title={i18n.translate`schools`}>
+          <Schools className={styles.details} property={property} />
         </Section>
         <Section title={i18n.translate`parking`}>
           <Parking className={styles.details} property={property} />

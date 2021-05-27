@@ -2,6 +2,8 @@ import { useContext } from 'react';
 
 import {
   FiltersContext,
+  HighlightedLandmarkContext,
+  HighlightedLandmarkDetails,
   HoveredPropertyContext,
   HoveredPropertyDetails,
   MapBoundsContext,
@@ -12,6 +14,10 @@ import {
 
 export function useFilters() {
   return useContext(FiltersContext);
+}
+
+export function useHighlightedLandmark<S>() {
+  return useContext<HighlightedLandmarkDetails<S>>(HighlightedLandmarkContext);
 }
 
 export function useHoveredProperty<P>() {

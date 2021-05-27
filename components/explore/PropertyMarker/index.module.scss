@@ -3,7 +3,7 @@
   margin-top: -10px;
   position: relative;
   transform: translateX(-50%) translateY(-100%);
-  transition: filter 0.15s;
+  transition: filter 0.15s, opacity 0.15s;
 }
 
 .extraInfo {
@@ -36,6 +36,10 @@
       margin-left: 0;
     }
   }
+}
+
+.faded {
+  opacity: 0.2;
 }
 
 .hovered {
