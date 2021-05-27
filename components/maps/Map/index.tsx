@@ -56,7 +56,7 @@ function renderDirections(
     const points = route.overview_path;
     line.setPath(points);
     line.setMap(map);
-    map.panToBounds(route.bounds);
+    map.fitBounds(route.bounds);
   } else {
     line.setMap(null);
   }
